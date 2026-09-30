@@ -1,22 +1,24 @@
-<!DOCTYPE html><html lang="pt-BR">
- <head><meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-  <title>MiniCraft</title>
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><title>MiniCraft</title>
 <link rel="icon" type="image/jpeg" href="favicon.jpeg">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1b1d22">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
 :root{--bg:#1b1d22;--pn:#2b2f38;--ac:#5dbb3f;--tx:#f2f2f2;--st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;touch-action:none}
 html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font:700 16px/1.2 ui-monospace,Menlo,Consolas,monospace}
 canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
-.scr{position:fixed;inset:0;z-index:5;display:none;flex-direction:column;align-items:center;justify-content:flex-start;gap:12px;padding:clamp(24px,8vh,64px) 16px calc(24px + var(--sb));overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;background:linear-gradient(#6fb1e8,#9ad3f0 55%,#5b8f3a 55%,#3f6b28)}
-.scr.on{display:flex}.scr.dim{background:#000b}
+.scr{position:fixed;inset:0;z-index:5;display:none;flex-direction:column;align-items:center;justify-content:flex-start;gap:12px;padding:clamp(24px,8vh,64px) 16px calc(24px + var(--sb));overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;background:transparent}
+.scr.on{display:flex}.scr.dim{background:rgba(0,0,0,.62)}
 h1{font-size:clamp(36px,12vw,64px);margin:0 0 14px;text-shadow:4px 4px 0 #0006;letter-spacing:2px;text-align:center}
 h2{margin:0 0 6px;text-shadow:2px 2px 0 #0006}
 .b,.b2,.sg{border:3px solid #000;background:var(--pn);color:var(--tx);font:inherit;border-radius:0;box-shadow:inset -3px -3px #0006,inset 3px 3px #fff3}
-.b{width:min(320px,86vw);padding:14px}.g{background:var(--ac)}
+.b{width:min(320px,86vw);padding:14px}.menurow{width:min(320px,86vw);display:flex;gap:12px}.menurow .b{width:calc(50% - 6px)}.g{background:var(--ac)}
 .b:active,.b2:active,.sg:active{filter:brightness(1.3)}
 .b2{padding:10px 12px}
-#wl{width:min(360px,90vw);display:flex;flex-direction:column;gap:8px}
+#wl{width:min(360px,90vw);display:flex;flex-direction:column;gap:8px}.field{width:min(360px,90vw);display:flex;flex-direction:column;gap:6px;text-shadow:2px 2px 0 #0006}.field input{width:100%;padding:13px 12px;border:3px solid #000;background:#fff;color:#111;font:inherit;border-radius:0;box-shadow:inset 3px 3px #0002,inset -3px -3px #0003;touch-action:auto;user-select:text;-webkit-user-select:text}.field input:focus{outline:3px solid #fff}.helpbox{width:min(520px,92vw);padding:14px;background:#0008;border:3px solid #000;line-height:1.45;text-shadow:2px 2px 0 #0006}.tabs{display:flex;gap:6px;width:min(360px,90vw)}.tabs .sg{padding:11px 4px}.tabbody{width:min(520px,92vw)}
 .wi{display:flex;gap:6px;align-items:center;background:#0007;padding:8px;border:3px solid #000}
 .wn{flex:1;display:flex;flex-direction:column;gap:4px}.wn small{opacity:.7}
 .row{width:min(340px,90vw);display:flex;flex-direction:column;gap:6px;margin-bottom:8px;text-shadow:2px 2px 0 #0006}
@@ -39,9 +41,11 @@ h2{margin:0 0 6px;text-shadow:2px 2px 0 #0006}
 #ig{display:grid;max-height:none;overflow:visible;grid-template-columns:repeat(5,56px);gap:10px 8px;padding:4px}#sl{width:min(340px,90vw)}#jb.fx{display:block;left:22px;bottom:calc(100px + var(--sb))}.cell .sl{image-rendering:pixelated;background-size:100% 100%;background-repeat:no-repeat}.cell{display:flex;flex-direction:column;align-items:center;gap:3px;width:56px;text-shadow:1px 1px 0 #000}.cell span{font-size:9px;white-space:nowrap}#tp .sg{font-size:12px;padding:10px 2px}
 </style></head><body>
 <canvas id="c"></canvas>
-<div id="m" class="scr on"><h1>⛏ MiniCraft</h1><button class="b g" id="play">Jogar</button><button class="b" id="cfg">Configurações</button></div>
-<div id="w" class="scr"><h2>Mundos</h2><div id="wl"></div><button class="b g" id="nw">+ Novo mundo</button><button class="b" data-go="m">Voltar</button></div>
-<div id="s" class="scr"><h2>Configurações</h2><div id="sl"></div><button class="b" data-go="m">Voltar</button></div>
+<div id="m" class="scr on"><h1>⛏ MiniCraft</h1><button class="b g" id="play">Jogar</button><div class="menurow"><button class="b" id="how">Como jogar</button><button class="b" id="nw">Novo mundo</button></div><button class="b" id="cfg">Configurações</button></div>
+<div id="w" class="scr dim"><h2>Mundos</h2><div id="wl"></div><button class="b g" id="nw2">+ Novo mundo</button><button class="b" data-go="m">Voltar</button></div>
+<div id="h" class="scr dim"><h2>Como jogar</h2><div class="tabs"><button class="sg on" id="htm">Celular</button><button class="sg" id="hpc">Computador</button></div><div id="htxt" class="tabbody"></div><button class="b" data-go="m">Voltar</button></div>
+<div id="nwc" class="scr dim"><h2>Novo mundo</h2><div class="field"><label for="wni">Nome do mundo</label><input id="wni" type="text" maxlength="32" value="Mundo 1" autocomplete="off"></div><div class="field"><label for="wsi">Seed</label><input id="wsi" type="number" inputmode="numeric" value="12345"></div><button class="b g" id="createw">Criar mundo</button><button class="b" data-go="m">Cancelar</button></div>
+<div id="s" class="scr dim"><h2>Configurações</h2><div id="sl"></div><button class="b" data-go="m">Voltar</button></div>
 <div id="p" class="scr dim"><h2>Pausado</h2><div class="row"><div>Horário</div><div class="r3" id="tp"></div></div><button class="b g" id="rs">Continuar</button><button class="b" id="ex">Salvar e sair</button></div>
 <div id="iv" class="scr dim"><h2>Inventário</h2><div id="ig"></div><button class="b" id="ivc">Fechar</button></div>
 <div id="hud"><div id="zl"></div><div id="zr"></div><div id="jb"><div id="jn"></div></div><div id="uw"></div><div id="ch">+</div>
@@ -55,7 +59,7 @@ let cfg=Object.assign({rd:3,fd:3,fc:8,q:1,sn:1,ct:0,fov:75,js:0,bs:1,bo:1,iy:0,d
 if(typeof cfg.fd!=='number')cfg.fd=cfg.rd;
 let worlds=LS('mc_worlds',[]);
 function applyUI(){const r=document.documentElement.style;r.setProperty('--k',cfg.bs);r.setProperty('--op',cfg.bo)}applyUI();
-const show=id=>$$('.scr').forEach(e=>e.classList.toggle('on',e.id==id));
+const MENU_SCREENS=['m','w','h','nwc','s'];const show=id=>{ $$('.scr').forEach(e=>e.classList.toggle('on',e.id==id)); if($('#hud'))$('#hud').style.display=id==='none'?'block':(MENU_SCREENS.includes(id)?'none':($('#hud').style.display||'block')); };
 $$('[data-go]').forEach(b=>b.onclick=()=>show(b.dataset.go));
 addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('gesturestart',e=>e.preventDefault());
 
@@ -244,14 +248,15 @@ function sky(){const a=(tm-.25)*6.2832,sh=Math.sin(a),k=Math.max(0,Math.min(1,(s
  sun.position.set(cp.x+d[0]/l,cp.y+d[1]/l,cp.z+d[2]/l);moon.position.set(cp.x-d[0]/l,cp.y-d[1]/l,cp.z-d[2]/l);sun.lookAt(cp);moon.lookAt(cp);
  sunLight.position.set(cp.x+d[0]*.75,cp.y+d[1]*.75+30,cp.z+d[2]*.75);sunTarget.position.set(cp.x,cp.y,cp.z);
  stars.position.copy(cp);stars.scale.setScalar(Math.max(1,(cfg.rd*16+20)/68));stars.material.opacity=Math.max(0,1-k*2.5);stars.visible=stars.material.opacity>.02;for(const o of clouds){o.material.opacity=.72*k;const dx=o.position.x-cp.x,dz=o.position.z-cp.z;if(dx*dx+dz*dz>280*280){o.position.x=cp.x+(Math.random()*2-1)*180;o.position.z=cp.z+(Math.random()*2-1)*180}}sun.visible=sh>-.2;moon.visible=sh<.2}
+let menuPreview=true,menuAngle=0;
 function loop(t){if(!on)return;requestAnimationFrame(loop);if(ps){last=t;return}
- const dt=Math.min((t-last)/1000,.05);last=t;phys(dt);if(cfg.dl)tm=(tm+dt/cfg.dl)%1;if((wa+=dt)>.12){wa=0;wtick()}stream();proc();
- cam.position.set(pl.x,pl.y+1.62,pl.z);cam.rotation.set(pl.pitch,pl.yaw,0);updateLocalLights();sky();const u2=WT(gb(Math.floor(pl.x),Math.floor(pl.y+1.62),Math.floor(pl.z)));if(u2!==uw){uw=u2;$('#uw').style.display=u2?'block':'none'}
+ const dt=Math.min((t-last)/1000,.05);last=t;if(menuPreview){menuAngle=(menuAngle+dt*.16)%(Math.PI*2)}else{phys(dt);if(cfg.dl)tm=(tm+dt/cfg.dl)%1;}if((wa+=dt)>.12){wa=0;wtick()}stream();proc();
+ if(menuPreview){const tx=pl.x,tz=pl.z,ty=28,r=30;cam.position.set(tx+Math.cos(menuAngle)*r,34,tz+Math.sin(menuAngle)*r);cam.lookAt(tx,ty,tz)}else{cam.position.set(pl.x,pl.y+1.62,pl.z);cam.rotation.set(pl.pitch,pl.yaw,0)}updateLocalLights();sky();const u2=WT(gb(Math.floor(pl.x),Math.floor(pl.y+1.62),Math.floor(pl.z)));if(u2!==uw){uw=u2;$('#uw').style.display=u2?'block':'none'}
  const r=ray();hl.visible=!!r;if(r)hl.position.set(r.x+.5,r.y+.5,r.z+.5);R.render(scene,cam);
  if(t-sv>15000){sv=t;saveW()}}
 function saveW(){if(W&&pl){const e=[];for(const[k,m]of W.ed){const cx=Math.floor(k/4096)-2048,cz=k%4096-2048;for(const[i,b]of m)e.push(cx,cz,i,b)}W.e=e;W.p=[pl.x,pl.y,pl.z,pl.yaw,pl.pitch];W.t=tm}
  try{localStorage.setItem('mc_worlds',JSON.stringify(worlds,(k,v)=>k=='ed'?undefined:v))}catch(e){}}
-function start(w){if(!R)init3();lightSources.clear();W=w;W.ed=new Map();const e=w.e||[];
+function start(w){menuPreview=false;if(!R)init3();lightSources.clear();W=w;W.ed=new Map();const e=w.e||[];
  for(let i=0;i<e.length;i+=4){const k=ck(e[i],e[i+1]);let m=W.ed.get(k);if(!m)W.ed.set(k,m=new Map);m.set(e[i+2],e[i+3])}
  rebuildAllLampSources();
  chunks.forEach(drop);chunks.clear();lastC='';cq=[];wq=[];dirty.clear();const p=w.p;
@@ -301,8 +306,12 @@ function drawW(){const l=$('#wl');l.innerHTML=worlds.length?'':'<div style="text
  worlds.forEach((w,i)=>{const d=document.createElement('div');d.className='wi';d.innerHTML=`<div class="wn"><b>${w.name}</b><small>Seed ${w.seed}</small></div><button class="b2 g">▶</button><button class="b2">🗑</button>`;
   const[bp,bx]=d.querySelectorAll('button');bp.onclick=()=>start(w);
   bx.onclick=()=>{if(bx.dataset.s){worlds.splice(i,1);saveW();drawW()}else{bx.dataset.s=1;bx.textContent='Apagar?'}};l.append(d)})}
-$('#play').onclick=()=>{drawW();show('w')};$('#cfg').onclick=()=>{drawCfg();show('s')};
-$('#nw').onclick=()=>{const n=worlds.reduce((m,w)=>Math.max(m,w.n||0),0)+1,w={n,name:'Mundo '+n,seed:Math.random()*1e6|0};worlds.push(w);saveW();start(w)};
-</script>
-  </body>
-    </html>
+function nextWorldNumber(){return worlds.reduce((m,w)=>Math.max(m,w.n||0),0)+1}
+function openNewWorld(){const n=nextWorldNumber();$('#wni').value='Mundo '+n;$('#wsi').value=(Math.random()*1000000000|0);show('nwc');setTimeout(()=>$('#wni').focus(),0)}
+function createWorld(){const n=nextWorldNumber();let name=$('#wni').value.trim()||('Mundo '+n),seed=Number($('#wsi').value);if(!Number.isFinite(seed))seed=Math.random()*1000000000|0;seed=Math.trunc(seed);const w={n,name,seed};worlds.push(w);saveW();start(w)}
+function setHow(tab){const mobile=tab==='mobile';$('#htm').classList.toggle('on',mobile);$('#hpc').classList.toggle('on',!mobile);$('#htxt').innerHTML=mobile?'<div class="helpbox"><b>Celular</b><br><br>• Use o joystick para andar.<br>• Arraste o lado direito para olhar.<br>• Toque para quebrar um bloco.<br>• Segure para colocar o bloco selecionado.<br>• ▲ pula. Toque duas vezes nele para ligar/desligar o voo.<br>• Use ☰ para pausar e salvar.</div>':'<div class="helpbox"><b>Computador</b><br><br>• WASD: andar.<br>• Mouse: olhar ao redor.<br>• Espaço: pular.<br>• Shift esquerdo: descer durante o voo.<br>• Clique: quebrar o bloco.<br>• Segure o clique: colocar o bloco selecionado.<br>• Use o menu ☰ para pausar e salvar.</div>';}
+$('#play').onclick=()=>{drawW();show('w')};$('#how').onclick=()=>{setHow('mobile');show('h')};$('#cfg').onclick=()=>{drawCfg();show('s')};$('#nw').onclick=openNewWorld;$('#nw2').onclick=openNewWorld;$('#createw').onclick=createWorld;$('#htm').onclick=()=>setHow('mobile');$('#hpc').onclick=()=>setHow('pc');setHow('mobile');
+// Cena do próprio jogo como fundo dos menus. A tela inicial fica sem escurecimento; os demais menus usam .dim.
+start({n:0,name:'Menu',seed:20260930,e:[],p:[8.5,40,8.5,0,0],t:.45});menuPreview=true;show('m');
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));}
+</script></body></html>
