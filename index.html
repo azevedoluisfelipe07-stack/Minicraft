@@ -39,6 +39,18 @@ h2{margin:0 0 6px;text-shadow:2px 2px 0 #0006}
 .sl.sel{border-color:#fff}
 #uw{position:absolute;inset:0;background:rgba(30,90,210,.35);display:none;pointer-events:none}
 #ig{display:grid;max-height:none;overflow:visible;grid-template-columns:repeat(5,56px);gap:10px 8px;padding:4px}#sl{width:min(340px,90vw)}#jb.fx{display:block;left:22px;bottom:calc(100px + var(--sb))}.cell .sl{image-rendering:pixelated;background-size:100% 100%;background-repeat:no-repeat}.cell{display:flex;flex-direction:column;align-items:center;gap:3px;width:56px;text-shadow:1px 1px 0 #000}.cell span{font-size:9px;white-space:nowrap}#tp .sg{font-size:12px;padding:10px 2px}
+</style><style id="mc-loader-style">
+#mcLoader{position:fixed;inset:0;z-index:99999;background:#17191e;color:#f2f2f2;font:700 15px/1.35 ui-monospace,Menlo,Consolas,monospace;display:flex;align-items:center;justify-content:center;padding:22px;touch-action:auto;overflow:auto}
+#mcLoader .box{width:min(620px,94vw);max-height:94vh;overflow:auto}
+#mcLoader h1{font-size:clamp(28px,8vw,44px);margin:0 0 8px;text-align:left;letter-spacing:1px}
+#mcLoader .sub{opacity:.8;margin-bottom:16px}
+#mcLoadList{display:flex;flex-direction:column;gap:8px}
+.mcLoadItem{border:3px solid #000;background:#20242a;padding:10px 12px;box-shadow:inset 3px 3px #fff2,inset -3px -3px #0006}
+.mcLoadItem.ok{border-left:10px solid #5dbb3f}.mcLoadItem.warn{border-left:10px solid #e0b84f}.mcLoadItem.fail{border-left:10px solid #e24d4d}
+.mcLoadTitle{font-size:16px}.mcLoadDetail{opacity:.85;margin-top:3px;white-space:pre-wrap;overflow-wrap:anywhere}
+#mcLoader .bar{height:10px;background:#090a0c;border:2px solid #000;margin:14px 0 12px;overflow:hidden}.mcLoadBar{height:100%;width:0;background:#5dbb3f;transition:width .2s}
+#mcLoader button{width:100%;margin-top:14px;padding:13px;border:3px solid #000;background:#5dbb3f;color:#fff;font:inherit;display:none}
+#mcLoader.fail #mcLoadRetry{display:block}
 </style></head><body>
 <canvas id="c"></canvas>
 <div id="m" class="scr on"><h1>⛏ MiniCraft</h1><button class="b g" id="play">Jogar</button><div class="menurow"><button class="b" id="how">Como jogar</button><button class="b" id="nw">Novo mundo</button></div><button class="b" id="cfg">Configurações</button></div>
@@ -51,15 +63,87 @@ h2{margin:0 0 6px;text-shadow:2px 2px 0 #0006}
 <div id="hud"><div id="zl"></div><div id="zr"></div><div id="jb"><div id="jn"></div></div><div id="uw"></div><div id="ch">+</div>
 <button class="rb" id="bj">▲</button><button class="rb" id="bd">▼</button><button class="rb" id="bp">☰</button><button class="rb" id="bq">⛏</button><button class="rb" id="bc">▣</button>
 <div id="bn"></div><div id="hb"></div></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<div id="mcLoader"><div class="box"><h1>MiniCraft — carregando</h1><div class="sub" id="mcLoadSummary">Preparando o jogo...</div><div class="bar"><div class="mcLoadBar" id="mcLoadBar"></div></div><div id="mcLoadList"></div><button id="mcLoadRetry" onclick="location.reload()">Tentar novamente</button></div></div><script>
+(function(){
+  const state={items:[],failed:false,done:false};
+  function el(id){return document.getElementById(id)}
+  function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+  window.MCLoad={
+    add:function(title,status,detail){
+      let item=state.items.find(x=>x.title===title);
+      if(item){item.status=status;item.detail=detail||item.detail||''}
+      else {item={title,status,detail:detail||''};state.items.push(item)}
+      const list=el('mcLoadList'); if(!list)return;
+      list.innerHTML=state.items.map(x=>'<div class="mcLoadItem '+x.status+'"><div class="mcLoadTitle">'+(x.status==='ok'?'✓':x.status==='warn'?'⚠':'✕')+' '+esc(x.title)+'</div><div class="mcLoadDetail">'+esc(x.detail)+'</div></div>').join('');
+      const fails=state.items.filter(x=>x.status==='fail').length;
+      const warns=state.items.filter(x=>x.status==='warn').length;
+      state.failed=fails>0;
+      el('mcLoadSummary').textContent=fails?'O MiniCraft encontrou um erro durante a inicialização.':warns?'O MiniCraft iniciou com algumas correções de segurança.':'Verificando os componentes do jogo...';
+      const n=Math.min(100,state.items.length*14+(state.done?20:0)); el('mcLoadBar').style.width=n+'%';
+      el('mcLoader').classList.toggle('fail',state.failed);
+    },
+    done:function(){
+      if(state.failed)return;
+      state.done=true; this.add('Inicialização','ok','MiniCraft pronto.');
+      setTimeout(()=>{const x=el('mcLoader');if(x)x.style.display='none'},180);
+    },
+    fatal:function(title,detail){this.add(title,'fail',detail);}
+  };
+  window.addEventListener('error',function(e){
+    const d=(e.error&&e.error.stack)?e.error.stack:(e.message+'\n'+(e.filename||'')+':'+(e.lineno||'?')+':'+(e.colno||'?'));
+    MCLoad.fatal('Erro JavaScript',d);
+  });
+  window.addEventListener('unhandledrejection',function(e){
+    const r=e.reason; MCLoad.fatal('Erro assíncrono',r&&r.stack?r.stack:String(r));
+  });
+  setTimeout(function(){
+    if(!window.__mcMainStarted){MCLoad.fatal('Inicialização','O código principal não terminou de iniciar.');}
+  },12000);
+  MCLoad.add('Página HTML','ok','Interface encontrada.');
+  try{
+    const c=document.createElement('canvas');
+    const gl=c.getContext('webgl',{antialias:false})||c.getContext('experimental-webgl');
+    MCLoad.add('WebGL',gl?'ok':'fail',gl?'Contexto WebGL disponível.':'O dispositivo não disponibilizou WebGL.');
+  }catch(e){MCLoad.fatal('WebGL','Não foi possível testar o suporte gráfico: '+(e&&e.message?e.message:String(e)))}
+})();
+</script><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
+window.__mcMainStarted=true;
+MCLoad.add('Three.js',typeof THREE!=='undefined'?'ok':'fail',typeof THREE!=='undefined'?'Biblioteca carregada.':'A biblioteca Three.js não foi encontrada.');
+if(typeof THREE!=='undefined')MCLoad.add('Motor 3D','ok',THREE.REVISION?'Three.js r'+THREE.REVISION+' detectado.':'Motor 3D carregado.');
+else MCLoad.fatal('Motor 3D','O motor Three.js não está disponível.');
+MCLoad.add('Armazenamento local',(()=>{try{localStorage.setItem('__mc_test','1');localStorage.removeItem('__mc_test');return 'ok'}catch(e){return 'fail'}})(),(()=>{try{localStorage.setItem('__mc_test','1');localStorage.removeItem('__mc_test');return 'localStorage disponível.'}catch(e){return 'localStorage indisponível: '+e.message}})());
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const LS=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}};
 let cfg=Object.assign({rd:3,fd:3,fc:8,q:1,sn:1,ct:0,fov:75,js:0,bs:1,bo:1,iy:0,dl:240},LS('mc_cfg',{}));
+let cfgRecovered=false;
+const cfgDefaults={rd:3,fd:3,fc:8,q:1,sn:1,ct:0,fov:75,js:0,bs:1,bo:1,iy:0,dl:240};
+for(const k of Object.keys(cfgDefaults)){if(typeof cfg[k]!=='number'||!Number.isFinite(cfg[k])){cfg[k]=cfgDefaults[k];cfgRecovered=true}}
 if(typeof cfg.fd!=='number')cfg.fd=cfg.rd;
+const hbSafe=[1,2,3,7,10,101,24,25,26];
+if(!Array.isArray(cfg.hb)){cfg.hb=hbSafe.slice();cfgRecovered=true}else{
+  const old=cfg.hb.slice(0,9);cfg.hb=old.map((v,i)=>Number.isInteger(v)&&((v>=0&&v<38)||(v>=100&&v<=101))?v:hbSafe[i]);
+  while(cfg.hb.length<9)cfg.hb.push(hbSafe[cfg.hb.length]);
+  if(JSON.stringify(old)!==JSON.stringify(cfg.hb.slice(0,old.length)))cfgRecovered=true;
+}
+if(cfgRecovered){try{localStorage.setItem('mc_cfg',JSON.stringify(cfg))}catch(e){}MCLoad.add('Configuração salva','warn','Um valor inválido foi encontrado e substituído por um valor seguro.');}else MCLoad.add('Configuração salva','ok','Configurações válidas.');
 let worlds=LS('mc_worlds',[]);
+if(!Array.isArray(worlds)){worlds=[];try{localStorage.setItem('mc_worlds','[]')}catch(e){}MCLoad.add('Mundos salvos','warn','Dados inválidos foram ignorados; nenhum mundo foi apagado do jogo por causa desta verificação.')}else{
+  let worldWarnings=0;
+  worlds=worlds.map((w,i)=>{
+    if(!w||typeof w!=='object'){worldWarnings++;return null}
+    let changed=false;
+    if(typeof w.name!=='string'||!w.name.trim()){w.name='Mundo '+(w.n||i+1);changed=true}
+    if(!Number.isFinite(Number(w.seed))){w.seed=0;changed=true}
+    if(w.e!=null&&!Array.isArray(w.e)){w.e=[];changed=true}
+    if(Array.isArray(w.p)){const p=w.p.slice(0,5);while(p.length<5)p.push(0);for(let j=0;j<5;j++)if(!Number.isFinite(Number(p[j])))p[j]=0,changed=true;w.p=p}else if(w.p!=null){w.p=[8.5,40,8.5,0,0];changed=true}
+    if(changed)worldWarnings++;return w;
+  }).filter(Boolean);
+  MCLoad.add('Integridade dos mundos',worldWarnings?'warn':'ok',worldWarnings?worldWarnings+' mundo(s) tiveram dados estruturais normalizados com segurança.':worlds.length+' mundo(s) passaram pela verificação estrutural.');
+  MCLoad.add('Mundos salvos','ok',worlds.length+' mundo(s) disponível(is).');
+}
 function applyUI(){const r=document.documentElement.style;r.setProperty('--k',cfg.bs);r.setProperty('--op',cfg.bo)}applyUI();
-const MENU_SCREENS=['m','w','h','nwc','s'];const show=id=>{ $$('.scr').forEach(e=>e.classList.toggle('on',e.id==id)); if($('#hud'))$('#hud').style.display=id==='none'?'block':(MENU_SCREENS.includes(id)?'none':($('#hud').style.display||'block')); };
+const MENU_SCREENS=['m','w','h','nwc','s'];const show=id=>{ $$('.scr').forEach(e=>{const active=id!=='none'&&e.id===id;e.classList.toggle('on',active);e.style.display=active?'flex':'none'}); if($('#hud'))$('#hud').style.display=id==='none'?'block':(MENU_SCREENS.includes(id)?'none':($('#hud').style.display||'block')); };
 $$('[data-go]').forEach(b=>b.onclick=()=>show(b.dataset.go));
 addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('gesturestart',e=>e.preventDefault());
 
@@ -98,6 +182,100 @@ B[100]=['Balde cheio',17,17,17];B[101]=['Balde vazio',17,17,17];
 const INV=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,24,25,26,27,28,29,30,31,32,33,34,35,36,37,100,101],WT=b=>b>=16&&b<24;
 const T=new Uint8Array(40);T[6]=T[10]=1;for(let i=16;i<24;i++)T[i]=1;
 
+/* ---------- Super proteção: integridade dos blocos ---------- */
+const MC_EXPECTED_BLOCKS={1:'Grama',2:'Terra',3:'Pedra',4:'Areia',5:'Tronco',6:'Folhas',7:'Tábuas',8:'Pedregulho',9:'Tijolos',10:'Vidro',11:'Neve',12:'Cascalho',13:'Arenito',14:'Carvão',15:'Lã',16:'Água',24:'Obsidiana',25:'Tábuas escuras',26:'Ouro',27:'Ferro',28:'Diamante',29:'Argila',30:'Lã azul',31:'Lã amarela',32:'Pedra lisa',33:'Luminária',34:'Areia do deserto',35:'Arenito do deserto',36:'Ardósia',37:'Cacto',100:'Balde cheio',101:'Balde vazio'};
+const MC_BLOCK_IDS=Object.create(null),MC_BLOCK_ALIASES=Object.create(null);
+function mcBlockName(id){const b=B[id];return Array.isArray(b)&&typeof b[0]==='string'?b[0]:null}
+function mcFindBlockByName(name){for(let i=0;i<B.length;i++)if(mcBlockName(i)===name)return i;return -1}
+function mcFindFreeId(){for(let i=1;i<100;i++)if(!B[i])return i;return -1}
+function mcCheckBlocks(){
+  let bad=0,missing=0,relocated=0,textureBad=0,duplicateDeclared=0;
+  const declared=Object.create(null);
+  for(let i=1;i<B.length;i++){
+    const b=B[i];
+    if(b&&Array.isArray(b)){
+      if(typeof b[0]!=='string'||!b[0])bad++;
+      for(let j=1;j<=3;j++)if(!Number.isInteger(b[j])||b[j]<0||b[j]>=PT.length)textureBad++;
+      if(b.id!=null){const id=String(b.id);if(declared[id]!=null)duplicateDeclared++;else declared[id]=i}
+    }
+  }
+  for(const [id,name] of Object.entries(MC_EXPECTED_BLOCKS)){
+    const n=+id,b=B[n],current=mcBlockName(n);
+    if(current===name){MC_BLOCK_IDS[name]=n;continue}
+    const found=mcFindBlockByName(name);
+    if(!b&&found>=0){
+      B[n]=B[found]; MC_BLOCK_IDS[name]=n; MC_BLOCK_ALIASES[found]=n; relocated++;
+      MCLoad.add('Bloco '+name,'warn','O ID esperado estava vazio; a definição existente foi recuperada para o ID '+n+' sem apagar a referência antiga ('+found+').');
+    }else if(!b&&found<0){
+      const free=mcFindFreeId();
+      if(free>=0){MC_BLOCK_IDS[name]=free;MCLoad.add('Bloco '+name,'warn','O bloco não foi encontrado. Um ID livre ('+free+') foi reservado para uma recuperação segura.');}
+      else{missing++;MCLoad.fatal('Bloco '+name,'Não existe definição recuperável e não há ID livre disponível.')}
+    }else if(b&&current!==name){
+      const free=mcFindFreeId();
+      if(found>=0&&free>=0){MC_BLOCK_IDS[name]=free;MC_BLOCK_ALIASES[found]=free;relocated++;MCLoad.add('ID de '+name,'warn','O ID esperado '+n+' está ocupado por '+(current||'registro inválido')+'. A proteção preservou o ocupante e reservou o ID livre '+free+' para '+name+'.')}
+      else{missing++;MCLoad.fatal('ID de '+name,'Esperado no ID '+n+', mas encontrado: '+(current||'registro inválido')+'. A correção automática foi bloqueada para evitar colisões.')}
+    }
+  }
+  for(const id of INV)if(!B[id])bad++;
+  MCLoad.add('Registro de blocos',bad||textureBad?'warn':'ok',bad||textureBad?('Foram encontrados '+bad+' registro(s) inválido(s) e '+textureBad+' textura(s) inválida(s).'):(B.filter(Boolean).length+' definições verificadas.'));
+  MCLoad.add('IDs dos blocos',duplicateDeclared?'warn':'ok',duplicateDeclared?'Existem '+duplicateDeclared+' ID(s) declarados em duplicidade; nenhuma troca global foi feita.':'Nenhum ID declarado duplicado.');
+  MCLoad.add('Texturas dos blocos',textureBad?'warn':'ok',textureBad?'Algumas texturas não apontam para o atlas atual; as referências existentes foram preservadas.':'Todas as texturas dos blocos apontam para o atlas atual.');
+  MCLoad.add('Inventário',INV.every(id=>!!B[id])?'ok':'warn',INV.every(id=>!!B[id])?'Todos os itens do inventário possuem definição.':'Há itens do inventário com definição ausente.');
+  MCLoad.add('Identidade dos blocos',missing?'fail':relocated?'warn':'ok',missing?'Alguns blocos esperados não puderam ser recuperados.':relocated?'Foram feitas correções seguras sem substituir IDs ocupados.':'IDs e nomes esperados conferidos.');
+}
+/* ---------- TESTE DE ESTRESSE DA SUPER PROTEÇÃO ---------- */
+const MC_STRESS_TEST=true;
+if(MC_STRESS_TEST){
+  // 1) ID errado: a Grama é movida temporariamente para um ID incorreto.
+  if(B[1]){B[40]=B[1];delete B[1]}
+  // 2) ID declarado duplicado: dois registros carregam o mesmo identificador interno.
+  if(B[2])B[2].id='DUPLICADO-4';
+  if(B[3])B[3].id='DUPLICADO-4';
+  // 3) Textura inválida: a Terra recebe uma referência fora do atlas.
+  if(B[2])B[2][1]=9999;
+  // 4) Bioma com referências inexistentes: a proteção deve identificar a referência.
+  window.MC_TEST_BIOME={name:'Bioma de Teste',blocks:['Grama','BlocoQueNaoExiste','OutroBlocoInexistente']};
+}
+mcCheckBlocks();
+
+/* ---------- Cores do LOD distante ---------- */
+const FLAT={};
+const FLAT_STAGE={};
+function sampleAtlasColor(tile,scale=8){
+ const tx=(tile%8)*8,ty=Math.floor(tile/8)*8;
+ const ctx=cv.getContext('2d'),img=ctx.getImageData(tx,ty,8,8).data;
+ let r=0,g=0,b=0,n=0;
+ for(let y=0;y<8;y++)for(let x=0;x<8;x++){const i=(y*8+x)*4,a=img[i+3];if(a<20)continue;r+=img[i];g+=img[i+1];b+=img[i+2];n++;}
+ if(!n)return [110,150,190];
+ return [Math.round(r/n),Math.round(g/n),Math.round(b/n)];
+}
+function makeFlatColors(){
+ for(let b=1;b<B.length;b++){
+  if(!B[b])continue;
+  const top=B[b][1],side=B[b][2],base=B[b][3];
+  if(!Number.isFinite(top)||!Number.isFinite(side)||!Number.isFinite(base))continue;
+  const a=sampleAtlasColor(top),c=sampleAtlasColor(side),z=sampleAtlasColor(base);
+  FLAT[b]=[Math.round(a[0]*.55+c[0]*.35+z[0]*.10),Math.round(a[1]*.55+c[1]*.35+z[1]*.10),Math.round(a[2]*.55+c[2]*.35+z[2]*.10)];
+  FLAT[b]=FLAT[b].map(v=>Math.round(v*.94));
+  FLAT_STAGE[b]={8:FLAT[b],4:[0,0,0],2:[0,0,0],1:[0,0,0]};
+  for(const px of [4,2,1]){
+   const f=.55+.45*(px/8);
+   FLAT_STAGE[b][px]=FLAT[b].map(v=>Math.round(v*f));
+  }
+ }
+}
+function flatColor(b,stage=8){return (FLAT_STAGE[b]&&FLAT_STAGE[b][stage])||FLAT[b]||[110,110,110]}
+makeFlatColors();
+if(MC_STRESS_TEST){
+  const refs=window.MC_TEST_BIOME.blocks;
+  const missing=refs.filter(n=>mcFindBlockByName(n)<0);
+  if(missing.length){
+    MCLoad.add('Biomas e referências', 'warn', 'O bioma de teste possui '+missing.length+' bloco(s) inexistente(s): '+missing.join(', ')+'. Referências externas não foram alteradas automaticamente.');
+  }else MCLoad.add('Biomas e referências','ok','Todas as referências do bioma de teste existem.');
+  MCLoad.add('Teste de estresse','ok','Foram injetados: ID incorreto, ID declarado duplicado, textura inválida e referências de bioma inexistentes.');
+}
+
+
 /* ---------- Mundo ---------- */
 const CS=16,H=68,chunks=new Map(),ck=(x,z)=>(x+2048)*4096+(z+2048);let W=null;
 function hs(x,z,s){let h=Math.imul(x,374761393)^Math.imul(z,668265263)^Math.imul(s,2147483647);h=Math.imul(h^h>>>13,1274126177);return((h^h>>>16)>>>0)/4294967296}
@@ -119,7 +297,7 @@ function gen(cx,cz){const k=ck(cx,cz);let c=chunks.get(k);if(c)return c;
 function gb(x,y,z){if(y<0)return 3;if(y>=H)return 0;const c=chunks.get(ck(x>>4,z>>4));return c?c.d[(x&15)+(z&15)*16+y*256]:-1}
 function sb(x,y,z,b){const cx=x>>4,cz=z>>4,k=ck(cx,cz),c=chunks.get(k);if(!c||y<0||y>=H)return;const lx=x&15,lz=z&15,i=lx+lz*16+y*256;
  const oldb=c.d[i];c.d[i]=b;if(y+1>c.top)c.top=y+1;let e=W.ed.get(k);if(!e)W.ed.set(k,e=new Map);e.set(i,b);
- const sk=sourceKey(x,y,z);if(oldb===27&&b!==27)lightSources.delete(sk);if(b===27)lightSources.set(sk,15);c.light=null;mk(c);wake(x,y,z);if(oldb===27||b===27){markLightArea(x,y,z);updateLocalLights();}
+ const sk=sourceKey(x,y,z);if(oldb===LAMP_ID&&b!==LAMP_ID)lightSources.delete(sk);if(b===LAMP_ID)lightSources.set(sk,15);c.light=null;mk(c);wake(x,y,z);if(oldb===LAMP_ID||b===LAMP_ID){markLightArea(x,y,z);updateLocalLights();}
  if(lx==0)rm(cx-1,cz);if(lx==15)rm(cx+1,cz);if(lz==0)rm(cx,cz-1);if(lz==15)rm(cx,cz+1)}
 function rm(a,b){const c=chunks.get(ck(a,b));if(c&&c.done)mk(c)}
 
@@ -128,13 +306,12 @@ const FC=[[[1,0,0],[[1,0,0],[1,1,0],[1,1,1],[1,0,1]],.90,2],[[-1,0,0],[[0,0,1],[
 [[0,1,0],[[0,1,0],[0,1,1],[1,1,1],[1,1,0]],.98,1],[[0,-1,0],[[0,0,1],[0,0,0],[1,0,0],[1,0,1]],.82,3],
 [[0,0,1],[[1,0,1],[1,1,1],[0,1,1],[0,0,1]],.94,2],[[0,0,-1],[[0,0,0],[0,1,0],[1,1,0],[1,0,0]],.88,2]];
 const UV=[[0,0],[0,1],[1,1],[1,0]];let R,scene,cam,mat,wmat,flatMat,flatWmat,hl,sun,moon,stars,clouds=[],sunLight,sunTarget,tm=.4,uw=false,localLights=[];
-const FLAT={1:[92,185,75],2:[135,85,45],3:[125,125,125],4:[235,215,145],5:[105,70,40],6:[45,120,50],7:[170,135,85],8:[105,105,105],9:[155,70,55],10:[170,170,170],11:[205,235,240],12:[245,245,245],13:[165,165,155],14:[190,160,105],15:[55,55,55],16:[55,145,220],17:[55,145,220],18:[35,20,50],19:[70,48,30],20:[225,185,35],21:[185,185,190],22:[70,210,220],23:[180,150,125],24:[75,105,190],25:[235,205,55],26:[145,145,145],27:[245,220,90],34:[222,184,120],35:[205,158,98],36:[75,81,93],37:[55,130,58]};
-function flatColor(b){return FLAT[b]||[180,180,180]}
 function isFarChunk(c){if(!pl)return false;const dx=c.cx+0.5-pl.x/16,dz=c.cz+0.5-pl.z/16;return Math.hypot(dx,dz)>cfg.fc}
+const LAMP_ID=33;
 const lightSources=new Map(), sourceKey=(x,y,z)=>x+','+y+','+z;
-function markLightArea(x,y,z){const rc=Math.ceil(10/16);const pc=x>>4,pz=z>>4;for(let dz=-rc;dz<=rc;dz++)for(let dx=-rc;dx<=rc;dx++){const c=chunks.get(ck(pc+dx,pz+dz));if(c&&c.done)mk(c)}}
-function scanLights(c){for(let y=0;y<c.top;y++)for(let z=0;z<16;z++)for(let x=0;x<16;x++)if(c.d[x+z*16+y*256]===27)lightSources.set(sourceKey(c.cx*16+x,y,c.cz*16+z),15)}
-function rebuildAllLampSources(){lightSources.clear();if(!W)return;for(const [k,m] of W.ed){const cx=Math.floor(k/4096)-2048,cz=(k%4096)-2048;for(const [i,b] of m){if(b!==27)continue;const y=i>>8,lx=i&15,lz=(i>>4)&15;lightSources.set(sourceKey(cx*16+lx,y,cz*16+lz),15)}}}
+function markLightArea(x,y,z){const rc=Math.ceil(15/16);const pc=x>>4,pz=z>>4;for(let dz=-rc;dz<=rc;dz++)for(let dx=-rc;dx<=rc;dx++){const c=chunks.get(ck(pc+dx,pz+dz));if(c&&c.done)mk(c)}}
+function scanLights(c){for(let y=0;y<c.top;y++)for(let z=0;z<16;z++)for(let x=0;x<16;x++)if(c.d[x+z*16+y*256]===LAMP_ID)lightSources.set(sourceKey(c.cx*16+x,y,c.cz*16+z),15)}
+function rebuildAllLampSources(){lightSources.clear();if(!W)return;for(const [k,m] of W.ed){const cx=Math.floor(k/4096)-2048,cz=(k%4096)-2048;for(const [i,b] of m){if(b!==LAMP_ID)continue;const y=i>>8,lx=i&15,lz=(i>>4)&15;lightSources.set(sourceKey(cx*16+lx,y,cz*16+lz),15)}}}
 function drop(c){for(const k of['mesh','wm'])if(c[k]){c[k].geometry.dispose();scene.remove(c[k]);c[k]=null}}
 function build(A,m,c,k,o){if(!A.n)return;const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(A.P,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(A.U,2));g.setAttribute('color',new THREE.Float32BufferAttribute(A.C,3));
  g.setIndex(A.I);g.computeVertexNormals();g.computeBoundingSphere();const ms=new THREE.Mesh(g,m);ms.renderOrder=o;ms.castShadow=k==='mesh';ms.receiveShadow=true;scene.add(ms);c[k]=ms}
@@ -170,9 +347,41 @@ function rebuildLight(c){
  }
  c.light=L;return L;
 }
-function mesh(c){const O={P:[],U:[],C:[],I:[],n:0},Wt={P:[],U:[],C:[],I:[],n:0},X0=c.cx*16,Z0=c.cz*16,d=c.d,wd=new Map(),far=isFarChunk(c),L=rebuildLight(c);c.flat=far;
+function meshFar(c){
+ const dist=pl?Math.hypot(c.cx+0.5-pl.x/16,c.cz+0.5-pl.z/16):cfg.fc+1;
+ const stage=dist<cfg.fc+2?8:dist<cfg.fc+5?4:dist<cfg.fc+9?2:1;
+ const O={P:[],U:[],C:[],I:[],n:0},Wt={P:[],U:[],C:[],I:[],n:0},X0=c.cx*16,Z0=c.cz*16,d=c.d;
+ const topY=new Int16Array(256),topB=new Uint8Array(256);
+ for(let z=0;z<16;z++)for(let x=0;x<16;x++){
+  let y=H-1,b=0;for(;y>=0;y--){b=d[x+z*16+y*256];if(b){topY[x+z*16]=y;topB[x+z*16]=b;break}}
+ }
+ const used=new Uint8Array(256);
+ const addQuad=(A,pts,col)=>{for(const v of pts){A.P.push(v[0],v[1],v[2]);A.U.push(0,0);A.C.push(col[0]/255,col[1]/255,col[2]/255)}A.I.push(A.n,A.n+1,A.n+2,A.n,A.n+2,A.n+3);A.n+=4};
+ // Greedy top surfaces: a flat area made from many blocks becomes one large face.
+ for(let z=0;z<16;z++)for(let x=0;x<16;x++){
+  const ii=x+z*16;if(used[ii])continue;const y=topY[ii],b=topB[ii];if(!b)continue;
+  let w=1;while(x+w<16&&!used[ii+w]&&topY[ii+w]===y&&topB[ii+w]===b)w++;
+  let h=1,ok=true;while(z+h<16&&ok){for(let xx=0;xx<w;xx++){const j=(x+xx)+(z+h)*16;if(used[j]||topY[j]!==y||topB[j]!==b){ok=false;break}}if(ok)h++}
+  const fc=flatColor(b,stage),col=[fc[0],fc[1],fc[2]],A=WT(b)?Wt:O;addQuad(A,[[X0+x,y+1,Z0+z],[X0+x,y+1,Z0+z+h],[X0+x+w,y+1,Z0+z+h],[X0+x+w,y+1,Z0+z]],col);
+  for(let zz=0;zz<h;zz++)for(let xx=0;xx<w;xx++)used[(x+xx)+(z+zz)*16]=1;
+ }
+ // Add only the exposed vertical silhouette edges, also merged into long faces.
+ for(let z=0;z<16;z++)for(let x=0;x<16;x++){
+  const ii=x+z*16,y=topY[ii],b=topB[ii];if(!b)continue;
+  const fc=flatColor(b,stage),col=[fc[0],fc[1],fc[2]],edges=[[1,0],[0,1],[-1,0],[0,-1]];
+  for(const [dx,dz] of edges){const nx=x+dx,nz=z+dz;let ny=-1;if(nx>=0&&nx<16&&nz>=0&&nz<16)ny=topY[nx+nz*16];if(ny>=y)continue;
+   const A=WT(b)?Wt:O,xx=X0+x,zz=Z0+z,ex=xx+(dx?dx:1),ez=zz+(dz?dz:1);
+   if(dx===1)addQuad(A,[[ex,y+1,zz],[ex,y+1,zz+1],[ex,Math.max(ny+1,0),zz+1],[ex,Math.max(ny+1,0),zz]],col);
+   else if(dx===-1)addQuad(A,[[xx,y+1,zz+1],[xx,y+1,zz],[xx,Math.max(ny+1,0),zz],[xx,Math.max(ny+1,0),zz+1]],col);
+   else if(dz===1)addQuad(A,[[xx,y+1,ez],[xx,Math.max(ny+1,0),ez],[xx+1,Math.max(ny+1,0),ez],[xx+1,y+1,ez]],col);
+   else addQuad(A,[[xx+1,y+1,zz],[xx+1,Math.max(ny+1,0),zz],[xx,Math.max(ny+1,0),zz],[xx,y+1,zz]],col);
+  }
+ }
+ drop(c);build(O,flatMat,c,'mesh',0);build(Wt,flatWmat,c,'wm',1);c.flat=true;
+}
+function mesh(c){if(isFarChunk(c)){meshFar(c);return}const O={P:[],U:[],C:[],I:[],n:0},Wt={P:[],U:[],C:[],I:[],n:0},X0=c.cx*16,Z0=c.cz*16,d=c.d,wd=new Map(),far=false,L=rebuildLight(c);c.flat=false;
  const depthAt=(x,y,z)=>{const key=(x&15)+((z&15)<<4)+(y<<8);if(wd.has(key))return wd.get(key);let dep=0,yy=y+1;while(yy<H&&WT(gb(x,yy,z))){dep++;yy++}wd.set(key,dep);return dep};
- const lightFactor=(x,y,z)=>{let b=L[(x&15)+((z&15)<<4)+y*256];for(const[dx,dy,dz]of FC.map(v=>v[0])){const nx=x+dx,nz=z+dz,ny=y+dy;if(nx>=0&&nx<16&&nz>=0&&nz<16&&ny>=0&&ny<H)b=Math.max(b,L[nx+nz*16+ny*256])}return .62+.38*(b/15)};
+ const lightFactor=(x,y,z)=>{let b=L[(x&15)+((z&15)<<4)+y*256];for(const[dx,dy,dz]of FC.map(v=>v[0])){const nx=x+dx,nz=z+dz,ny=y+dy;if(nx>=0&&nx<16&&nz>=0&&nz<16&&ny>=0&&ny<H)b=Math.max(b,L[nx+nz*16+ny*256])}const wx=X0+x+.5,wz=Z0+z+.5,wy=y+.5;let lamp=0,ambientRelief=0;for(const key of lightSources.keys()){const a=key.split(',').map(Number),dx=wx-(a[0]+.5),dy=wy-(a[1]+.5),dz=wz-(a[2]+.5),d=Math.hypot(dx,dy,dz);if(d<3)lamp=Math.max(lamp,1-Math.pow(d/3,1.35));if(d<15)ambientRelief=Math.max(ambientRelief,1-Math.pow(d/15,1.25))}return Math.min(1.05,.34+.66*(b/15)+.70*lamp+.42*ambientRelief)};
  for(let y=0;y<c.top;y++)for(let z=0;z<16;z++)for(let x=0;x<16;x++){const b=d[x+z*16+y*256];if(!b)continue;
   const w=WT(b),A=w?Wt:O,wl=w&&!WT(gb(X0+x,y+1,Z0+z))?.9:1;
   for(const[f,cs,sh,ti]of FC){const nb=gb(X0+x+f[0],y+f[1],Z0+z+f[2]);
@@ -180,7 +389,7 @@ function mesh(c){const O={P:[],U:[],C:[],I:[],n:0},Wt={P:[],U:[],C:[],I:[],n:0},
    const t=B[b][ti],u0=t/TN,u1=(t+1)/TN;let faceSh=sh*lightFactor(x,y,z);const fc=flatColor(b);
    if(!w){const waterDepth=depthAt(X0+x,y,Z0+z);if(waterDepth>0){const wet=Math.pow(.88,Math.min(waterDepth,10));faceSh*=Math.max(.28,wet)}}
    // Luminaria stay visibly bright while also illuminating nearby blocks.
-   if(b===27)faceSh=Math.max(faceSh,1.35);
+   if(b===LAMP_ID)faceSh=Math.max(faceSh,1.15);
    for(let k=0;k<4;k++){const v=cs[k];A.P.push(X0+x+v[0],y+(v[1]?wl:0),Z0+z+v[2]);A.U.push(UV[k][0]?u1:u0,UV[k][1]);A.C.push(far?fc[0]/255*faceSh:faceSh,far?fc[1]/255*faceSh:faceSh,far?fc[2]/255*faceSh:faceSh)}
    A.I.push(A.n,A.n+1,A.n+2,A.n,A.n+2,A.n+3);A.n+=4}}
  drop(c);build(O,far?flatMat:mat,c,'mesh',0);build(Wt,far?flatWmat:wmat,c,'wm',1)}
@@ -209,6 +418,8 @@ function proc(){const q=cq.pop();if(!q)return;const c=gen(q[1],q[2]);if(c.done)r
 /* ---------- Jogador e física ---------- */
 let pl,jx=0,jy=0,up=0,dn=0,sel=1,on=0,ps=0,last=0,sv=0;const K={},AX=['x','y','z'];
 function hit(x,y,z){const e=.3;for(let i=Math.floor(x-e);i<=Math.floor(x+e);i++)for(let k=Math.floor(z-e);k<=Math.floor(z+e);k++)for(let j=Math.floor(y);j<=Math.floor(y+1.79);j++){const b=gb(i,j,k);if(b!==0&&!WT(b))return 1}return 0}
+let safeCheckTimer=0;
+function checkPlayerSafety(dt){safeCheckTimer+=dt;if(safeCheckTimer<1)return;safeCheckTimer=0;if(!hit(pl.x,pl.y,pl.z))return;const ox=pl.x,oy=pl.y,oz=pl.z;const tests=[];for(let dy=-4;dy<=4;dy++)for(let dx=-3;dx<=3;dx++)for(let dz=-3;dz<=3;dz++){if(dx===0&&dy===0&&dz===0)continue;tests.push([dx,dy,dz,dx*dx+dy*dy+dz*dz]);}tests.sort((a,b)=>a[3]-b[3]);for(const[tX,tY,tZ]of tests){const nx=ox+tX,ny=oy+tY,nz=oz+tZ;if(ny<0||ny>=H-1)continue;if(!hit(nx,ny,nz)){pl.x=nx;pl.y=ny;pl.z=nz;pl.vy=0;pl.og=0;return}}}
 function mv(a,d){const k=AX[a];pl[k]+=d;if(hit(pl.x,pl.y,pl.z)){pl[k]-=d;return 0}return 1}
 function phys(dt){const ax=jx+(K.KeyD?1:0)-(K.KeyA?1:0),ay=jy+(K.KeyS?1:0)-(K.KeyW?1:0),iw=WT(gb(Math.floor(pl.x),Math.floor(pl.y+.5),Math.floor(pl.z))),sp=(pl.fly?9:iw?2.6:4.3)*(Math.hypot(jx,jy)>.93?1.4:1),s=Math.sin(pl.yaw),c=Math.cos(pl.yaw),f=-ay,u=up||K.Space,dw=dn||K.ShiftLeft;
  mv(0,(c*ax-s*f)*sp*dt);mv(2,(-s*ax-c*f)*sp*dt);
@@ -228,13 +439,13 @@ function put(){
  if(x+1>pl.x-e&&x<pl.x+e&&z+1>pl.z-e&&z<pl.z+e&&y+1>pl.y&&y<pl.y+1.8)return;sb(x,y,z,sel)}
 
 /* ---------- Render / loop ---------- */
-function init3(){R=new THREE.WebGLRenderer({canvas:$('#c'),antialias:false,powerPreference:'high-performance'});R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFShadowMap;scene=new THREE.Scene();
- const tex=new THREE.CanvasTexture(cv);tex.magFilter=THREE.NearestFilter;tex.minFilter=THREE.NearestFilter;tex.generateMipmaps=false;tex.needsUpdate=true;
- mat=new THREE.MeshLambertMaterial({map:tex,vertexColors:true,alphaTest:.5});flatMat=new THREE.MeshLambertMaterial({vertexColors:true,alphaTest:.5});flatWmat=new THREE.MeshLambertMaterial({vertexColors:true,transparent:true,opacity:.65,depthWrite:false,side:THREE.DoubleSide});cam=new THREE.PerspectiveCamera(75,1,.1,200);cam.rotation.order='YXZ';
+function init3(){R=new THREE.WebGLRenderer({canvas:$('#c'),antialias:false,powerPreference:'high-performance'});R.shadowMap.enabled=false;scene=new THREE.Scene();
+ const tex=new THREE.CanvasTexture(cv);tex.magFilter=THREE.NearestFilter;tex.minFilter=THREE.LinearMipmapLinearFilter;tex.generateMipmaps=true;tex.anisotropy=Math.min(4,R.capabilities.getMaxAnisotropy());tex.needsUpdate=true;
+ mat=new THREE.MeshLambertMaterial({map:tex,vertexColors:true,alphaTest:.5});flatMat=new THREE.MeshBasicMaterial({vertexColors:true,alphaTest:.5});flatWmat=new THREE.MeshBasicMaterial({vertexColors:true,transparent:true,opacity:.65,depthWrite:false,side:THREE.DoubleSide});cam=new THREE.PerspectiveCamera(75,1,.1,200);cam.rotation.order='YXZ';
  hl=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1.004,1.004,1.004)),new THREE.LineBasicMaterial({color:0}));scene.add(hl);
  wmat=new THREE.MeshLambertMaterial({map:tex,vertexColors:true,transparent:true,opacity:.65,depthWrite:false,side:THREE.DoubleSide});
- const hemi=new THREE.HemisphereLight(0xd9f2ff,0x5d6b4a,.82);scene.add(hemi);
- sunLight=new THREE.DirectionalLight(0xffffff,.24);sunLight.castShadow=true;sunLight.shadow.mapSize.width=sunLight.shadow.mapSize.height=512;sunLight.shadow.camera.near=1;sunLight.shadow.camera.far=110;sunLight.shadow.camera.left=-48;sunLight.shadow.camera.right=48;sunLight.shadow.camera.top=48;sunLight.shadow.camera.bottom=-48;sunLight.shadow.bias=-0.0005;scene.add(sunLight);
+ const hemi=new THREE.HemisphereLight(0xd9f2ff,0x5d6b4a,.42);scene.add(hemi);
+ sunLight=new THREE.DirectionalLight(0xffffff,.16);sunLight.castShadow=false;scene.add(sunLight);
  sunTarget=new THREE.Object3D();scene.add(sunTarget);sunLight.target=sunTarget;
  const bb=(c,z)=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(z,z),new THREE.MeshBasicMaterial({color:c,fog:false,depthTest:false,depthWrite:false}));m.renderOrder=-1;scene.add(m);return m};
  sun=bb(0xffe680,16);moon=bb(0xdfe6f0,11);const pt=[];
@@ -244,27 +455,30 @@ function init3(){R=new THREE.WebGLRenderer({canvas:$('#c'),antialias:false,power
  const cc=document.createElement('canvas');cc.width=64;cc.height=32;const qx=cc.getContext('2d');qx.imageSmoothingEnabled=false;qx.fillStyle='#fff';qx.fillRect(8,14,48,10);qx.fillRect(16,9,32,15);qx.fillRect(25,5,14,19);qx.fillRect(4,18,56,6);const ct=new THREE.CanvasTexture(cc);ct.magFilter=THREE.NearestFilter;ct.minFilter=THREE.NearestFilter;
  for(let i=0;i<18;i++){const m=new THREE.SpriteMaterial({map:ct,transparent:true,opacity:.72,depthTest:true,depthWrite:false,fog:false});const o=new THREE.Sprite(m);const a=Math.random()*6.283,r=90+Math.random()*150;o.position.set(Math.cos(a)*r,42+Math.random()*18,Math.sin(a)*r);const sc=10+Math.random()*18;o.scale.set(sc,sc*.5,1);o.renderOrder=-0.5;scene.add(o);clouds.push(o)}
  addEventListener('resize',resize)}
-function resize(){if(!R)return;const d=cfg.rd*16,f=cfg.fd*16;R.setPixelRatio(Math.min(cfg.q,devicePixelRatio));R.setSize(innerWidth,innerHeight,false);cam.aspect=innerWidth/innerHeight;cam.far=d+40;cam.fov=cfg.fov;cam.updateProjectionMatrix();
- scene.fog=new THREE.Fog(0x8ec9ef,Math.min(f*.55,d*.5),Math.min(f+4,d+2));scene.background=new THREE.Color();sky()}
+function resize(){if(!R)return;const d=cfg.rd*16,f=cfg.fd*16;R.setPixelRatio(Math.min(cfg.q,devicePixelRatio));R.setSize(innerWidth,innerHeight,false);cam.aspect=innerWidth/innerHeight;cam.far=Math.max(24,f+10);cam.fov=cfg.fov;cam.updateProjectionMatrix();
+ // Neblina esférica: começa antes da borda das chunks e cresce rapidamente em todas as direções.
+ // Isso esconde o espaço além das chunks carregadas, inclusive nas laterais e abaixo/acima do jogador.
+ const fogDistance=Math.max(16,f);
+ scene.fog=new THREE.FogExp2(0x8ec9ef,Math.max(.0001,2.9/fogDistance));scene.background=new THREE.Color();sky()}
 const mx=(a,b,t)=>a+(b-a)*t;
-function updateLocalLights(){if(!scene||!pl)return;const arr=[];for(const key of lightSources.keys()){const a=key.split(',').map(Number),dx=a[0]+.5-pl.x,dz=a[2]+.5-pl.z,dy=a[1]+.5-(pl.y+1);const ds=dx*dx+dy*dy+dz*dz;if(ds<18*18)arr.push([ds,a[0],a[1],a[2]])}arr.sort((a,b)=>a[0]-b[0]);while(localLights.length<8){const p=new THREE.PointLight(0xffe9a8,0,14,1.7);p.castShadow=false;scene.add(p);localLights.push(p)}for(let i=0;i<localLights.length;i++){const p=localLights[i],a=arr[i];if(a){p.position.set(a[1]+.5,a[2]+.55,a[3]+.5);p.intensity=Math.max(.35,1.8-a[0]/324*1.05);p.distance=14;p.decay=1.7;p.visible=true}else p.visible=false}}
+function updateLocalLights(){if(!scene||!pl)return;const arr=[];for(const key of lightSources.keys()){const a=key.split(',').map(Number),dx=a[0]+.5-pl.x,dz=a[2]+.5-pl.z,dy=a[1]+.5-(pl.y+1),ds=dx*dx+dy*dy+dz*dz;if(ds<3*3)arr.push([ds,a[0],a[1],a[2]])}arr.sort((a,b)=>a[0]-b[0]);while(localLights.length<8){const p=new THREE.PointLight(0xffe9a8,0,3,2.0);p.castShadow=false;scene.add(p);localLights.push(p)}for(let i=0;i<localLights.length;i++){const p=localLights[i],a=arr[i];if(a){const d=Math.sqrt(a[0]);p.position.set(a[1]+.5,a[2]+.55,a[3]+.5);p.intensity=.45+3.2*Math.pow(Math.max(0,1-d/3),1.2);p.distance=3;p.decay=2.0;p.visible=true}else p.visible=false}}
 function sky(){const a=(tm-.25)*6.2832,sh=Math.sin(a),k=Math.max(0,Math.min(1,(sh+.15)/.4)),dk=Math.max(0,1-Math.abs(sh)/.25)*.55;
  const c=[mx(8,142,k),mx(12,201,k),mx(32,239,k)].map((v,i)=>mx(v,[240,120,70][i],dk));
  scene.background.setRGB(c[0]/255,c[1]/255,c[2]/255);scene.fog.color.copy(scene.background);
- const L=mx(.82,1.08,k);mat.color.setScalar(L);wmat.color.setScalar(L);flatMat.color.setScalar(L);flatWmat.color.setScalar(L);sunLight.intensity=mx(.18,.55,k);
+ const L=mx(.68,.92,k);mat.color.setScalar(L);wmat.color.setScalar(L);flatMat.color.setScalar(Math.min(L,.92));flatWmat.color.setScalar(Math.min(L,.92));sunLight.intensity=mx(.12,.38,k);
  const cp=cam.position,d=[Math.cos(a),sh,.25],l=Math.hypot(d[0],d[1],d[2])/70;
  sun.position.set(cp.x+d[0]/l,cp.y+d[1]/l,cp.z+d[2]/l);moon.position.set(cp.x-d[0]/l,cp.y-d[1]/l,cp.z-d[2]/l);sun.lookAt(cp);moon.lookAt(cp);
  sunLight.position.set(cp.x+d[0]*.75,cp.y+d[1]*.75+30,cp.z+d[2]*.75);sunTarget.position.set(cp.x,cp.y,cp.z);
  stars.position.copy(cp);stars.scale.setScalar(Math.max(1,(cfg.rd*16+20)/68));stars.material.opacity=Math.max(0,1-k*2.5);stars.visible=stars.material.opacity>.02;for(const o of clouds){o.material.opacity=.72*k;const dx=o.position.x-cp.x,dz=o.position.z-cp.z;if(dx*dx+dz*dz>280*280){o.position.x=cp.x+(Math.random()*2-1)*180;o.position.z=cp.z+(Math.random()*2-1)*180}}sun.visible=sh>-.2;moon.visible=sh<.2}
 let menuPreview=true,menuAngle=0;
 function loop(t){if(!on)return;requestAnimationFrame(loop);if(ps){last=t;return}
- const dt=Math.min((t-last)/1000,.05);last=t;if(menuPreview){menuAngle=(menuAngle+dt*.16)%(Math.PI*2)}else{phys(dt);if(cfg.dl)tm=(tm+dt/cfg.dl)%1;}if((wa+=dt)>.12){wa=0;wtick()}stream();proc();
+ const dt=Math.min((t-last)/1000,.05);last=t;if(menuPreview){menuAngle=(menuAngle+dt*.16)%(Math.PI*2)}else{phys(dt);checkPlayerSafety(dt);if(cfg.dl)tm=(tm+dt/cfg.dl)%1;}if((wa+=dt)>.12){wa=0;wtick()}stream();proc();
  if(menuPreview){const tx=pl.x,tz=pl.z,ty=28,r=30;cam.position.set(tx+Math.cos(menuAngle)*r,34,tz+Math.sin(menuAngle)*r);cam.lookAt(tx,ty,tz)}else{cam.position.set(pl.x,pl.y+1.62,pl.z);cam.rotation.set(pl.pitch,pl.yaw,0)}updateLocalLights();sky();const u2=WT(gb(Math.floor(pl.x),Math.floor(pl.y+1.62),Math.floor(pl.z)));if(u2!==uw){uw=u2;$('#uw').style.display=u2?'block':'none'}
  const r=ray();hl.visible=!!r;if(r)hl.position.set(r.x+.5,r.y+.5,r.z+.5);R.render(scene,cam);
  if(t-sv>15000){sv=t;saveW()}}
 function saveW(){if(W&&pl){const e=[];for(const[k,m]of W.ed){const cx=Math.floor(k/4096)-2048,cz=k%4096-2048;for(const[i,b]of m)e.push(cx,cz,i,b)}W.e=e;W.p=[pl.x,pl.y,pl.z,pl.yaw,pl.pitch];W.t=tm}
  try{localStorage.setItem('mc_worlds',JSON.stringify(worlds,(k,v)=>k=='ed'?undefined:v))}catch(e){}}
-function start(w){menuPreview=false;if(!R)init3();lightSources.clear();W=w;W.ed=new Map();const e=w.e||[];
+function start(w){menuPreview=false;$$('.scr').forEach(e=>{e.classList.remove('on');e.style.display='none'});if($('#hud'))$('#hud').style.display='block';if(!R)init3();lightSources.clear();W=w;W.ed=new Map();const e=w.e||[];
  for(let i=0;i<e.length;i+=4){const k=ck(e[i],e[i+1]);let m=W.ed.get(k);if(!m)W.ed.set(k,m=new Map);m.set(e[i+2],e[i+3])}
  rebuildAllLampSources();
  chunks.forEach(drop);chunks.clear();lastC='';cq=[];wq=[];dirty.clear();const p=w.p;
@@ -295,10 +509,11 @@ $('#ex').onclick=()=>{saveW();on=0;W=null;pl=null;$('#hud').style.display='none'
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&W)saveW()});
 
 /* ---------- Hotbar (9 slots) ---------- */
-const hb=$('#hb'),ic=document.createElement('canvas');ic.width=ic.height=128;const ix=ic.getContext('2d');ix.imageSmoothingEnabled=false;function drawBucket(full){ix.clearRect(0,0,128,128);ix.save();ix.scale(8,8);ix.fillStyle='#20242a';ix.fillRect(3,2,2,2);ix.fillRect(11,2,2,2);ix.fillRect(2,3,2,6);ix.fillRect(12,3,2,6);ix.fillStyle='#5b626a';ix.fillRect(4,4,8,2);ix.fillRect(3,6,10,7);ix.fillStyle='#9da5ad';ix.fillRect(4,7,8,5);ix.fillStyle=full?'#3a78e8':'#24292f';ix.fillRect(5,7,6,2);ix.fillStyle='#c3c8ce';ix.fillRect(5,12,6,1);ix.restore()}const icon=i=>{ix.clearRect(0,0,128,128);if(i>=100)drawBucket(i==100);else ix.drawImage(cv,B[i][2]*8,0,8,8,0,0,128,128);return`url(${ic.toDataURL()})`};
+const hb=$('#hb'),ic=document.createElement('canvas');ic.width=ic.height=128;const ix=ic.getContext('2d');ix.imageSmoothingEnabled=false;function drawBucket(full){ix.clearRect(0,0,128,128);ix.save();ix.scale(8,8);ix.fillStyle='#20242a';ix.fillRect(3,2,2,2);ix.fillRect(11,2,2,2);ix.fillRect(2,3,2,6);ix.fillRect(12,3,2,6);ix.fillStyle='#5b626a';ix.fillRect(4,4,8,2);ix.fillRect(3,6,10,7);ix.fillStyle='#9da5ad';ix.fillRect(4,7,8,5);ix.fillStyle=full?'#3a78e8':'#24292f';ix.fillRect(5,7,6,2);ix.fillStyle='#c3c8ce';ix.fillRect(5,12,6,1);ix.restore()}const icon=i=>{ix.clearRect(0,0,128,128);if(i>=100)drawBucket(i==100);else{const block=B[i];if(!block){ix.fillStyle='#4f5862';ix.fillRect(0,0,128,128);ix.fillStyle='#d8dde3';ix.fillRect(40,40,48,48);MCLoad.add('Hotbar','warn','Um bloco inválido foi encontrado; o ícone foi substituído temporariamente.');}else ix.drawImage(cv,block[2]*8,0,8,8,0,0,128,128)}return`url(${ic.toDataURL()})`};
 const hbDefault=[1,2,3,7,10,101,24,25,26],slots=Array.isArray(cfg.hb)?cfg.hb.slice(0,9).concat(hbDefault.slice(cfg.hb.length,9)):hbDefault.slice(),sbtn=[];let tt;function toast(t){const e=$('#bn');e.textContent=t;clearTimeout(tt);tt=setTimeout(()=>e.textContent=B[sel][0],1200)}let si=0;
 function upd(){sel=slots[si];sbtn.forEach((s,j)=>{s.style.backgroundImage=icon(slots[j]);s.classList.toggle('sel',j==si)});$('#bn').textContent=B[sel][0];cfg.hb=slots;try{localStorage.setItem('mc_cfg',JSON.stringify(cfg))}catch(e){}}
 for(let j=0;j<9;j++){const s=document.createElement('button');s.className='sl';s.onclick=()=>{si=j;upd()};hb.append(s);sbtn.push(s)}
+MCLoad.add('Hotbar','ok','Hotbar validada antes da atualização dos ícones.');
 const iib=document.createElement('canvas');iib.width=iib.height=64;const iix=iib.getContext('2d');iix.imageSmoothingEnabled=false;function inventoryIcon(){iix.clearRect(0,0,64,64);iix.save();iix.scale(4,4);iix.fillStyle='#15191d';iix.fillRect(2,3,12,11);iix.fillStyle='#8b949e';iix.fillRect(3,4,10,2);iix.fillStyle='#4f5862';iix.fillRect(3,7,10,6);iix.fillStyle='#b8c0c8';iix.fillRect(5,8,2,2);iix.fillRect(9,8,2,2);iix.fillStyle='#252a30';iix.fillRect(7,5,2,2);iix.restore();return`url(${iib.toDataURL()})`}const ib=document.createElement('button');ib.className='sl';ib.style.backgroundImage=inventoryIcon();ib.title='Inventário';ib.onclick=()=>{ps=1;show('iv')};hb.append(ib);
 for(const i of INV){const d=document.createElement('div');d.className='cell';const s=document.createElement('button');s.className='sl';s.style.cssText='width:56px;height:56px';s.style.backgroundImage=icon(i);
  s.onclick=()=>{slots[si]=i;upd();ps=0;show('none')};d.append(s,Object.assign(document.createElement('span'),{textContent:B[i][0]}));$('#ig').append(d)}
@@ -320,6 +535,11 @@ function createWorld(){const n=nextWorldNumber();let name=$('#wni').value.trim()
 function setHow(tab){const mobile=tab==='mobile';$('#htm').classList.toggle('on',mobile);$('#hpc').classList.toggle('on',!mobile);$('#htxt').innerHTML=mobile?'<div class="helpbox"><b>Celular</b><br><br>• Use o joystick para andar.<br>• Arraste o lado direito para olhar.<br>• Toque para quebrar um bloco.<br>• Segure para colocar o bloco selecionado.<br>• ▲ pula. Toque duas vezes nele para ligar/desligar o voo.<br>• Use ☰ para pausar e salvar.</div>':'<div class="helpbox"><b>Computador</b><br><br>• WASD: andar.<br>• Mouse: olhar ao redor.<br>• Espaço: pular.<br>• Shift esquerdo: descer durante o voo.<br>• Clique: quebrar o bloco.<br>• Segure o clique: colocar o bloco selecionado.<br>• Use o menu ☰ para pausar e salvar.</div>';}
 $('#play').onclick=()=>{drawW();show('w')};$('#how').onclick=()=>{setHow('mobile');show('h')};$('#cfg').onclick=()=>{drawCfg();show('s')};$('#nw').onclick=openNewWorld;$('#nw2').onclick=openNewWorld;$('#createw').onclick=createWorld;$('#htm').onclick=()=>setHow('mobile');$('#hpc').onclick=()=>setHow('pc');setHow('mobile');
 // Cena do próprio jogo como fundo dos menus. A tela inicial fica sem escurecimento; os demais menus usam .dim.
-start({n:0,name:'Menu',seed:20260930,e:[],p:[8.5,40,8.5,0,0],t:.45});menuPreview=true;show('m');
+try{
+  MCLoad.add('Inicialização do mundo','ok','Estruturas verificadas; iniciando a cena do menu.');
+  start({n:0,name:'Menu',seed:20260930,e:[],p:[8.5,40,8.5,0,0],t:.45});
+  menuPreview=true;show('m');
+  MCLoad.done();
+}catch(e){MCLoad.fatal('Falha ao iniciar o MiniCraft',e&&e.stack?e.stack:String(e))}
 if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));}
 </script></body></html>
