@@ -1,19 +1,11 @@
 {
   "name": "MiniCraft",
   "short_name": "MiniCraft",
-  "description": "Um mundo inteiro para imaginar e construir.",
-  "lang": "pt-BR",
-  "start_url": "./MiniCraft_v9.5.html",
-  "scope": "./",
-  "display": "standalone",
-  "orientation": "landscape",
-  "background_color": "#1b1d22",
-  "theme_color": "#1b1d22",
-  "icons": [
-    {
-      "src": "./favicon.jpeg",
-      "type": "image/jpeg",
-      "purpose": "any maskable"
-    }
-  ]
+  "start_url": "./index.html",
+  "display": "fullscreen",
+  "orientation": "any",
+  "background_color": "#8ec9ef",
+  "theme_color": "#8ec9ef",
+  "description": "MiniCraft - jogo 3D de blocos",
+  "icons": []
 }
