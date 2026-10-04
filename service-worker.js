@@ -1,6 +1,6 @@
 const CACHE_NAME = 'minicraft-v9.5';
 const APP_SHELL = [
-  './MiniCraft_v9.5.html',
+  './index.html',
   './manifest.json',
   './favicon.jpeg'
 ];
