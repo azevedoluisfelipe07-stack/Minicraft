@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><title>MiniCraft 9.89</title>
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><title>MiniCraft 9.90 Preview 6</title>
 <link rel="icon" type="image/jpeg" href="favicon.jpeg">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#1b1d22">
@@ -52,8 +52,20 @@ html.mc-old-controls #bd{right:16px;bottom:calc(146px + var(--sb));width:60px;he
 html.mc-old-controls #bq{right:92px;bottom:calc(100px + var(--sb));width:60px;height:60px}
 html.mc-old-controls #bc{right:92px;bottom:calc(174px + var(--sb));width:60px;height:60px}
 html.mc-old-controls #bp{right:10px;top:calc(10px + var(--st));width:46px;height:46px}
+html.mc-pc #zl,html.mc-pc #zr,html.mc-pc #jb,html.mc-pc #jn,html.mc-pc #bj,html.mc-pc #bd,html.mc-pc #bq,html.mc-pc #bc,html.mc-pc #bp{display:none!important}
+html.mc-pc #hud{pointer-events:none}
+html.mc-pc #hb{pointer-events:none;left:50%;right:auto;transform:translateX(-50%);width:min(500px,96vw);justify-content:center}
+html.mc-pc #bn{bottom:calc(58px + var(--sb));font-size:14px}
+html.mc-pc #ch{font-size:22px;width:20px;height:20px;margin:-10px}
+html.mc-pc body{cursor:default}
+.pcKey{min-width:110px;font-family:inherit}
+.pcStatus{opacity:.75;font-size:12px;margin-top:5px}
+.pcBindGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.pcBind{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#0005;border:2px solid #000;padding:7px}
+.pcBind button{flex:0 0 100px;padding:9px 5px}
+
 </style><style id="mc-tab-fix">
-/* MiniCraft 9.89 — abas: área de toque e texto sem corte */
+/* MiniCraft 9.90 Preview — abas: área de toque e texto sem corte */
 #s .panelTop,#iv .invTabs{position:relative;z-index:20;display:flex;align-items:stretch;gap:6px;width:100%;min-height:50px;height:50px;overflow-x:auto;overflow-y:hidden;padding:0 0 3px;margin:0;touch-action:pan-x;pointer-events:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 #s .panelTop::-webkit-scrollbar,#iv .invTabs::-webkit-scrollbar{display:none}
 #s .panelTop .sg,#iv .invTabs .sg{position:relative;z-index:21;flex:1 0 130px;min-width:130px;height:47px;min-height:47px;padding:10px 4px;touch-action:manipulation;pointer-events:auto;white-space:nowrap}
@@ -94,7 +106,7 @@ html.mc-old-controls #bp{right:10px;top:calc(10px + var(--st));width:46px;height
 <div id="w" class="scr dim"><h2>Mundos</h2><div id="wl"></div><button class="b g" id="nw2">+ Novo mundo</button><button class="b" data-go="m">Voltar</button></div>
 <div id="h" class="scr dim"><h2>Como jogar</h2><div class="tabs"><button class="sg on" id="htm">Celular</button><button class="sg" id="hpc">Computador</button></div><div id="htxt" class="tabbody"></div><button class="b" data-go="m">Voltar</button></div>
 <div id="nwc" class="scr dim"><h2>Novo mundo</h2><div class="field"><label for="wni">Nome do mundo</label><input id="wni" type="text" maxlength="32" value="Mundo 1" autocomplete="off"></div><div class="field"><label for="wsi">Seed</label><input id="wsi" type="number" inputmode="numeric" value="12345"></div><button class="b g" id="createw">Criar mundo</button><button class="b" data-go="m">Cancelar</button></div>
-<div id="s" class="scr dim"><button class="closeX" id="cfgClose" aria-label="Fechar configurações">×</button><h2>Configurações</h2><div class="panel"><div class="panelTop" id="cfgTabs"><button class="sg on" data-tab="visual">Visual</button><button class="sg" data-tab="mundo">Mundo</button><button class="sg" data-tab="controles">Controles</button><button class="sg" data-tab="jogo">Jogo</button></div><div id="sl" class="panelBody"></div></div></div>
+<div id="s" class="scr dim"><button class="closeX" id="cfgClose" aria-label="Fechar configurações">×</button><h2>Configurações</h2><div class="panel"><div class="panelTop" id="cfgTabs"><button class="sg on" data-tab="visual">Visual</button><button class="sg" data-tab="mundo">Mundo</button><button class="sg" data-tab="controles">Controles</button><button class="sg" data-tab="jogo">Jogo</button><button class="sg" data-tab="pc">PC</button></div><div id="sl" class="panelBody"></div></div></div>
 <div id="p" class="scr dim"><h2>Pausado</h2><div class="row"><div>Horário</div><div class="r3" id="tp"></div></div><button class="b g" id="rs">Continuar</button><button class="b" id="ex">Salvar e sair</button></div>
 <div id="iv" class="scr dim"><button class="closeX" id="invClose" aria-label="Fechar inventário">×</button><h2>Inventário</h2><div class="invPanel"><div class="invTabs" id="invTabs"><button class="sg on" data-cat="all">Todos</button><button class="sg" data-cat="construcao">Construção</button><button class="sg" data-cat="natureza">Natureza</button><button class="sg" data-cat="materiais">Materiais</button><button class="sg" data-cat="itens">Itens</button></div><div id="ig" class="invGrid"></div><div class="screenHint">Toque em um item para colocá-lo na hotbar.</div></div></div>
 <div id="hud"><div id="zl"></div><div id="zr"></div><div id="jb"><div id="jn"></div></div><div id="uw"></div><div id="ch">+</div>
@@ -136,7 +148,7 @@ html.mc-old-controls #bp{right:10px;top:calc(10px + var(--st));width:46px;height
   setTimeout(function(){
     if(!window.__mcMainStarted){MCLoad.fatal('Inicialização','O código principal não terminou de iniciar.');}
   },12000);
-  MCLoad.add('Página HTML','ok','Interface encontrada.');
+  MCLoad.add('Página HTML','ok','MiniCraft 9.90 Preview 6.');
   try{
     const c=document.createElement('canvas');
     const gl=c.getContext('webgl',{antialias:false})||c.getContext('experimental-webgl');
@@ -152,15 +164,18 @@ else MCLoad.fatal('Motor 3D','O motor Three.js não está disponível.');
 MCLoad.add('Armazenamento local',(()=>{try{localStorage.setItem('__mc_test','1');localStorage.removeItem('__mc_test');return 'ok'}catch(e){return 'fail'}})(),(()=>{try{localStorage.setItem('__mc_test','1');localStorage.removeItem('__mc_test');return 'localStorage disponível.'}catch(e){return 'localStorage indisponível: '+e.message}})());
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const LS=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}};
-let cfg=Object.assign({rd:3,fd:3,q:1,sn:1,ct:0,fov:75,js:0,bs:1,bo:1,iy:0,dl:240,cr:1,nb:1,dm:0,sq:0,old:0},LS('mc_cfg',{}));
+let cfg=Object.assign({rd:3,fd:3,q:1,sn:1,ct:0,fov:75,js:0,bs:1,bo:1,iy:0,dl:240,cr:1,nb:1,dm:0,sq:0,old:0,pc:0},LS('mc_cfg',{}));
 let cfgRecovered=false;
-const cfgDefaults={rd:3,fd:3,q:1,sn:1,ct:0,fov:75,js:0,bs:1,bo:1,iy:0,dl:240,cr:1,nb:1,dm:0,sq:0,old:0};
+const cfgDefaults={rd:3,fd:3,q:1,sn:1,ct:0,fov:75,js:0,bs:1,bo:1,iy:0,dl:240,cr:1,nb:1,dm:0,sq:0,old:0,pc:0};
 delete cfg.fc;
+const pcDefaults={forward:'KeyW',back:'KeyS',left:'KeyA',right:'KeyD',jump:'Space',down:'ShiftLeft',fly:'KeyF',inventory:'KeyE',pause:'Escape',breakKey:'KeyR',placeKey:'KeyT',prevSlot:'BracketLeft',nextSlot:'BracketRight'};
+cfg.pcKeys=Object.assign({},pcDefaults,(cfg.pcKeys&&typeof cfg.pcKeys==='object')?cfg.pcKeys:{});
+for(const k of Object.keys(pcDefaults))if(typeof cfg.pcKeys[k]!=='string'||!cfg.pcKeys[k])cfg.pcKeys[k]=pcDefaults[k];
 for(const k of Object.keys(cfgDefaults)){if(typeof cfg[k]!=='number'||!Number.isFinite(cfg[k])){cfg[k]=cfgDefaults[k];cfgRecovered=true}}
 if(typeof cfg.fd!=='number')cfg.fd=cfg.rd;
 const hbSafe=[1,2,3,7,10,101,24,25,26];
 if(!Array.isArray(cfg.hb)){cfg.hb=hbSafe.slice();cfgRecovered=true}else{
-  const old=cfg.hb.slice(0,9);cfg.hb=old.map((v,i)=>Number.isInteger(v)&&((v>=0&&v<38)||(v>=100&&v<=101))?v:hbSafe[i]);
+  const old=cfg.hb.slice(0,9);cfg.hb=old.map((v,i)=>Number.isInteger(v)&&((v>=0&&v<42)||(v>=100&&v<=101))?v:hbSafe[i]);
   while(cfg.hb.length<9)cfg.hb.push(hbSafe[cfg.hb.length]);
   if(JSON.stringify(old)!==JSON.stringify(cfg.hb.slice(0,old.length)))cfgRecovered=true;
 }
@@ -180,8 +195,8 @@ if(!Array.isArray(worlds)){worlds=[];try{localStorage.setItem('mc_worlds','[]')}
   MCLoad.add('Integridade dos mundos',worldWarnings?'warn':'ok',worldWarnings?worldWarnings+' mundo(s) tiveram dados estruturais normalizados com segurança.':worlds.length+' mundo(s) passaram pela verificação estrutural.');
   MCLoad.add('Mundos salvos','ok',worlds.length+' mundo(s) disponível(is).');
 }
-function applyUI(){const r=document.documentElement.style;r.setProperty('--k',cfg.bs);r.setProperty('--op',cfg.bo);document.documentElement.classList.toggle('mc-dark-buttons',!!cfg.dm);document.documentElement.classList.toggle('mc-square-buttons',!!cfg.sq);document.documentElement.classList.toggle('mc-old-controls',!!cfg.old);const cross=$('#ch'),name=$('#bn');if(cross)cross.style.display=cfg.cr?'block':'none';if(name)name.style.display=cfg.nb?'block':'none'}applyUI();
-const MENU_SCREENS=['m','w','h','nwc','s'];const show=id=>{ $$('.scr').forEach(e=>{const active=id!=='none'&&e.id===id;e.classList.toggle('on',active);e.style.display=active?'flex':'none'}); if($('#hud'))$('#hud').style.display=id==='none'?'block':(MENU_SCREENS.includes(id)?'none':($('#hud').style.display||'block')); };
+function applyUI(){const r=document.documentElement.style;r.setProperty('--k',cfg.bs);r.setProperty('--op',cfg.bo);document.documentElement.classList.toggle('mc-dark-buttons',!!cfg.dm);document.documentElement.classList.toggle('mc-square-buttons',!!cfg.sq);document.documentElement.classList.toggle('mc-old-controls',!!cfg.old);document.documentElement.classList.toggle('mc-pc',!!cfg.pc);const cross=$('#ch'),name=$('#bn');if(cross)cross.style.display=cfg.cr?'block':'none';if(name)name.style.display=cfg.nb?'block':'none'}applyUI();
+const MENU_SCREENS=['m','w','h','nwc','s'];const show=id=>{ $$('.scr').forEach(e=>{const active=id!=='none'&&e.id===id;e.classList.toggle('on',active);e.style.display=active?'flex':'none'}); if(id!=='none'&&document.pointerLockElement===($('#c')))document.exitPointerLock?.(); if($('#hud'))$('#hud').style.display=id==='none'?'block':(MENU_SCREENS.includes(id)?'none':($('#hud').style.display||'block')); };
 $$('[data-go]').forEach(b=>b.onclick=()=>show(b.dataset.go));
 addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('gesturestart',e=>e.preventDefault());
 
@@ -210,18 +225,32 @@ const PT=[
 (x,y)=>y%4==3?[[178,128,76],10]:((x*3+y*5)%9==0?[[196,148,92],8]:[[208,160,98],12]),
 (x,y)=>((x*3+y*7)%13==0)?[[46,50,60],8]:((x+y*2)%6==0?[[96,102,114],8]:[[70,76,88],10]),
 (x,y)=>(x==0||x==7)?[[30,92,40],8]:(x%4==3&&y%3==1)?[[200,222,150],6]:(x%4==1?[[36,104,46],10]:[[52,128,58],12]),
-(x,y)=>{const d=Math.max(Math.abs(x-3.5),Math.abs(y-3.5));return d>3?[[30,92,40],8]:d>2?[[48,120,54],10]:(x+y)%3==0?[[190,215,140],6]:[[84,158,72],12]}];
+(x,y)=>{const d=Math.max(Math.abs(x-3.5),Math.abs(y-3.5));return d>3?[[30,92,40],8]:d>2?[[48,120,54],10]:(x+y)%3==0?[[190,215,140],6]:[[84,158,72],12]},
+/* 33 folha nevada, 34 madeira escura, 35 grama nevada, 36 gelo */
+(x,y)=>{const r=rr();if(r<.12)return null;if(r<.34)return[[24+(x%2)*4,48+(y%2)*6,30+(x+y)%2*4],12];return[[34+(x+y)%3*4,68+(x%2)*5,38+(y%2)*4],18]},
+(x,y)=>[y%4==3?[62,45,30]:[92,66,42],12],
+/* 35 lado da grama nevada */
+(x,y)=>{const n=(x*5+y*3)%11;return n<2?[[202,230,180],8]:n<4?[[180,216,150],10]:[[158,198,126],12]},
+/* 36 gelo */
+(x,y)=>((x+y)%4==0)?[[238,248,245],6]:[[205,235,220],9],
+/* 37 topo da grama nevada: neve clara sobre verde muito claro */
+(x,y)=>{const n=(x*11+y*7)%17;return n<3?[[242,249,239],6]:n<6?[[226,242,220],7]:[[202,229,178],10]}];
+PT.push(
+ (x,y)=>{const n=(x*5+y*3)%11;return n<2?[[202,230,180],8]:n<4?[[180,216,150],10]:[[158,198,126],12]},
+ (x,y)=>{const n=(x*11+y*7)%17;return n<3?[[242,249,239],6]:n<6?[[226,242,220],7]:[[202,229,178],10]}
+);
 PT.forEach((f,t)=>{for(let y=0;y<8;y++)for(let x=0;x<8;x++){const r=f(x,y);if(!r)continue;const k=(rr()-.5)*r[1],c=r[0];cx.fillStyle=`rgb(${c[0]+k|0},${c[1]+k|0},${c[2]+k|0})`;cx.fillRect(t*8+x,y,1,1)}});
 /* nome, topo, lado, base */
 const B=[0,['Grama',0,1,2],['Terra',2,2,2],['Pedra',3,3,3],['Areia',4,4,4],['Tronco',6,5,6],['Folhas',7,7,7],['Tábuas',8,8,8],['Pedregulho',9,9,9],['Tijolos',10,10,10],['Vidro',11,11,11],['Neve',12,12,12],['Cascalho',13,13,13],['Arenito',14,14,14],['Carvão',15,15,15],['Lã',16,16,16],['Água',17,17,17]];for(let i=17;i<24;i++)B[i]=B[16];
 [['Obsidiana',18],['Tábuas escuras',19],['Ouro',20],['Ferro',21],['Diamante',22],['Argila',23],['Lã azul',24],['Lã amarela',25],['Pedra lisa',26],['Luminária',27]].forEach(([n,t],i)=>B[24+i]=[n,t,t,t]);
 B[34]=['Areia do deserto',28,28,28];B[35]=['Arenito do deserto',29,29,29];B[36]=['Ardósia',30,30,30];B[37]=['Cacto',32,31,32];
+B[38]=['Folha nevada',33,33,33];B[39]=['Madeira escura',34,34,34];B[40]=['Grama nevada',39,38,2];B[41]=['Gelo',36,36,36];
 B[100]=['Balde cheio',17,17,17];B[101]=['Balde vazio',17,17,17];
-const INV=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,24,25,26,27,28,29,30,31,32,33,34,35,36,37,100,101],WT=b=>b>=16&&b<24;
-const T=new Uint8Array(40);T[6]=T[10]=1;for(let i=16;i<24;i++)T[i]=1;
+const INV=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,100,101],WT=b=>b>=16&&b<24;
+const T=new Uint8Array(42);T[6]=T[10]=T[38]=T[41]=1;for(let i=16;i<24;i++)T[i]=1;
 
 /* ---------- Super proteção: integridade dos blocos ---------- */
-const MC_EXPECTED_BLOCKS={1:'Grama',2:'Terra',3:'Pedra',4:'Areia',5:'Tronco',6:'Folhas',7:'Tábuas',8:'Pedregulho',9:'Tijolos',10:'Vidro',11:'Neve',12:'Cascalho',13:'Arenito',14:'Carvão',15:'Lã',16:'Água',24:'Obsidiana',25:'Tábuas escuras',26:'Ouro',27:'Ferro',28:'Diamante',29:'Argila',30:'Lã azul',31:'Lã amarela',32:'Pedra lisa',33:'Luminária',34:'Areia do deserto',35:'Arenito do deserto',36:'Ardósia',37:'Cacto',100:'Balde cheio',101:'Balde vazio'};
+const MC_EXPECTED_BLOCKS={1:'Grama',2:'Terra',3:'Pedra',4:'Areia',5:'Tronco',6:'Folhas',7:'Tábuas',8:'Pedregulho',9:'Tijolos',10:'Vidro',11:'Neve',12:'Cascalho',13:'Arenito',14:'Carvão',15:'Lã',16:'Água',24:'Obsidiana',25:'Tábuas escuras',26:'Ouro',27:'Ferro',28:'Diamante',29:'Argila',30:'Lã azul',31:'Lã amarela',32:'Pedra lisa',33:'Luminária',34:'Areia do deserto',35:'Arenito do deserto',36:'Ardósia',37:'Cacto',38:'Folha nevada',39:'Madeira escura',40:'Grama nevada',41:'Gelo',100:'Balde cheio',101:'Balde vazio'};
 const MC_BLOCK_IDS=Object.create(null),MC_BLOCK_ALIASES=Object.create(null);
 function mcBlockName(id){const b=B[id];return Array.isArray(b)&&typeof b[0]==='string'?b[0]:null}
 function mcFindBlockByName(name){for(let i=0;i<B.length;i++)if(mcBlockName(i)===name)return i;return -1}
@@ -262,7 +291,7 @@ function mcCheckBlocks(){
   MCLoad.add('Identidade dos blocos',missing?'fail':relocated?'warn':'ok',missing?'Alguns blocos esperados não puderam ser recuperados.':relocated?'Foram feitas correções seguras sem substituir IDs ocupados.':'IDs e nomes esperados conferidos.');
 }
 /* ---------- TESTE DE ESTRESSE DA SUPER PROTEÇÃO ---------- */
-const MC_STRESS_TEST=true;
+const MC_STRESS_TEST=false;
 if(MC_STRESS_TEST){
   // 1) ID errado: a Grama é movida temporariamente para um ID incorreto.
   if(B[1]){B[40]=B[1];delete B[1]}
@@ -296,18 +325,49 @@ function makeLodTexture(stage){
 const CS=16,H=68,chunks=new Map(),ck=(x,z)=>(x+2048)*4096+(z+2048);let W=null;
 function hs(x,z,s){let h=Math.imul(x,374761393)^Math.imul(z,668265263)^Math.imul(s,2147483647);h=Math.imul(h^h>>>13,1274126177);return((h^h>>>16)>>>0)/4294967296}
 function vn(x,z,s){const ix=Math.floor(x),iz=Math.floor(z),fx=x-ix,fz=z-iz,u=fx*fx*(3-2*fx),v=fz*fz*(3-2*fz),a=hs(ix,iz,s),b=hs(ix+1,iz,s),c=hs(ix,iz+1,s),d=hs(ix+1,iz+1,s);return a+(b-a)*u+(c-a)*v+(a-b-c+d)*u*v}
-function biomeAt(x,z){const s=W.seed;const b=vn(x/150,z/150,s+31)*.65+vn(x/70,z/70,s+32)*.35;const oRaw=vn(x/520,z/520,s+61)*.55+vn(x/300,z/300,s+62)*.30+vn(x/180,z/180,s+63)*.15;const o=Math.max(0,Math.min(1,(oRaw-.68)/.16));const ocean=o*o*(3-2*o);const m=Math.max(0,Math.min(1,(b-.48)/.28))*(1-ocean);const f=Math.max(0,Math.min(1,(vn(x/120,z/120,s+41)-.32)/.34))*(1-m)*(1-ocean);const dn=vn(x/200,z/200,s+71)*.65+vn(x/90,z/90,s+72)*.35,dr=Math.max(0,Math.min(1,(dn-.52)/.14))*(1-m)*(1-ocean);return{m:m*m*(3-2*m),f:f*f*(3-2*f),o:ocean,d:dr*dr*(3-2*dr)}}
+function biomeAt(x,z){const s=W.seed;const b=vn(x/150,z/150,s+31)*.65+vn(x/70,z/70,s+32)*.35;const oRaw=vn(x/520,z/520,s+61)*.55+vn(x/300,z/300,s+62)*.30+vn(x/180,z/180,s+63)*.15;const o=Math.max(0,Math.min(1,(oRaw-.68)/.16));const ocean=o*o*(3-2*o);const m=Math.max(0,Math.min(1,(b-.48)/.28))*(1-ocean);const f=Math.max(0,Math.min(1,(vn(x/120,z/120,s+41)-.32)/.34))*(1-m)*(1-ocean);const dn=vn(x/200,z/200,s+71)*.65+vn(x/90,z/90,s+72)*.35,dr=Math.max(0,Math.min(1,(dn-.52)/.14))*(1-m)*(1-ocean);const snn=vn(x/210,z/210,s+101)*.65+vn(x/95,z/95,s+102)*.35,sn=Math.max(0,Math.min(1,(snn-.54)/.12))*(1-m)*(1-ocean)*(1-dr);return{m:m*m*(3-2*m),f:f*f*(3-2*f),o:ocean,d:dr*dr*(3-2*dr),s:sn*sn*(3-2*sn)}}
 function height(x,z){const s=W.seed,n=vn(x/48,z/48,s)*.6+vn(x/20,z/20,s+1)*.3+vn(x/8,z/8,s+2)*.1,bm=biomeAt(x,z),coast=bm.o,base=8+n*17,mountain=vn(x/34,z/34,s+51)*.7+vn(x/14,z/14,s+52)*.3,normal=Math.floor(base+(mountain-.38)*32*bm.m*(1-coast*.85)),oceanFloor=3+Math.floor(vn(x/70,z/70,s+62)*2);return Math.max(3,Math.min(62,Math.floor(normal*(1-coast)+oceanFloor*coast)))}
+function snowGrassNaturalAt(x,z){
+ const bm=biomeAt(x,z);
+ const h=height(x,z);
+ // A freezing source must be a naturally generated snowy-grass land block, never water.
+ return bm.s>.35&&bm.o<=.15&&bm.m<=.35&&h>=16;
+}
 function gen(cx,cz){const k=ck(cx,cz);let c=chunks.get(k);if(c)return c;
  const d=new Uint8Array(CS*CS*H),X0=cx*CS,Z0=cz*CS;let top=0;
- for(let z=0;z<CS;z++)for(let x=0;x<CS;x++){const wx=X0+x,wz=Z0+z,h=height(wx,wz),bm=biomeAt(wx,wz),mount=bm.m>.35,forest=bm.f>.35,ocean=bm.o>.35,underwater=h<16,sand=underwater||ocean||h<=7,stoneTop=mount&&h>=38,desert=!sand&&!mount&&bm.d+(vn(wx/7,wz/7,W.seed+74)-.5)*.35>.5;
-  for(let y=0;y<=h;y++)d[x+z*16+y*256]=y==h?(sand?4:desert?34:stoneTop?3:1):y>h-4?(sand?13:desert?35:stoneTop?3:2):(hs(wx*7+y,wz*3+y,W.seed+9)<.025?14:(y<10&&hs((wx>>2)+Math.imul(y>>1,9157),wz>>2,W.seed+91)<(10-y)/14?36:3));
-  for(let y=h+1;y<=15;y++)d[x+z*16+y*256]=16;top=Math.max(top,h+1,h<15?16:0);
-  if(desert&&hs(wx,wz,W.seed+81)<.010){const t=2+Math.floor(hs(wz+17,wx+31,W.seed+4321)*3);for(let y=h+1;y<=h+t;y++)d[x+z*16+y*256]=37;top=Math.max(top,h+t+1)}
-  if(!underwater&&!ocean&&!desert&&forest&&!mount&&x>1&&x<14&&z>1&&z<14&&hs(wx,wz,W.seed+5)<.028){const t=4+(hs(wx,wz,W.seed+6)<.5?1:0);
-   for(let y=h+1;y<=h+t;y++)d[x+z*16+y*256]=5;
-   for(let dy=t-2;dy<=t+1;dy++){const r=dy>=t?1:2;for(let a=-r;a<=r;a++)for(let b=-r;b<=r;b++){if(r==2&&Math.abs(a)==2&&Math.abs(b)==2)continue;const i=x+a+(z+b)*16+(h+dy)*256;if(!d[i])d[i]=6}}
-   top=Math.max(top,h+t+2)}}
+ // Mark only water columns that are within 7 blocks of naturally generated snowy grass.
+ // The expanded scan prevents frozen spots from appearing at chunk borders without a nearby snow-grass source.
+ const freeze=new Uint8Array(256);
+ for(let sz=-7;sz<23;sz++)for(let sx=-7;sx<23;sx++){
+   const gx=X0+sx,gz=Z0+sz;
+   if(!snowGrassNaturalAt(gx,gz))continue;
+   const lx0=Math.max(0,sx-7),lx1=Math.min(15,sx+7),lz0=Math.max(0,sz-7),lz1=Math.min(15,sz+7);
+   for(let fz=lz0;fz<=lz1;fz++)for(let fx=lx0;fx<=lx1;fx++){
+     const dx=fx-sx,dz=fz-sz;if(dx*dx+dz*dz<=49)freeze[fx+fz*16]=1;
+   }
+ }
+ for(let z=0;z<CS;z++)for(let x=0;x<CS;x++){
+   const wx=X0+x,wz=Z0+z,h=height(wx,wz),bm=biomeAt(wx,wz),mount=bm.m>.35,forest=bm.f>.35,ocean=bm.o>.35,snow=bm.s>.35&&!ocean&&!mount,underwater=h<16,sand=underwater||ocean||h<=7,stoneTop=mount&&h>=38,desert=!sand&&!mount&&!snow&&bm.d+(vn(wx/7,wz/7,W.seed+74)-.5)*.35>.5;
+   for(let y=0;y<=h;y++)d[x+z*16+y*256]=y==h?(sand?4:desert?34:snow?40:stoneTop?3:1):y>h-4?(sand?13:desert?35:stoneTop?3:2):(hs(wx*7+y,wz*3+y,W.seed+9)<.025?14:(y<10&&hs((wx>>2)+Math.imul(y>>1,9157),wz>>2,W.seed+91)<(10-y)/14?36:3));
+   for(let y=h+1;y<=15;y++)d[x+z*16+y*256]=16;
+   // Freeze the complete water column in the protected 7-block radius.
+   if(h<16&&bm.s>.35&&freeze[x+z*16])for(let y=h+1;y<=15;y++)d[x+z*16+y*256]=41;
+   top=Math.max(top,h+1,h<15?16:0);
+   if(desert&&hs(wx,wz,W.seed+81)<.010){const t=2+Math.floor(hs(wz+17,wx+31,W.seed+4321)*3);for(let y=h+1;y<=h+t;y++)d[x+z*16+y*256]=37;top=Math.max(top,h+t+1)}
+   if(snow&&!underwater&&h>=16&&h<=60&&x>=3&&x<=12&&z>=3&&z<=12&&hs(wx,wz,W.seed+105)<.018){
+     const t=4+(hs(wx,wz,W.seed+106)<.5?1:0);
+     // Trunk is placed first and the tree is kept safely inside this chunk,
+     // preventing clipped structures at chunk borders or above the world ceiling.
+     for(let y=h+1;y<=h+t;y++)d[x+z*16+y*256]=39;
+     for(let dy=t-2;dy<=t+1;dy++){const r=dy>=t?1:2;for(let a=-r;a<=r;a++)for(let b=-r;b<=r;b++){if(r==2&&Math.abs(a)==2&&Math.abs(b)==2)continue;const tx=x+a,tz=z+b,ty=h+dy;if(tx<0||tx>=16||tz<0||tz>=16||ty<0||ty>=H)continue;const i=tx+tz*16+ty*256;if(!d[i])d[i]=38}}
+     top=Math.max(top,h+t+2);
+   }else if(!underwater&&!ocean&&!desert&&!snow&&forest&&!mount&&x>1&&x<14&&z>1&&z<14&&hs(wx,wz,W.seed+5)<.028){
+     const t=4+(hs(wx,wz,W.seed+6)<.5?1:0);
+     for(let y=h+1;y<=h+t;y++)d[x+z*16+y*256]=5;
+     for(let dy=t-2;dy<=t+1;dy++){const r=dy>=t?1:2;for(let a=-r;a<=r;a++)for(let b=-r;b<=r;b++){if(r==2&&Math.abs(a)==2&&Math.abs(b)==2)continue;const i=x+a+(z+b)*16+(h+dy)*256;if(!d[i])d[i]=6}}
+     top=Math.max(top,h+t+2)
+   }
+ }
  const e=W.ed.get(k);if(e)for(const[i,b]of e){d[i]=b;if((i>>8)+1>top)top=(i>>8)+1}
  c={d,top,mesh:null,cx,cz,done:0,light:null};chunks.set(k,c);scanLights(c);return c}
 function gb(x,y,z){if(y<0)return 3;if(y>=H)return 0;const c=chunks.get(ck(x>>4,z>>4));return c?c.d[(x&15)+(z&15)*16+y*256]:-1}
@@ -321,14 +381,14 @@ function rm(a,b){const c=chunks.get(ck(a,b));if(c&&c.done)mk(c)}
 const FC=[[[1,0,0],[[1,0,0],[1,1,0],[1,1,1],[1,0,1]],.90,2],[[-1,0,0],[[0,0,1],[0,1,1],[0,1,0],[0,0,0]],.90,2],
 [[0,1,0],[[0,1,0],[0,1,1],[1,1,1],[1,1,0]],.98,1],[[0,-1,0],[[0,0,1],[0,0,0],[1,0,0],[1,0,1]],.82,3],
 [[0,0,1],[[1,0,1],[1,1,1],[0,1,1],[0,0,1]],.94,2],[[0,0,-1],[[0,0,0],[0,1,0],[1,1,0],[1,0,0]],.88,2]];
-const UV=[[0,0],[0,1],[1,1],[1,0]];let R,scene,cam,mat,wmat,hl,sun,moon,stars,clouds=[],sunLight,sunTarget,tm=.4,uw=false,localLights=[];
+const UV=[[0,0],[0,1],[1,1],[1,0]];let R,scene,cam,mat,wmat,leafMat,hl,sun,moon,stars,clouds=[],sunLight,sunTarget,tm=.4,uw=false,localLights=[];
 function isFarChunk(c){if(!pl)return false;const dx=c.cx+0.5-pl.x/16,dz=c.cz+0.5-pl.z/16;return Math.hypot(dx,dz)>=12}
 const LAMP_ID=33;
 const lightSources=new Map(), sourceKey=(x,y,z)=>x+','+y+','+z;
 function markLightArea(x,y,z){const rc=Math.ceil(15/16);const pc=x>>4,pz=z>>4;for(let dz=-rc;dz<=rc;dz++)for(let dx=-rc;dx<=rc;dx++){const c=chunks.get(ck(pc+dx,pz+dz));if(c&&c.done)mk(c)}}
 function scanLights(c){for(let y=0;y<c.top;y++)for(let z=0;z<16;z++)for(let x=0;x<16;x++)if(c.d[x+z*16+y*256]===LAMP_ID)lightSources.set(sourceKey(c.cx*16+x,y,c.cz*16+z),15)}
 function rebuildAllLampSources(){lightSources.clear();if(!W)return;for(const [k,m] of W.ed){const cx=Math.floor(k/4096)-2048,cz=(k%4096)-2048;for(const [i,b] of m){if(b!==LAMP_ID)continue;const y=i>>8,lx=i&15,lz=(i>>4)&15;lightSources.set(sourceKey(cx*16+lx,y,cz*16+lz),15)}}}
-function drop(c){for(const k of['mesh','wm'])if(c[k]){c[k].geometry.dispose();scene.remove(c[k]);c[k]=null}}
+function drop(c){for(const k of['mesh','wm','lm'])if(c[k]){c[k].geometry.dispose();scene.remove(c[k]);c[k]=null}}
 function build(A,m,c,k,o){if(!A.n)return;const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(A.P,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(A.U,2));g.setAttribute('color',new THREE.Float32BufferAttribute(A.C,3));
  g.setIndex(A.I);g.computeVertexNormals();g.computeBoundingSphere();const ms=new THREE.Mesh(g,m);ms.renderOrder=o;ms.castShadow=k==='mesh';ms.receiveShadow=true;scene.add(ms);c[k]=ms}
 function rebuildLight(c){
@@ -382,7 +442,7 @@ function meshFar(c){
   const ii=x+z*16;if(used[ii])continue;const y=topY[ii],b=topB[ii];if(!b)continue;
   let w=1;while(x+w<16&&!used[ii+w]&&topY[ii+w]===y&&topB[ii+w]===b)w++;
   let h=1,ok=true;while(z+h<16&&ok){for(let xx=0;xx<w;xx++){const j=(x+xx)+(z+h)*16;if(used[j]||topY[j]!==y||topB[j]!==b){ok=false;break}}if(ok)h++}
-  const A=WT(b)?Wt:O,xx=X0+x,zz=Z0+z;addQuad(A,[[xx,y+1,zz],[xx,y+1,zz+h],[xx+w,y+1,zz+h],[xx+w,y+1,zz]],B[b][1]);
+  const A=WT(b)?Wt:O,xx=X0+x,zz=Z0+z;addQuad(A,[[xx,y+1,zz],[xx,y+1,zz+h],[xx+w,y+1,zz+h],[xx+w,y+1,zz]],b===40?39:B[b][1]);
   for(let zz2=0;zz2<h;zz2++)for(let xx2=0;xx2<w;xx2++)used[(x+xx2)+(z+zz2)*16]=1;
  }
  // Exposed vertical silhouette edges use the side texture of each block.
@@ -399,20 +459,20 @@ function meshFar(c){
  }
  drop(c);build(O,LOD_MAT[stage],c,'mesh',0);build(Wt,LOD_WMAT[stage],c,'wm',1);c.flat=true;c.lodStage=stage;
 }
-function mesh(c){if(isFarChunk(c)){meshFar(c);return}const O={P:[],U:[],C:[],I:[],n:0},Wt={P:[],U:[],C:[],I:[],n:0},X0=c.cx*16,Z0=c.cz*16,d=c.d,wd=new Map(),far=false,L=rebuildLight(c);c.flat=false;
+function mesh(c){if(isFarChunk(c)){meshFar(c);return}const O={P:[],U:[],C:[],I:[],n:0},Wt={P:[],U:[],C:[],I:[],n:0},Lf={P:[],U:[],C:[],I:[],n:0},X0=c.cx*16,Z0=c.cz*16,d=c.d,wd=new Map(),far=false,L=rebuildLight(c);c.flat=false;
  const depthAt=(x,y,z)=>{const key=(x&15)+((z&15)<<4)+(y<<8);if(wd.has(key))return wd.get(key);let dep=0,yy=y+1;while(yy<H&&WT(gb(x,yy,z))){dep++;yy++}wd.set(key,dep);return dep};
  const lightFactor=(x,y,z)=>{let b=L[(x&15)+((z&15)<<4)+y*256];for(const[dx,dy,dz]of FC.map(v=>v[0])){const nx=x+dx,nz=z+dz,ny=y+dy;if(nx>=0&&nx<16&&nz>=0&&nz<16&&ny>=0&&ny<H)b=Math.max(b,L[nx+nz*16+ny*256])}const wx=X0+x+.5,wz=Z0+z+.5,wy=y+.5;let lamp=0,ambientRelief=0;for(const key of lightSources.keys()){const a=key.split(',').map(Number),dx=wx-(a[0]+.5),dy=wy-(a[1]+.5),dz=wz-(a[2]+.5),d=Math.hypot(dx,dy,dz);if(d<3)lamp=Math.max(lamp,1-Math.pow(d/3,1.35));if(d<15)ambientRelief=Math.max(ambientRelief,1-Math.pow(d/15,1.25))}return Math.min(1.05,.34+.66*(b/15)+.70*lamp+.42*ambientRelief)};
  for(let y=0;y<c.top;y++)for(let z=0;z<16;z++)for(let x=0;x<16;x++){const b=d[x+z*16+y*256];if(!b)continue;
-  const w=WT(b),A=w?Wt:O,wl=w&&!WT(gb(X0+x,y+1,Z0+z))?.9:1;
+  const w=WT(b),leaf=b===6||b===38,A=w?Wt:leaf?Lf:O,wl=w&&!WT(gb(X0+x,y+1,Z0+z))?.9:1;
   for(const[f,cs,sh,ti]of FC){const nb=gb(X0+x+f[0],y+f[1],Z0+z+f[2]);
    if(w?!(nb==0||(nb>0&&T[nb]&&!WT(nb))):(nb>0&&(!T[nb]||nb==b)))continue;
-   const t=B[b][ti],u0=t/TN,u1=(t+1)/TN;let faceSh=sh*lightFactor(x,y,z);
+   const t=b===40?(f[1]===1?39:(f[1]===-1?2:38)):B[b][ti],u0=t/TN,u1=(t+1)/TN;let faceSh=sh*lightFactor(x,y,z);
    if(!w){const waterDepth=depthAt(X0+x,y,Z0+z);if(waterDepth>0){const wet=Math.pow(.88,Math.min(waterDepth,10));faceSh*=Math.max(.28,wet)}}
    // Luminaria stay visibly bright while also illuminating nearby blocks.
    if(b===LAMP_ID)faceSh=Math.max(faceSh,1.15);
    for(let k=0;k<4;k++){const v=cs[k];A.P.push(X0+x+v[0],y+(v[1]?wl:0),Z0+z+v[2]);A.U.push(UV[k][0]?u1:u0,UV[k][1]);A.C.push(faceSh,faceSh,faceSh)}
    A.I.push(A.n,A.n+1,A.n+2,A.n,A.n+2,A.n+3);A.n+=4}}
- drop(c);build(O,mat,c,'mesh',0);build(Wt,wmat,c,'wm',1)}
+ drop(c);build(O,mat,c,'mesh',0);build(Wt,wmat,c,'wm',1);build(Lf,leafMat,c,'lm',2)}
 
 /* ---------- Física: água e areia ---------- */
 function mk(c){if(dl)dirty.add(c);else mesh(c)}
@@ -441,9 +501,15 @@ function hit(x,y,z){const e=.3;for(let i=Math.floor(x-e);i<=Math.floor(x+e);i++)
 let safeCheckTimer=0;
 function checkPlayerSafety(dt){safeCheckTimer+=dt;if(safeCheckTimer<1)return;safeCheckTimer=0;if(!hit(pl.x,pl.y,pl.z))return;const ox=pl.x,oy=pl.y,oz=pl.z;const tests=[];for(let dy=-4;dy<=4;dy++)for(let dx=-3;dx<=3;dx++)for(let dz=-3;dz<=3;dz++){if(dx===0&&dy===0&&dz===0)continue;tests.push([dx,dy,dz,dx*dx+dy*dy+dz*dz]);}tests.sort((a,b)=>a[3]-b[3]);for(const[tX,tY,tZ]of tests){const nx=ox+tX,ny=oy+tY,nz=oz+tZ;if(ny<0||ny>=H-1)continue;if(!hit(nx,ny,nz)){pl.x=nx;pl.y=ny;pl.z=nz;pl.vy=0;pl.og=0;return}}}
 function mv(a,d){const k=AX[a];pl[k]+=d;if(hit(pl.x,pl.y,pl.z)){pl[k]-=d;return 0}return 1}
-function phys(dt){const ax=jx+(K.KeyD?1:0)-(K.KeyA?1:0),ay=jy+(K.KeyS?1:0)-(K.KeyW?1:0),iw=WT(gb(Math.floor(pl.x),Math.floor(pl.y+.5),Math.floor(pl.z))),sp=(pl.fly?9:iw?2.6:4.3)*(Math.hypot(jx,jy)>.93?1.4:1),s=Math.sin(pl.yaw),c=Math.cos(pl.yaw),f=-ay,u=up||K.Space,dw=dn||K.ShiftLeft;
+function phys(dt){const pk=cfg.pcKeys||pcDefaults,ax=jx+(K[pk.right]?1:0)-(K[pk.left]?1:0),ay=jy+(K[pk.back]?1:0)-(K[pk.forward]?1:0),iw=WT(gb(Math.floor(pl.x),Math.floor(pl.y+.5),Math.floor(pl.z))),sp=(pl.fly?9:iw?2.8:4.3)*(Math.hypot(jx,jy)>.93?1.4:1),s=Math.sin(pl.yaw),c=Math.cos(pl.yaw),f=-ay,u=up||K[pk.jump],dw=dn||K[pk.down];
  mv(0,(c*ax-s*f)*sp*dt);mv(2,(-s*ax-c*f)*sp*dt);
- if(pl.fly)pl.vy=((u?1:0)-(dw?1:0))*7;else if(iw){pl.vy=Math.max(pl.vy-10*dt,-3);if(u)pl.vy=Math.min(pl.vy+30*dt,3.5)}else{pl.vy=Math.max(pl.vy-25*dt,-30);if(u&&pl.og)pl.vy=8.3}
+ if(pl.fly)pl.vy=((u?1:0)-(dw?1:0))*7;
+ else if(iw){
+   // Swimming: jump/up now gives a strong, immediate rise so the player can leave water.
+   if(u)pl.vy=Math.max(pl.vy,5.6);
+   else if(dw)pl.vy=Math.min(pl.vy,-3.2);
+   else pl.vy=Math.max(pl.vy-7*dt,-2.2);
+ }else{pl.vy=Math.max(pl.vy-25*dt,-30);if(u&&pl.og)pl.vy=8.3}
  const dy=pl.vy*dt;if(!mv(1,dy)){pl.og=dy<0?1:0;pl.vy=0}else pl.og=0}
 function ray(w){const ce=Math.cos(pl.pitch),dx=-Math.sin(pl.yaw)*ce,dy=Math.sin(pl.pitch),dz=-Math.cos(pl.yaw)*ce,ox=pl.x,oy=pl.y+1.62,oz=pl.z;
  let x=Math.floor(ox),y=Math.floor(oy),z=Math.floor(oz),px,py,pz;const sx=Math.sign(dx),sy=Math.sign(dy),sz=Math.sign(dz),ax=Math.abs(1/dx),ay=Math.abs(1/dy),az=Math.abs(1/dz);
@@ -460,12 +526,13 @@ function put(){
 
 /* ---------- Render / loop ---------- */
 function init3(){R=new THREE.WebGLRenderer({canvas:$('#c'),antialias:false,powerPreference:'high-performance'});R.shadowMap.enabled=false;scene=new THREE.Scene();
- const tex=new THREE.CanvasTexture(cv);tex.magFilter=THREE.NearestFilter;tex.minFilter=THREE.NearestFilter;tex.generateMipmaps=false;tex.anisotropy=1;tex.needsUpdate=true;
+ const tex=new THREE.CanvasTexture(cv);tex.magFilter=THREE.NearestFilter;tex.minFilter=THREE.NearestFilter;tex.generateMipmaps=false;tex.needsUpdate=true;
  for(const stage of [8,4,2,1])makeLodTexture(stage);
  for(const stage of [8,4,2,1]){LOD_MAT[stage]=new THREE.MeshLambertMaterial({map:LOD_TEX[stage],alphaTest:.5});LOD_WMAT[stage]=new THREE.MeshBasicMaterial({map:LOD_TEX[stage],transparent:true,opacity:.65,depthWrite:false,side:THREE.DoubleSide})}
  mat=new THREE.MeshLambertMaterial({map:tex,vertexColors:true,alphaTest:.5});cam=new THREE.PerspectiveCamera(75,1,.1,200);cam.rotation.order='YXZ';
  hl=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1.004,1.004,1.004)),new THREE.LineBasicMaterial({color:0}));scene.add(hl);
  wmat=new THREE.MeshLambertMaterial({map:tex,vertexColors:true,transparent:true,opacity:.65,depthWrite:false,side:THREE.DoubleSide});
+ leafMat=new THREE.MeshLambertMaterial({map:tex,vertexColors:true,alphaTest:.5,depthWrite:true,side:THREE.DoubleSide});
  const hemi=new THREE.HemisphereLight(0xd9f2ff,0x5d6b4a,.42);scene.add(hemi);
  sunLight=new THREE.DirectionalLight(0xffffff,.16);sunLight.castShadow=false;scene.add(sunLight);
  sunTarget=new THREE.Object3D();scene.add(sunTarget);sunLight.target=sunTarget;
@@ -487,7 +554,7 @@ function updateLocalLights(){if(!scene||!pl)return;const arr=[];for(const key of
 function sky(){const a=(tm-.25)*6.2832,sh=Math.sin(a),k=Math.max(0,Math.min(1,(sh+.15)/.4)),dk=Math.max(0,1-Math.abs(sh)/.25)*.55;
  const c=[mx(8,142,k),mx(12,201,k),mx(32,239,k)].map((v,i)=>mx(v,[240,120,70][i],dk));
  scene.background.setRGB(c[0]/255,c[1]/255,c[2]/255);scene.fog.color.copy(scene.background);
- const L=mx(.68,.92,k);mat.color.setScalar(L);wmat.color.setScalar(L);for(const stage of [8,4,2,1]){LOD_MAT[stage].color.setScalar(L);LOD_WMAT[stage].color.setScalar(Math.min(L,.92))}sunLight.intensity=mx(.12,.38,k);
+ const L=mx(.68,.92,k);mat.color.setScalar(L);wmat.color.setScalar(L);if(leafMat)leafMat.color.setScalar(L);for(const stage of [8,4,2,1]){LOD_MAT[stage].color.setScalar(L);LOD_WMAT[stage].color.setScalar(Math.min(L,.92))}sunLight.intensity=mx(.12,.38,k);
  const cp=cam.position,d=[Math.cos(a),sh,.25],l=Math.hypot(d[0],d[1],d[2])/70;
  sun.position.set(cp.x+d[0]/l,cp.y+d[1]/l,cp.z+d[2]/l);moon.position.set(cp.x-d[0]/l,cp.y-d[1]/l,cp.z-d[2]/l);sun.lookAt(cp);moon.lookAt(cp);
  sunLight.position.set(cp.x+d[0]*.75,cp.y+d[1]*.75+30,cp.z+d[2]*.75);sunTarget.position.set(cp.x,cp.y,cp.z);
@@ -509,14 +576,48 @@ function start(w){menuPreview=false;$$('.scr').forEach(e=>{e.classList.remove('o
  if(!p){let y=H-1;while(y>0&&gb(8,y,8)==0)y--;pl.y=y+1}
  jb.className=cfg.js?'':'fx';jb.style.cssText='';$('#bd').style.display='none';$('#bq').style.display=$('#bc').style.display=cfg.ct?'block':'none';$('#hud').style.display='block';show('none');ps=0;last=performance.now();sv=last;if(!on){on=1;requestAnimationFrame(loop)}}
 
+/* ---------- Controles de PC ---------- */
+let pcBinding=null,pcMouseDown=0,pcPointerLocked=false,pcLastX=0,pcLastY=0;
+const pcActionLabels={forward:'Andar para frente',back:'Andar para trás',left:'Andar para esquerda',right:'Andar para direita',jump:'Pular',down:'Descer / voo',fly:'Ativar voo',inventory:'Inventário',pause:'Pausar',breakKey:'Quebrar',placeKey:'Colocar',prevSlot:'Slot anterior',nextSlot:'Próximo slot'};
+function pcCodeLabel(code){const m={Space:'Espaço',Escape:'Esc',ShiftLeft:'Shift esquerdo',ShiftRight:'Shift direito',ControlLeft:'Ctrl esquerdo',ControlRight:'Ctrl direito',AltLeft:'Alt esquerdo',AltRight:'Alt direito',ArrowUp:'Seta ↑',ArrowDown:'Seta ↓',ArrowLeft:'Seta ←',ArrowRight:'Seta →',BracketLeft:'[',BracketRight:']'};if(m[code])return m[code];if(code&&code.startsWith('Key'))return code.slice(3);if(code&&code.startsWith('Digit'))return code.slice(5);return code||'—'}
+function saveCfg(){try{localStorage.setItem('mc_cfg',JSON.stringify(cfg))}catch(e){}}
+function pcBindStart(action){pcBinding=action;drawCfg();toast('Pressione uma tecla para '+pcActionLabels[action])}
+function pcResetKeys(){cfg.pcKeys=Object.assign({},pcDefaults);saveCfg();drawCfg();toast('Atalhos do PC restaurados')}
+function pcRequestLock(){if(!cfg.pc||!on||ps)return;if(document.pointerLockElement!==$('#c'))$('#c').requestPointerLock?.()}
+function pcMouseAction(button){if(!on||ps||!cfg.pc)return;if(button===0)brk();else if(button===2)put()}
+function pcSelectSlot(delta){si=(si+delta+9)%9;upd()}
+function pcInventory(){if(!on)return;ps=1;show('iv')}
+function pcPause(){if(!on)return;ps=1;saveW();show('p')}
+function pcKeyDown(e){
+ const pk=cfg.pcKeys||pcDefaults;
+ if(pcBinding){if(e.code==='Escape'){pcBinding=null;drawCfg();e.preventDefault();e.stopPropagation();return}if(Object.values(pk).includes(e.code)&&pk[pcBinding]!==e.code){/* allow reassignment; old action loses the shared key on next use */}pk[pcBinding]=e.code;pcBinding=null;saveCfg();drawCfg();e.preventDefault();e.stopPropagation();return}
+ if(!cfg.pc)return;
+ if(e.code===pk.pause){e.preventDefault();pcPause();return}
+ if(e.code===pk.inventory){e.preventDefault();pcInventory();return}
+ if(e.code===pk.fly){if(on&&!ps){pl.fly^=1;pl.vy=0;toast(pl.fly?'Voo ligado':'Voo desligado')}e.preventDefault();return}
+ if(e.code===pk.breakKey){if(on&&!ps)brk();e.preventDefault();return}
+ if(e.code===pk.placeKey){if(on&&!ps)put();e.preventDefault();return}
+ if(e.code===pk.prevSlot){pcSelectSlot(-1);e.preventDefault();return}
+ if(e.code===pk.nextSlot){pcSelectSlot(1);e.preventDefault();return}
+ K[e.code]=1;
+}
+function pcKeyUp(e){K[e.code]=0}
+window.addEventListener('keydown',pcKeyDown,true);window.addEventListener('keyup',pcKeyUp,true);
+$('#c').addEventListener('mousedown',e=>{if(!cfg.pc||!on||ps)return;e.preventDefault();pcMouseDown=e.button;pcRequestLock();pcMouseAction(e.button)});
+$('#c').addEventListener('contextmenu',e=>{if(cfg.pc){e.preventDefault();return false}});
+document.addEventListener('mousemove',e=>{if(!cfg.pc||!on||ps||document.pointerLockElement!==$('#c'))return;pl.yaw-=e.movementX*.0025*cfg.sn;pl.pitch=Math.max(-1.55,Math.min(1.55,pl.pitch-e.movementY*.0025*cfg.sn*(cfg.iy?-1:1)))},true);
+document.addEventListener('pointerlockchange',()=>{pcPointerLocked=document.pointerLockElement===$('#c')});
+$('#c').addEventListener('wheel',e=>{if(!cfg.pc||!on||ps)return;e.preventDefault();pcSelectSlot(e.deltaY>0?1:-1)},{passive:false});
+document.addEventListener('keydown',e=>{if(!cfg.pc||pcBinding)return;if(e.code.startsWith('Digit')){const n=Number(e.code.slice(5));if(n>=1&&n<=9){si=n-1;upd();e.preventDefault()}}},{capture:true});
+
 /* ---------- Controles de toque ---------- */
 const zl=$('#zl'),zr=$('#zr'),jb=$('#jb'),jn=$('#jn');let jid=null,jo=[0,0];
-zl.onpointerdown=e=>{if(jid!==null)return;jid=e.pointerId;zl.setPointerCapture(jid);if(cfg.js){jo=[e.clientX,e.clientY];jb.style.cssText=`display:block;left:${jo[0]-60}px;top:${jo[1]-60}px`}else{const q=jb.getBoundingClientRect();jo=[q.left+60,q.top+60]}jn.style.transform=''};
+zl.onpointerdown=e=>{if(cfg.pc)return;if(jid!==null)return;jid=e.pointerId;zl.setPointerCapture(jid);if(cfg.js){jo=[e.clientX,e.clientY];jb.style.cssText=`display:block;left:${jo[0]-60}px;top:${jo[1]-60}px`}else{const q=jb.getBoundingClientRect();jo=[q.left+60,q.top+60]}jn.style.transform=''};
 zl.onpointermove=e=>{if(e.pointerId!=jid)return;let dx=e.clientX-jo[0],dy=e.clientY-jo[1];const l=Math.hypot(dx,dy),m=50;if(l>m){dx*=m/l;dy*=m/l}
  jn.style.transform=`translate(${dx}px,${dy}px)`;jx=dx/m;jy=dy/m;if(Math.hypot(jx,jy)<.15)jx=jy=0};
 zl.onpointerup=zl.onpointercancel=e=>{if(e.pointerId!=jid)return;jid=null;jx=jy=0;if(cfg.js)jb.style.display='none';jn.style.transform=''};
 let lid=null,lp,lt,lm,lh,tr;
-zr.onpointerdown=e=>{if(lid!==null)return;lid=e.pointerId;zr.setPointerCapture(lid);lp=[e.clientX,e.clientY];lt=performance.now();lm=0;tr=0;lh=setTimeout(()=>{if(lid!==null&&!lm&&!cfg.ct){put();lm=2}},380)};
+zr.onpointerdown=e=>{if(cfg.pc)return;if(lid!==null)return;lid=e.pointerId;zr.setPointerCapture(lid);lp=[e.clientX,e.clientY];lt=performance.now();lm=0;tr=0;lh=setTimeout(()=>{if(lid!==null&&!lm&&!cfg.ct){put();lm=2}},380)};
 zr.onpointermove=e=>{if(e.pointerId!=lid)return;const dx=e.clientX-lp[0],dy=e.clientY-lp[1];lp=[e.clientX,e.clientY];tr+=Math.abs(dx)+Math.abs(dy);if(tr>12&&!lm)lm=1;
  pl.yaw-=dx*.005*cfg.sn;pl.pitch=Math.max(-1.55,Math.min(1.55,pl.pitch-dy*.005*cfg.sn*(cfg.iy?-1:1)))};
 zr.onpointerup=e=>{if(e.pointerId!=lid)return;clearTimeout(lh);if(!lm&&!cfg.ct&&performance.now()-lt<380)brk();lid=null};
@@ -525,7 +626,7 @@ const hold=(el,f)=>{el.onpointerdown=()=>f(1);el.onpointerup=el.onpointercancel=
 const rep=(el,f)=>{let t;el.onpointerdown=()=>{f();t=setInterval(f,260)};el.onpointerup=el.onpointercancel=el.onpointerleave=()=>clearInterval(t)};rep($('#bq'),brk);rep($('#bc'),put);
 hold($('#bj'),v=>up=v);hold($('#bd'),v=>dn=v);
 let lj=0;$('#bj').addEventListener('pointerdown',()=>{const n=performance.now();if(n-lj<320){pl.fly^=1;pl.vy=0;$('#bd').style.display=pl.fly?'block':'none';toast(pl.fly?'Voo ligado':'Voo desligado');lj=0}else lj=n});
-onkeydown=e=>K[e.code]=1;onkeyup=e=>K[e.code]=0;
+onkeydown=e=>{if(!cfg.pc)K[e.code]=1};onkeyup=e=>{if(!cfg.pc)K[e.code]=0};
 $('#bp').onclick=()=>{ps=1;saveW();show('p')};$('#rs').onclick=()=>{ps=0;show('none')};
 $('#ex').onclick=()=>{saveW();on=0;W=null;pl=null;$('#hud').style.display='none';jx=jy=up=dn=0;drawW();show('w')};
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&W)saveW()});
@@ -537,7 +638,7 @@ function upd(){sel=slots[si];sbtn.forEach((s,j)=>{s.style.backgroundImage=icon(s
 for(let j=0;j<9;j++){const s=document.createElement('button');s.className='sl';s.onclick=()=>{si=j;upd()};hb.append(s);sbtn.push(s)}
 MCLoad.add('Hotbar','ok','Hotbar validada antes da atualização dos ícones.');
 const iib=document.createElement('canvas');iib.width=iib.height=64;const iix=iib.getContext('2d');iix.imageSmoothingEnabled=false;function inventoryIcon(){iix.clearRect(0,0,64,64);iix.save();iix.scale(4,4);iix.fillStyle='#15191d';iix.fillRect(2,3,12,11);iix.fillStyle='#8b949e';iix.fillRect(3,4,10,2);iix.fillStyle='#4f5862';iix.fillRect(3,7,10,6);iix.fillStyle='#b8c0c8';iix.fillRect(5,8,2,2);iix.fillRect(9,8,2,2);iix.fillStyle='#252a30';iix.fillRect(7,5,2,2);iix.restore();return`url(${iib.toDataURL()})`}const ib=document.createElement('button');ib.className='sl';ib.style.backgroundImage=inventoryIcon();ib.title='Inventário';ib.onclick=()=>{ps=1;show('iv')};hb.append(ib);
-const INV_CAT={construcao:new Set([7,8,9,10,11,24,25,26,27,28,29,30,31,32,33,35]),natureza:new Set([1,2,4,5,6,12,13,14,34,37]),materiais:new Set([3,15,16,24,25,26,27,28,29,30,31,32,33,34,35,36]),itens:new Set([100,101])};
+const INV_CAT={construcao:new Set([7,8,9,10,11,24,25,26,27,28,29,30,31,32,33,35,38,39,40,41]),natureza:new Set([1,2,4,5,6,12,13,14,34,37,38,39,40,41]),materiais:new Set([3,15,16,24,25,26,27,28,29,30,31,32,33,34,35,36,38,39,40,41]),itens:new Set([100,101])};
 let invCat='all';
 function invCategory(id){for(const [cat,set] of Object.entries(INV_CAT))if(set.has(id))return cat;return 'materiais'}
 function renderInventory(){const g=$('#ig');g.innerHTML='';for(const i of INV){if(invCat!=='all'&&invCategory(i)!==invCat)continue;const d=document.createElement('div');d.className='cell';const s=document.createElement('button');s.className='sl';s.style.cssText='width:56px;height:56px';s.style.backgroundImage=icon(i);s.onclick=()=>{slots[si]=i;upd();ps=0;show('none')};d.append(s,Object.assign(document.createElement('span'),{textContent:B[i][0]}));g.append(d)}}
@@ -546,9 +647,17 @@ $('#invClose').onclick=()=>{ps=0;show('none')};$('#cfgClose').onclick=()=>{show(
 [['Manhã',.27],['Meio-dia',.5],['Tarde',.72],['Noite',0]].forEach(([n,v])=>{const b=document.createElement('button');b.className='sg';b.textContent=n;b.onclick=()=>{tm=v;sky();$$('#tp .sg').forEach(x=>x.classList.toggle('on',x==b))};$('#tp').append(b)});
 
 /* ---------- Menus ---------- */
-const OPT={visual:[['q','Qualidade gráfica',[[.6,'Baixa'],[1,'Média'],[1.5,'Alta']]],['fov','Campo de visão',[[60,'60°'],[75,'75°'],[90,'90°']]],['cr','Mira na tela',[[1,'Ligada'],[0,'Desligada']]],['nb','Nome do bloco',[[1,'Ligado'],[0,'Desligado']]]],mundo:[['rd','Distância de renderização'],['fd','Distância da neblina'],['dl','Duração do dia',[[0,'Parado'],[120,'Curto'],[240,'Normal'],[480,'Longo']]]],controles:[['sn','Sensibilidade da câmera',[[.6,'Baixa'],[1,'Média'],[1.6,'Alta']]],['iy','Inverter câmera vertical',[[0,'Não'],[1,'Sim']]],['ct','Quebrar / colocar',[[0,'Toque'],[1,'Botões']]],['js','Joystick',[[0,'Fixo'],[1,'Flutuante']]],['bs','Tamanho dos botões',[[.85,'Pequeno'],[1,'Médio'],[1.2,'Grande']]],['bo','Opacidade dos controles',[[.5,'50%'],[.75,'75%'],[1,'100%']]],['dm','Modo escuro de botões',[[0,'Desativado'],[1,'Ativado']]],['sq','Botões quadrados',[[0,'Desativado'],[1,'Ativado']]],['old','Controles antigos',[[0,'Desativado'],[1,'Ativado']]]],jogo:[]};
+const OPT={visual:[['q','Qualidade gráfica',[[.6,'Baixa'],[1,'Média'],[1.5,'Alta']]],['fov','Campo de visão',[[60,'60°'],[75,'75°'],[90,'90°']]],['cr','Mira na tela',[[1,'Ligada'],[0,'Desligada']]],['nb','Nome do bloco',[[1,'Ligado'],[0,'Desligado']]]],mundo:[['rd','Distância de renderização'],['fd','Distância da neblina'],['dl','Duração do dia',[[0,'Parado'],[120,'Curto'],[240,'Normal'],[480,'Longo']]]],controles:[['sn','Sensibilidade da câmera',[[.6,'Baixa'],[1,'Média'],[1.6,'Alta']]],['iy','Inverter câmera vertical',[[0,'Não'],[1,'Sim']]],['ct','Quebrar / colocar',[[0,'Toque'],[1,'Botões']]],['js','Joystick',[[0,'Fixo'],[1,'Flutuante']]],['bs','Tamanho dos botões',[[.85,'Pequeno'],[1,'Médio'],[1.2,'Grande']]],['bo','Opacidade dos controles',[[.5,'50%'],[.75,'75%'],[1,'100%']]],['dm','Modo escuro de botões',[[0,'Desativado'],[1,'Ativado']]],['sq','Botões quadrados',[[0,'Desativado'],[1,'Ativado']]],['old','Controles antigos',[[0,'Desativado'],[1,'Ativado']]]],jogo:[],pc:[['pc','Modo PC',[[0,'Desativado'],[1,'Ativado']]] ]};
 let cfgTab='visual';
-function drawCfg(){const c=$('#sl');c.innerHTML='';const list=OPT[cfgTab]||[];if(!list.length){c.innerHTML='<div class="settingCard"><div class="settingTitle">Jogo</div><div>As configurações de jogabilidade desta versão permanecem nos controles durante a partida.</div></div>';return}list.forEach(([k,n,v])=>{const d=document.createElement('div');d.className='settingCard';if(k==='rd'||k==='fd'){d.innerHTML='<div class="settingTitle">'+n+'</div>';const r=document.createElement('div');r.className='rangeBox';const inp=document.createElement('input');inp.type='range';inp.min=2;inp.max=64;inp.step=1;inp.value=cfg[k];const val=document.createElement('span');val.className='rangeVal';val.textContent=cfg[k]+' chunks';const apply=()=>{cfg[k]=+inp.value;val.textContent=cfg[k]+' chunks';applyUI();try{localStorage.setItem('mc_cfg',JSON.stringify(cfg))}catch(e){}if(R)resize();if(k==='rd'){lastC='';stream();if(stars)stars.scale.setScalar(Math.max(1,(cfg.rd*16+20)/68));for(let i=0;i<Math.min(8,cq.length);i++)proc()}};inp.oninput=()=>val.textContent=inp.value+' chunks';inp.onchange=apply;r.append(inp,val);d.append(r);c.append(d);return}d.innerHTML='<div class="settingTitle">'+n+'</div>';const r=document.createElement('div');r.className='r3';v.forEach(([val,l])=>{const b=document.createElement('button');b.textContent=l;b.className='sg'+(cfg[k]==val?' on':'');b.onclick=()=>{cfg[k]=val;applyUI();try{localStorage.setItem('mc_cfg',JSON.stringify(cfg))}catch(e){}drawCfg()};r.append(b)});d.append(r);c.append(d)})}
+function drawPCSettings(c){
+ const d=document.createElement('div');d.className='settingCard';d.innerHTML='<div class="settingTitle">Modo PC</div><div class="r3"></div><div class="pcStatus">No PC: mouse olha ao redor, clique esquerdo quebra, clique direito coloca e a roda do mouse troca o slot.</div>';
+ const row=d.querySelector('.r3');[['pc',0,'Desativado'],['pc',1,'Ativado']].forEach(([k,v,l])=>{const b=document.createElement('button');b.className='sg'+(cfg[k]===v?' on':'');b.textContent=l;b.onclick=()=>{cfg[k]=v;applyUI();saveCfg();drawCfg()};row.append(b)});c.append(d);
+ if(!cfg.pc){const h=document.createElement('div');h.className='settingCard';h.innerHTML='<div class="settingTitle">Atalhos</div><div>Ative o Modo PC para usar e configurar os atalhos.</div>';c.append(h);return}
+ const b=document.createElement('div');b.className='settingCard';b.innerHTML='<div class="settingTitle">Atalhos configuráveis</div><div class="pcBindGrid"></div><button class="sg" style="margin-top:10px;width:100%">Restaurar atalhos padrão</button>';
+ const grid=b.querySelector('.pcBindGrid');for(const [action,label] of Object.entries(pcActionLabels)){const row=document.createElement('div');row.className='pcBind';const span=document.createElement('span');span.textContent=label;const btn=document.createElement('button');btn.className='sg pcKey'+(pcBinding===action?' on':'');btn.textContent=pcBinding===action?'Pressione...':pcCodeLabel(cfg.pcKeys[action]);btn.onclick=()=>pcBindStart(action);row.append(span,btn);grid.append(row)}b.querySelector('button:last-child').onclick=pcResetKeys;c.append(b);
+ const h=document.createElement('div');h.className='settingCard';h.innerHTML='<div class="settingTitle">Atalhos extras</div><div>1–9 selecionam os slots. A roda do mouse também troca o slot. Clique no jogo para capturar o mouse; Esc solta o mouse.</div>';c.append(h);
+}
+function drawCfg(){const c=$('#sl');c.innerHTML='';const list=OPT[cfgTab]||[];if(cfgTab==='pc'){drawPCSettings(c);return}if(!list.length){c.innerHTML='<div class="settingCard"><div class="settingTitle">Jogo</div><div>As configurações de jogabilidade desta versão permanecem nos controles durante a partida.</div></div>';return}list.forEach(([k,n,v])=>{const d=document.createElement('div');d.className='settingCard';if(k==='rd'||k==='fd'){d.innerHTML='<div class="settingTitle">'+n+'</div>';const r=document.createElement('div');r.className='rangeBox';const inp=document.createElement('input');inp.type='range';inp.min=2;inp.max=64;inp.step=1;inp.value=cfg[k];const val=document.createElement('span');val.className='rangeVal';val.textContent=cfg[k]+' chunks';const apply=()=>{cfg[k]=+inp.value;val.textContent=cfg[k]+' chunks';applyUI();try{localStorage.setItem('mc_cfg',JSON.stringify(cfg))}catch(e){}if(R)resize();if(k==='rd'){lastC='';stream();if(stars)stars.scale.setScalar(Math.max(1,(cfg.rd*16+20)/68));for(let i=0;i<Math.min(8,cq.length);i++)proc()}};inp.oninput=()=>val.textContent=inp.value+' chunks';inp.onchange=apply;r.append(inp,val);d.append(r);c.append(d);return}d.innerHTML='<div class="settingTitle">'+n+'</div>';const r=document.createElement('div');r.className='r3';v.forEach(([val,l])=>{const b=document.createElement('button');b.textContent=l;b.className='sg'+(cfg[k]==val?' on':'');b.onclick=()=>{cfg[k]=val;applyUI();try{localStorage.setItem('mc_cfg',JSON.stringify(cfg))}catch(e){}drawCfg()};r.append(b)});d.append(r);c.append(d)})}
 $$('#cfgTabs .sg').forEach(b=>b.onclick=()=>{cfgTab=b.dataset.tab;$$('#cfgTabs .sg').forEach(x=>x.classList.toggle('on',x===b));drawCfg()});
 function drawW(){const l=$('#wl');l.innerHTML=worlds.length?'':'<div style="text-align:center;text-shadow:2px 2px 0 #0006">Nenhum mundo ainda</div>';
  worlds.forEach((w,i)=>{const d=document.createElement('div');d.className='wi';d.innerHTML=`<div class="wn"><b>${w.name}</b><small>Seed ${w.seed}</small></div><button class="b2 g">▶</button><button class="b2">🗑</button>`;
@@ -557,7 +666,7 @@ function drawW(){const l=$('#wl');l.innerHTML=worlds.length?'':'<div style="text
 function nextWorldNumber(){return worlds.reduce((m,w)=>Math.max(m,w.n||0),0)+1}
 function openNewWorld(){const n=nextWorldNumber();$('#wni').value='Mundo '+n;$('#wsi').value=(Math.random()*1000000000|0);show('nwc');setTimeout(()=>$('#wni').focus(),0)}
 function createWorld(){const n=nextWorldNumber();let name=$('#wni').value.trim()||('Mundo '+n),seed=Number($('#wsi').value);if(!Number.isFinite(seed))seed=Math.random()*1000000000|0;seed=Math.trunc(seed);const w={n,name,seed};worlds.push(w);saveW();start(w)}
-function setHow(tab){const mobile=tab==='mobile';$('#htm').classList.toggle('on',mobile);$('#hpc').classList.toggle('on',!mobile);$('#htxt').innerHTML=mobile?'<div class="helpbox"><b>Celular</b><br><br>• Use o joystick para andar.<br>• Arraste o lado direito para olhar.<br>• Toque para quebrar um bloco.<br>• Segure para colocar o bloco selecionado.<br>• ▲ pula. Toque duas vezes nele para ligar/desligar o voo.<br>• Use ☰ para pausar e salvar.</div>':'<div class="helpbox"><b>Computador</b><br><br>• WASD: andar.<br>• Mouse: olhar ao redor.<br>• Espaço: pular.<br>• Shift esquerdo: descer durante o voo.<br>• Clique: quebrar o bloco.<br>• Segure o clique: colocar o bloco selecionado.<br>• Use o menu ☰ para pausar e salvar.</div>';}
+function setHow(tab){const mobile=tab==='mobile';$('#htm').classList.toggle('on',mobile);$('#hpc').classList.toggle('on',!mobile);$('#htxt').innerHTML=mobile?'<div class="helpbox"><b>Celular</b><br><br>• Use o joystick para andar.<br>• Arraste o lado direito para olhar.<br>• Toque para quebrar um bloco.<br>• Segure para colocar o bloco selecionado.<br>• ▲ pula. Toque duas vezes nele para ligar/desligar o voo.<br>• Use ☰ para pausar e salvar.</div>':'<div class="helpbox"><b>Computador</b><br><br>• WASD: andar.<br>• Mouse: olhar ao redor.<br>• Espaço: pular.<br>• Shift esquerdo: descer durante o voo.<br>• Clique esquerdo: quebrar.<br>• Clique direito: colocar.<br>• Roda do mouse ou 1–9: escolher slot.<br>• E: inventário; Esc: pausar/soltar o mouse.<br>• Os atalhos podem ser configurados em Configurações → PC.</div>';}
 renderInventory();drawCfg();$('#play').onclick=()=>{drawW();show('w')};$('#how').onclick=()=>{setHow('mobile');show('h')};$('#cfg').onclick=()=>{drawCfg();show('s')};$('#nw').onclick=openNewWorld;$('#nw2').onclick=openNewWorld;$('#createw').onclick=createWorld;$('#htm').onclick=()=>setHow('mobile');$('#hpc').onclick=()=>setHow('pc');setHow('mobile');
 // Cena do próprio jogo como fundo dos menus. A tela inicial fica sem escurecimento; os demais menus usam .dim.
 try{
@@ -566,5 +675,5 @@ try{
   menuPreview=true;show('m');
   MCLoad.done();
 }catch(e){MCLoad.fatal('Falha ao iniciar o MiniCraft',e&&e.stack?e.stack:String(e))}
-if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));}
 </script></body></html>
