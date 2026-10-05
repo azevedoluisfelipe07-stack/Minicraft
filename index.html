@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><title>MiniCraft</title>
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><title>MiniCraft 9.89</title>
 <link rel="icon" type="image/jpeg" href="favicon.jpeg">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#1b1d22">
@@ -23,14 +23,15 @@ h2{margin:0 0 6px;text-shadow:2px 2px 0 #0006}
 .wn{flex:1;display:flex;flex-direction:column;gap:4px}.wn small{opacity:.7}
 .row{width:min(340px,90vw);display:flex;flex-direction:column;gap:6px;margin-bottom:8px;text-shadow:2px 2px 0 #0006}
 .r3{display:flex;gap:6px}.sg{flex:1;padding:10px 4px}.sg.on{background:var(--ac)}
+.panel{width:min(720px,94vw);display:flex;flex-direction:column;gap:10px}.panelTop{display:flex;gap:6px;overflow-x:auto;width:100%;padding-bottom:2px}.panelTop .sg{min-width:130px;flex:1}.panelBody{width:100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px}.settingCard{background:#0007;border:3px solid #000;padding:10px;box-shadow:inset 3px 3px #fff2,inset -3px -3px #0006}.settingCard .row{width:100%;margin:0}.settingTitle{font-size:13px;opacity:.72;margin-bottom:5px}.invPanel{width:min(760px,94vw);display:flex;flex-direction:column;gap:10px}.invTabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}.invTabs .sg{min-width:125px}.invGrid{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(76px,1fr))!important;gap:8px!important;width:100%;padding:8px!important;overflow:auto!important;max-height:58vh!important;background:#0005;border:3px solid #000}.invGrid .cell{width:auto;min-width:0;background:#0005;border:2px solid #000;padding:5px}.invGrid .cell .sl{width:58px!important;height:58px!important}.invGrid .cell span{font-size:10px;white-space:normal;text-align:center}.screenHint{opacity:.7;font-size:12px;text-align:center}
 #hud{position:fixed;inset:0;z-index:2;display:none;pointer-events:none}
 #zl,#zr{position:absolute;top:0;height:100%;pointer-events:auto}
-#zl{left:0;width:40%}#zr{left:40%;right:0}
+#zl{left:0;width:42%}#zr{left:42%;right:0}
 #jb{position:absolute;width:120px;height:120px;border-radius:50%;background:#fff3;border:3px solid #fff5;display:none}
 #jn{position:absolute;left:35px;top:35px;width:50px;height:50px;border-radius:50%;background:#fff8}
 #ch{position:absolute;left:50%;top:50%;width:18px;height:18px;margin:-9px;color:#fff;text-align:center;mix-blend-mode:difference;font-size:20px;line-height:18px}
 .rb{position:absolute;width:60px;height:60px;border-radius:50%;border:3px solid #000;background:#ffffff55;color:#fff;font:700 20px monospace;pointer-events:auto;opacity:var(--op,1);transform:scale(var(--k,1));transform-origin:100% 100%}
-#bj{right:16px;bottom:calc(64px + var(--sb));width:72px;height:72px}#bc{right:16px;bottom:calc(146px + var(--sb));display:none}#bq{right:92px;bottom:calc(100px + var(--sb));display:none}#bd{right:92px;bottom:calc(174px + var(--sb));display:none}
+#bj{right:18px;bottom:calc(132px + var(--sb));width:68px;height:68px}#bd{right:18px;bottom:calc(56px + var(--sb));width:68px;height:68px;display:none}#bq{right:96px;bottom:calc(132px + var(--sb));display:none}#bc{right:96px;bottom:calc(56px + var(--sb));display:none}
 #bp{transform-origin:100% 0;top:calc(10px + var(--st));right:10px;width:46px;height:46px;font-size:20px}
 #bn{position:absolute;left:0;right:0;bottom:calc(58px + var(--sb));text-align:center;text-shadow:2px 2px 0 #000;font-size:13px}
 #hb{position:absolute;left:0;right:0;bottom:calc(6px + var(--sb));display:flex;gap:4px;padding:0 8px;overflow-x:auto;pointer-events:auto;touch-action:pan-x;scrollbar-width:none}
@@ -39,7 +40,27 @@ h2{margin:0 0 6px;text-shadow:2px 2px 0 #0006}
 .sl.sel{border-color:#fff}
 #uw{position:absolute;inset:0;background:rgba(30,90,210,.35);display:none;pointer-events:none}
 #ig{display:grid;max-height:none;overflow:visible;grid-template-columns:repeat(5,56px);gap:10px 8px;padding:4px}#sl{width:min(340px,90vw)}#jb.fx{display:block;left:22px;bottom:calc(100px + var(--sb))}.cell .sl{image-rendering:pixelated;background-size:100% 100%;background-repeat:no-repeat}.cell{display:flex;flex-direction:column;align-items:center;gap:3px;width:56px;text-shadow:1px 1px 0 #000}.cell span{font-size:9px;white-space:nowrap}#tp .sg{font-size:12px;padding:10px 2px}
-</style><style id="mc-loader-style">
+</style><style id="mc-ui-custom-style">
+/* Personalização dos controles — MiniCraft 9.88 */
+:root{--mc-btn-bg:#ffffff55;--mc-btn-border:#000;--mc-btn-radius:50%;--mc-hb-bg:transparent}
+.rb{background:var(--mc-btn-bg);border-radius:var(--mc-btn-radius)}
+#hb{background:var(--mc-hb-bg);border-radius:14px;padding-top:4px;padding-bottom:4px}
+html.mc-dark-buttons{--mc-btn-bg:#000000b8;--mc-btn-border:#000;--mc-hb-bg:#0000009c}
+html.mc-square-buttons{--mc-btn-radius:10px}
+html.mc-old-controls #bj{right:16px;bottom:calc(64px + var(--sb));width:72px;height:72px}
+html.mc-old-controls #bd{right:16px;bottom:calc(146px + var(--sb));width:60px;height:60px}
+html.mc-old-controls #bq{right:92px;bottom:calc(100px + var(--sb));width:60px;height:60px}
+html.mc-old-controls #bc{right:92px;bottom:calc(174px + var(--sb));width:60px;height:60px}
+html.mc-old-controls #bp{right:10px;top:calc(10px + var(--st));width:46px;height:46px}
+</style><style id="mc-tab-fix">
+/* MiniCraft 9.89 — abas: área de toque e texto sem corte */
+#s .panelTop,#iv .invTabs{position:relative;z-index:20;display:flex;align-items:stretch;gap:6px;width:100%;min-height:50px;height:50px;overflow-x:auto;overflow-y:hidden;padding:0 0 3px;margin:0;touch-action:pan-x;pointer-events:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+#s .panelTop::-webkit-scrollbar,#iv .invTabs::-webkit-scrollbar{display:none}
+#s .panelTop .sg,#iv .invTabs .sg{position:relative;z-index:21;flex:1 0 130px;min-width:130px;height:47px;min-height:47px;padding:10px 4px;touch-action:manipulation;pointer-events:auto;white-space:nowrap}
+#iv .invTabs .sg{flex-basis:125px;min-width:125px}
+#s .panelBody,#iv .invGrid{position:relative;z-index:1}
+</style>
+<style id="mc-loader-style">
 #mcLoader{position:fixed;inset:0;z-index:99999;background:#17191e;color:#f2f2f2;font:700 15px/1.35 ui-monospace,Menlo,Consolas,monospace;display:flex;align-items:center;justify-content:center;padding:22px;touch-action:auto;overflow:auto}
 #mcLoader .box{width:min(620px,94vw);max-height:94vh;overflow:auto}
 #mcLoader h1{font-size:clamp(28px,8vw,44px);margin:0 0 8px;text-align:left;letter-spacing:1px}
@@ -51,15 +72,31 @@ h2{margin:0 0 6px;text-shadow:2px 2px 0 #0006}
 #mcLoader .bar{height:10px;background:#090a0c;border:2px solid #000;margin:14px 0 12px;overflow:hidden}.mcLoadBar{height:100%;width:0;background:#5dbb3f;transition:width .2s}
 #mcLoader button{width:100%;margin-top:14px;padding:13px;border:3px solid #000;background:#5dbb3f;color:#fff;font:inherit;display:none}
 #mcLoader.fail #mcLoadRetry{display:block}
-</style></head><body>
+</style>
+<style id="mc-ui-scroll-fix">
+/* MiniCraft 9.88 — rolagem simples e fechamento por X */
+#s,#iv{overflow-y:auto;overflow-x:hidden;touch-action:pan-y}
+#s .panel,#iv .invPanel{min-height:0;touch-action:pan-y}
+#s .panelTop,#iv .invTabs{position:static;z-index:auto;background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;padding:0;border:0;touch-action:pan-x;flex-wrap:nowrap}
+#s .panelBody{min-height:0;overflow:visible;touch-action:pan-y;overscroll-behavior:auto;padding:4px 3px 14px}
+#s .panelBody .settingCard,#s .panelBody .settingCard *{touch-action:manipulation}
+#iv .invPanel{width:min(760px,94vw);height:auto;overflow:visible}
+#iv .invGrid{min-height:0;max-height:none!important;overflow:visible!important;touch-action:pan-y;overscroll-behavior:auto}
+#iv .invGrid *{touch-action:manipulation}
+#s .panelTop .sg,#iv .invTabs .sg{touch-action:manipulation}
+#s .closeX,#iv .closeX{position:fixed;top:calc(10px + var(--st));right:12px;z-index:50;width:48px;height:48px;border:3px solid #000;background:var(--pn);color:var(--tx);font:700 28px/1 ui-monospace,Menlo,Consolas,monospace;border-radius:50%;box-shadow:inset -3px -3px #0006,inset 3px 3px #fff3;display:flex;align-items:center;justify-content:center;padding:0;touch-action:manipulation}
+#s h2,#iv h2{padding-right:58px}
+@media(max-width:520px){#s .panel,#iv .invPanel{width:94vw}#s .panelBody{grid-template-columns:1fr}#iv .invGrid{grid-template-columns:repeat(3,minmax(76px,1fr))!important}}
+</style>
+</head><body>
 <canvas id="c"></canvas>
 <div id="m" class="scr on"><h1>⛏ MiniCraft</h1><button class="b g" id="play">Jogar</button><div class="menurow"><button class="b" id="how">Como jogar</button><button class="b" id="nw">Novo mundo</button></div><button class="b" id="cfg">Configurações</button></div>
 <div id="w" class="scr dim"><h2>Mundos</h2><div id="wl"></div><button class="b g" id="nw2">+ Novo mundo</button><button class="b" data-go="m">Voltar</button></div>
 <div id="h" class="scr dim"><h2>Como jogar</h2><div class="tabs"><button class="sg on" id="htm">Celular</button><button class="sg" id="hpc">Computador</button></div><div id="htxt" class="tabbody"></div><button class="b" data-go="m">Voltar</button></div>
 <div id="nwc" class="scr dim"><h2>Novo mundo</h2><div class="field"><label for="wni">Nome do mundo</label><input id="wni" type="text" maxlength="32" value="Mundo 1" autocomplete="off"></div><div class="field"><label for="wsi">Seed</label><input id="wsi" type="number" inputmode="numeric" value="12345"></div><button class="b g" id="createw">Criar mundo</button><button class="b" data-go="m">Cancelar</button></div>
-<div id="s" class="scr dim"><h2>Configurações</h2><div id="sl"></div><button class="b" data-go="m">Voltar</button></div>
+<div id="s" class="scr dim"><button class="closeX" id="cfgClose" aria-label="Fechar configurações">×</button><h2>Configurações</h2><div class="panel"><div class="panelTop" id="cfgTabs"><button class="sg on" data-tab="visual">Visual</button><button class="sg" data-tab="mundo">Mundo</button><button class="sg" data-tab="controles">Controles</button><button class="sg" data-tab="jogo">Jogo</button></div><div id="sl" class="panelBody"></div></div></div>
 <div id="p" class="scr dim"><h2>Pausado</h2><div class="row"><div>Horário</div><div class="r3" id="tp"></div></div><button class="b g" id="rs">Continuar</button><button class="b" id="ex">Salvar e sair</button></div>
-<div id="iv" class="scr dim"><h2>Inventário</h2><div id="ig"></div><button class="b" id="ivc">Fechar</button></div>
+<div id="iv" class="scr dim"><button class="closeX" id="invClose" aria-label="Fechar inventário">×</button><h2>Inventário</h2><div class="invPanel"><div class="invTabs" id="invTabs"><button class="sg on" data-cat="all">Todos</button><button class="sg" data-cat="construcao">Construção</button><button class="sg" data-cat="natureza">Natureza</button><button class="sg" data-cat="materiais">Materiais</button><button class="sg" data-cat="itens">Itens</button></div><div id="ig" class="invGrid"></div><div class="screenHint">Toque em um item para colocá-lo na hotbar.</div></div></div>
 <div id="hud"><div id="zl"></div><div id="zr"></div><div id="jb"><div id="jn"></div></div><div id="uw"></div><div id="ch">+</div>
 <button class="rb" id="bj">▲</button><button class="rb" id="bd">▼</button><button class="rb" id="bp">☰</button><button class="rb" id="bq">⛏</button><button class="rb" id="bc">▣</button>
 <div id="bn"></div><div id="hb"></div></div>
@@ -115,9 +152,10 @@ else MCLoad.fatal('Motor 3D','O motor Three.js não está disponível.');
 MCLoad.add('Armazenamento local',(()=>{try{localStorage.setItem('__mc_test','1');localStorage.removeItem('__mc_test');return 'ok'}catch(e){return 'fail'}})(),(()=>{try{localStorage.setItem('__mc_test','1');localStorage.removeItem('__mc_test');return 'localStorage disponível.'}catch(e){return 'localStorage indisponível: '+e.message}})());
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const LS=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}};
-let cfg=Object.assign({rd:3,fd:3,fc:8,q:1,sn:1,ct:0,fov:75,js:0,bs:1,bo:1,iy:0,dl:240},LS('mc_cfg',{}));
+let cfg=Object.assign({rd:3,fd:3,q:1,sn:1,ct:0,fov:75,js:0,bs:1,bo:1,iy:0,dl:240,cr:1,nb:1,dm:0,sq:0,old:0},LS('mc_cfg',{}));
 let cfgRecovered=false;
-const cfgDefaults={rd:3,fd:3,fc:8,q:1,sn:1,ct:0,fov:75,js:0,bs:1,bo:1,iy:0,dl:240};
+const cfgDefaults={rd:3,fd:3,q:1,sn:1,ct:0,fov:75,js:0,bs:1,bo:1,iy:0,dl:240,cr:1,nb:1,dm:0,sq:0,old:0};
+delete cfg.fc;
 for(const k of Object.keys(cfgDefaults)){if(typeof cfg[k]!=='number'||!Number.isFinite(cfg[k])){cfg[k]=cfgDefaults[k];cfgRecovered=true}}
 if(typeof cfg.fd!=='number')cfg.fd=cfg.rd;
 const hbSafe=[1,2,3,7,10,101,24,25,26];
@@ -142,7 +180,7 @@ if(!Array.isArray(worlds)){worlds=[];try{localStorage.setItem('mc_worlds','[]')}
   MCLoad.add('Integridade dos mundos',worldWarnings?'warn':'ok',worldWarnings?worldWarnings+' mundo(s) tiveram dados estruturais normalizados com segurança.':worlds.length+' mundo(s) passaram pela verificação estrutural.');
   MCLoad.add('Mundos salvos','ok',worlds.length+' mundo(s) disponível(is).');
 }
-function applyUI(){const r=document.documentElement.style;r.setProperty('--k',cfg.bs);r.setProperty('--op',cfg.bo)}applyUI();
+function applyUI(){const r=document.documentElement.style;r.setProperty('--k',cfg.bs);r.setProperty('--op',cfg.bo);document.documentElement.classList.toggle('mc-dark-buttons',!!cfg.dm);document.documentElement.classList.toggle('mc-square-buttons',!!cfg.sq);document.documentElement.classList.toggle('mc-old-controls',!!cfg.old);const cross=$('#ch'),name=$('#bn');if(cross)cross.style.display=cfg.cr?'block':'none';if(name)name.style.display=cfg.nb?'block':'none'}applyUI();
 const MENU_SCREENS=['m','w','h','nwc','s'];const show=id=>{ $$('.scr').forEach(e=>{const active=id!=='none'&&e.id===id;e.classList.toggle('on',active);e.style.display=active?'flex':'none'}); if($('#hud'))$('#hud').style.display=id==='none'?'block':(MENU_SCREENS.includes(id)?'none':($('#hud').style.display||'block')); };
 $$('[data-go]').forEach(b=>b.onclick=()=>show(b.dataset.go));
 addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('gesturestart',e=>e.preventDefault());
@@ -238,41 +276,19 @@ if(MC_STRESS_TEST){
 }
 mcCheckBlocks();
 
-/* ---------- Cores do LOD distante ---------- */
-const FLAT={};
-const FLAT_STAGE={};
-function sampleAtlasColor(tile,scale=8){
- const tx=(tile%8)*8,ty=Math.floor(tile/8)*8;
- const ctx=cv.getContext('2d'),img=ctx.getImageData(tx,ty,8,8).data;
- let r=0,g=0,b=0,n=0;
- for(let y=0;y<8;y++)for(let x=0;x<8;x++){const i=(y*8+x)*4,a=img[i+3];if(a<20)continue;r+=img[i];g+=img[i+1];b+=img[i+2];n++;}
- if(!n)return [110,150,190];
- return [Math.round(r/n),Math.round(g/n),Math.round(b/n)];
-}
-function makeFlatColors(){
- for(let b=1;b<B.length;b++){
-  if(!B[b])continue;
-  const top=B[b][1],side=B[b][2],base=B[b][3];
-  if(!Number.isFinite(top)||!Number.isFinite(side)||!Number.isFinite(base))continue;
-  const a=sampleAtlasColor(top),c=sampleAtlasColor(side),z=sampleAtlasColor(base);
-  FLAT[b]=[Math.round(a[0]*.55+c[0]*.35+z[0]*.10),Math.round(a[1]*.55+c[1]*.35+z[1]*.10),Math.round(a[2]*.55+c[2]*.35+z[2]*.10)];
-  FLAT[b]=FLAT[b].map(v=>Math.round(v*.94));
-  FLAT_STAGE[b]={8:FLAT[b],4:[0,0,0],2:[0,0,0],1:[0,0,0]};
-  for(const px of [4,2,1]){
-   const f=.55+.45*(px/8);
-   FLAT_STAGE[b][px]=FLAT[b].map(v=>Math.round(v*f));
-  }
+/* ---------- LOD de textura distante ---------- */
+const LOD_TEX={},LOD_MAT={},LOD_WMAT={};
+function makeLodTexture(stage){
+ const out=document.createElement('canvas');out.width=64;out.height=64;
+ const o=out.getContext('2d');o.imageSmoothingEnabled=false;
+ for(let ty=0;ty<8;ty++)for(let tx=0;tx<8;tx++){
+  const x=tx*8,y=ty*8;
+  if(stage===8){o.drawImage(cv,x,y,8,8,x,y,8,8);continue}
+  const t=document.createElement('canvas');t.width=stage;t.height=stage;const q=t.getContext('2d');q.imageSmoothingEnabled=false;
+  q.drawImage(cv,x,y,8,8,0,0,stage,stage);
+  o.drawImage(t,0,0,stage,stage,x,y,8,8);
  }
-}
-function flatColor(b,stage=8){return (FLAT_STAGE[b]&&FLAT_STAGE[b][stage])||FLAT[b]||[110,110,110]}
-makeFlatColors();
-if(MC_STRESS_TEST){
-  const refs=window.MC_TEST_BIOME.blocks;
-  const missing=refs.filter(n=>mcFindBlockByName(n)<0);
-  if(missing.length){
-    MCLoad.add('Biomas e referências', 'warn', 'O bioma de teste possui '+missing.length+' bloco(s) inexistente(s): '+missing.join(', ')+'. Referências externas não foram alteradas automaticamente.');
-  }else MCLoad.add('Biomas e referências','ok','Todas as referências do bioma de teste existem.');
-  MCLoad.add('Teste de estresse','ok','Foram injetados: ID incorreto, ID declarado duplicado, textura inválida e referências de bioma inexistentes.');
+ const tex=new THREE.CanvasTexture(out);tex.magFilter=THREE.NearestFilter;tex.minFilter=THREE.NearestFilter;tex.generateMipmaps=false;tex.needsUpdate=true;LOD_TEX[stage]=tex;return tex;
 }
 
 
@@ -305,8 +321,8 @@ function rm(a,b){const c=chunks.get(ck(a,b));if(c&&c.done)mk(c)}
 const FC=[[[1,0,0],[[1,0,0],[1,1,0],[1,1,1],[1,0,1]],.90,2],[[-1,0,0],[[0,0,1],[0,1,1],[0,1,0],[0,0,0]],.90,2],
 [[0,1,0],[[0,1,0],[0,1,1],[1,1,1],[1,1,0]],.98,1],[[0,-1,0],[[0,0,1],[0,0,0],[1,0,0],[1,0,1]],.82,3],
 [[0,0,1],[[1,0,1],[1,1,1],[0,1,1],[0,0,1]],.94,2],[[0,0,-1],[[0,0,0],[0,1,0],[1,1,0],[1,0,0]],.88,2]];
-const UV=[[0,0],[0,1],[1,1],[1,0]];let R,scene,cam,mat,wmat,flatMat,flatWmat,hl,sun,moon,stars,clouds=[],sunLight,sunTarget,tm=.4,uw=false,localLights=[];
-function isFarChunk(c){if(!pl)return false;const dx=c.cx+0.5-pl.x/16,dz=c.cz+0.5-pl.z/16;return Math.hypot(dx,dz)>cfg.fc}
+const UV=[[0,0],[0,1],[1,1],[1,0]];let R,scene,cam,mat,wmat,hl,sun,moon,stars,clouds=[],sunLight,sunTarget,tm=.4,uw=false,localLights=[];
+function isFarChunk(c){if(!pl)return false;const dx=c.cx+0.5-pl.x/16,dz=c.cz+0.5-pl.z/16;return Math.hypot(dx,dz)>=12}
 const LAMP_ID=33;
 const lightSources=new Map(), sourceKey=(x,y,z)=>x+','+y+','+z;
 function markLightArea(x,y,z){const rc=Math.ceil(15/16);const pc=x>>4,pz=z>>4;for(let dz=-rc;dz<=rc;dz++)for(let dx=-rc;dx<=rc;dx++){const c=chunks.get(ck(pc+dx,pz+dz));if(c&&c.done)mk(c)}}
@@ -348,36 +364,40 @@ function rebuildLight(c){
  c.light=L;return L;
 }
 function meshFar(c){
- const dist=pl?Math.hypot(c.cx+0.5-pl.x/16,c.cz+0.5-pl.z/16):cfg.fc+1;
- const stage=dist<cfg.fc+2?8:dist<cfg.fc+5?4:dist<cfg.fc+9?2:1;
+ const dist=pl?Math.hypot(c.cx+0.5-pl.x/16,c.cz+0.5-pl.z/16):12;
+ const stage=dist<12?8:dist<16?4:dist<20?2:1;
  const O={P:[],U:[],C:[],I:[],n:0},Wt={P:[],U:[],C:[],I:[],n:0},X0=c.cx*16,Z0=c.cz*16,d=c.d;
  const topY=new Int16Array(256),topB=new Uint8Array(256);
  for(let z=0;z<16;z++)for(let x=0;x<16;x++){
   let y=H-1,b=0;for(;y>=0;y--){b=d[x+z*16+y*256];if(b){topY[x+z*16]=y;topB[x+z*16]=b;break}}
  }
  const used=new Uint8Array(256);
- const addQuad=(A,pts,col)=>{for(const v of pts){A.P.push(v[0],v[1],v[2]);A.U.push(0,0);A.C.push(col[0]/255,col[1]/255,col[2]/255)}A.I.push(A.n,A.n+1,A.n+2,A.n,A.n+2,A.n+3);A.n+=4};
- // Greedy top surfaces: a flat area made from many blocks becomes one large face.
+ const addQuad=(A,pts,tile)=>{const u0=(tile%8)/8,u1=u0+1/8,v0=Math.floor(tile/8)/8,v1=v0+1/8;
+  for(let k=0;k<4;k++){const v=pts[k];A.P.push(v[0],v[1],v[2]);A.U.push(k===0||k===3?u0:u1,k===0||k===1?v0:v1);A.C.push(1,1,1)}
+  A.I.push(A.n,A.n+1,A.n+2,A.n,A.n+2,A.n+3);A.n+=4;
+ };
+ // Greedy top surfaces. The low-resolution atlas is stretched over each merged surface,
+ // preserving the block's appearance without the old solid-color fallback.
  for(let z=0;z<16;z++)for(let x=0;x<16;x++){
   const ii=x+z*16;if(used[ii])continue;const y=topY[ii],b=topB[ii];if(!b)continue;
   let w=1;while(x+w<16&&!used[ii+w]&&topY[ii+w]===y&&topB[ii+w]===b)w++;
   let h=1,ok=true;while(z+h<16&&ok){for(let xx=0;xx<w;xx++){const j=(x+xx)+(z+h)*16;if(used[j]||topY[j]!==y||topB[j]!==b){ok=false;break}}if(ok)h++}
-  const fc=flatColor(b,stage),col=[fc[0],fc[1],fc[2]],A=WT(b)?Wt:O;addQuad(A,[[X0+x,y+1,Z0+z],[X0+x,y+1,Z0+z+h],[X0+x+w,y+1,Z0+z+h],[X0+x+w,y+1,Z0+z]],col);
-  for(let zz=0;zz<h;zz++)for(let xx=0;xx<w;xx++)used[(x+xx)+(z+zz)*16]=1;
+  const A=WT(b)?Wt:O,xx=X0+x,zz=Z0+z;addQuad(A,[[xx,y+1,zz],[xx,y+1,zz+h],[xx+w,y+1,zz+h],[xx+w,y+1,zz]],B[b][1]);
+  for(let zz2=0;zz2<h;zz2++)for(let xx2=0;xx2<w;xx2++)used[(x+xx2)+(z+zz2)*16]=1;
  }
- // Add only the exposed vertical silhouette edges, also merged into long faces.
+ // Exposed vertical silhouette edges use the side texture of each block.
  for(let z=0;z<16;z++)for(let x=0;x<16;x++){
   const ii=x+z*16,y=topY[ii],b=topB[ii];if(!b)continue;
-  const fc=flatColor(b,stage),col=[fc[0],fc[1],fc[2]],edges=[[1,0],[0,1],[-1,0],[0,-1]];
-  for(const [dx,dz] of edges){const nx=x+dx,nz=z+dz;let ny=-1;if(nx>=0&&nx<16&&nz>=0&&nz<16)ny=topY[nx+nz*16];if(ny>=y)continue;
-   const A=WT(b)?Wt:O,xx=X0+x,zz=Z0+z,ex=xx+(dx?dx:1),ez=zz+(dz?dz:1);
-   if(dx===1)addQuad(A,[[ex,y+1,zz],[ex,y+1,zz+1],[ex,Math.max(ny+1,0),zz+1],[ex,Math.max(ny+1,0),zz]],col);
-   else if(dx===-1)addQuad(A,[[xx,y+1,zz+1],[xx,y+1,zz],[xx,Math.max(ny+1,0),zz],[xx,Math.max(ny+1,0),zz+1]],col);
-   else if(dz===1)addQuad(A,[[xx,y+1,ez],[xx,Math.max(ny+1,0),ez],[xx+1,Math.max(ny+1,0),ez],[xx+1,y+1,ez]],col);
-   else addQuad(A,[[xx+1,y+1,zz],[xx+1,Math.max(ny+1,0),zz],[xx,Math.max(ny+1,0),zz],[xx,y+1,zz]],col);
+  const edges=[[1,0],[-1,0],[0,1],[0,-1]];
+  for(const [dx,dz]of edges){const nx=x+dx,nz=z+dz;let ny=-1;if(nx>=0&&nx<16&&nz>=0&&nz<16)ny=topY[nx+nz*16];if(ny>=y)continue;
+   const A=WT(b)?Wt:O,xx=X0+x,zz=Z0+z,ex=xx+(dx?dx:1),ez=zz+(dz?dz:1),bot=Math.max(ny+1,0);
+   if(dx===1)addQuad(A,[[ex,y+1,zz],[ex,y+1,zz+1],[ex,bot,zz+1],[ex,bot,zz]],B[b][2]);
+   else if(dx===-1)addQuad(A,[[xx,y+1,zz+1],[xx,y+1,zz],[xx,bot,zz],[xx,bot,zz+1]],B[b][2]);
+   else if(dz===1)addQuad(A,[[xx,y+1,ez],[xx,bot,ez],[xx+1,bot,ez],[xx+1,y+1,ez]],B[b][2]);
+   else addQuad(A,[[xx+1,y+1,zz],[xx+1,bot,zz],[xx,bot,zz],[xx,y+1,zz]],B[b][2]);
   }
  }
- drop(c);build(O,flatMat,c,'mesh',0);build(Wt,flatWmat,c,'wm',1);c.flat=true;
+ drop(c);build(O,LOD_MAT[stage],c,'mesh',0);build(Wt,LOD_WMAT[stage],c,'wm',1);c.flat=true;c.lodStage=stage;
 }
 function mesh(c){if(isFarChunk(c)){meshFar(c);return}const O={P:[],U:[],C:[],I:[],n:0},Wt={P:[],U:[],C:[],I:[],n:0},X0=c.cx*16,Z0=c.cz*16,d=c.d,wd=new Map(),far=false,L=rebuildLight(c);c.flat=false;
  const depthAt=(x,y,z)=>{const key=(x&15)+((z&15)<<4)+(y<<8);if(wd.has(key))return wd.get(key);let dep=0,yy=y+1;while(yy<H&&WT(gb(x,yy,z))){dep++;yy++}wd.set(key,dep);return dep};
@@ -386,13 +406,13 @@ function mesh(c){if(isFarChunk(c)){meshFar(c);return}const O={P:[],U:[],C:[],I:[
   const w=WT(b),A=w?Wt:O,wl=w&&!WT(gb(X0+x,y+1,Z0+z))?.9:1;
   for(const[f,cs,sh,ti]of FC){const nb=gb(X0+x+f[0],y+f[1],Z0+z+f[2]);
    if(w?!(nb==0||(nb>0&&T[nb]&&!WT(nb))):(nb>0&&(!T[nb]||nb==b)))continue;
-   const t=B[b][ti],u0=t/TN,u1=(t+1)/TN;let faceSh=sh*lightFactor(x,y,z);const fc=flatColor(b);
+   const t=B[b][ti],u0=t/TN,u1=(t+1)/TN;let faceSh=sh*lightFactor(x,y,z);
    if(!w){const waterDepth=depthAt(X0+x,y,Z0+z);if(waterDepth>0){const wet=Math.pow(.88,Math.min(waterDepth,10));faceSh*=Math.max(.28,wet)}}
    // Luminaria stay visibly bright while also illuminating nearby blocks.
    if(b===LAMP_ID)faceSh=Math.max(faceSh,1.15);
-   for(let k=0;k<4;k++){const v=cs[k];A.P.push(X0+x+v[0],y+(v[1]?wl:0),Z0+z+v[2]);A.U.push(UV[k][0]?u1:u0,UV[k][1]);A.C.push(far?fc[0]/255*faceSh:faceSh,far?fc[1]/255*faceSh:faceSh,far?fc[2]/255*faceSh:faceSh)}
+   for(let k=0;k<4;k++){const v=cs[k];A.P.push(X0+x+v[0],y+(v[1]?wl:0),Z0+z+v[2]);A.U.push(UV[k][0]?u1:u0,UV[k][1]);A.C.push(faceSh,faceSh,faceSh)}
    A.I.push(A.n,A.n+1,A.n+2,A.n,A.n+2,A.n+3);A.n+=4}}
- drop(c);build(O,far?flatMat:mat,c,'mesh',0);build(Wt,far?flatWmat:wmat,c,'wm',1)}
+ drop(c);build(O,mat,c,'mesh',0);build(Wt,wmat,c,'wm',1)}
 
 /* ---------- Física: água e areia ---------- */
 function mk(c){if(dl)dirty.add(c);else mesh(c)}
@@ -412,7 +432,7 @@ let cq=[],lastC='',wq=[],dirty=new Set(),dl=0,wa=0;
 function stream(){const pc=Math.floor(pl.x)>>4,pz=Math.floor(pl.z)>>4,key=pc+','+pz;if(key==lastC)return;lastC=key;const r=cfg.rd;cq=[];
  for(let dz=-r;dz<=r;dz++)for(let dx=-r;dx<=r;dx++){const d=dx*dx+dz*dz;if(d>r*r+1)continue;const c=chunks.get(ck(pc+dx,pz+dz));if(!c||!c.done)cq.push([d,pc+dx,pz+dz])}
  cq.sort((a,b)=>b[0]-a[0]);
- chunks.forEach((c,k)=>{if(Math.abs(c.cx-pc)>r+2||Math.abs(c.cz-pz)>r+2){drop(c);chunks.delete(k)}else if(c.done&&c.flat!==isFarChunk(c))mesh(c)})}
+ chunks.forEach((c,k)=>{if(Math.abs(c.cx-pc)>r+2||Math.abs(c.cz-pz)>r+2){drop(c);chunks.delete(k)}else if(c.done&&c.flat!==isFarChunk(c))mesh(c);else if(c.done&&isFarChunk(c)){const d=Math.hypot(c.cx+0.5-pl.x/16,c.cz+0.5-pl.z/16),st=d<12?8:d<16?4:d<20?2:1;if(c.lodStage!==st)mesh(c)}})}
 function proc(){const q=cq.pop();if(!q)return;const c=gen(q[1],q[2]);if(c.done)return;gen(q[1]+1,q[2]);gen(q[1]-1,q[2]);gen(q[1],q[2]+1);gen(q[1],q[2]-1);mesh(c);c.done=1}
 
 /* ---------- Jogador e física ---------- */
@@ -441,7 +461,9 @@ function put(){
 /* ---------- Render / loop ---------- */
 function init3(){R=new THREE.WebGLRenderer({canvas:$('#c'),antialias:false,powerPreference:'high-performance'});R.shadowMap.enabled=false;scene=new THREE.Scene();
  const tex=new THREE.CanvasTexture(cv);tex.magFilter=THREE.NearestFilter;tex.minFilter=THREE.LinearMipmapLinearFilter;tex.generateMipmaps=true;tex.anisotropy=Math.min(4,R.capabilities.getMaxAnisotropy());tex.needsUpdate=true;
- mat=new THREE.MeshLambertMaterial({map:tex,vertexColors:true,alphaTest:.5});flatMat=new THREE.MeshBasicMaterial({vertexColors:true,alphaTest:.5});flatWmat=new THREE.MeshBasicMaterial({vertexColors:true,transparent:true,opacity:.65,depthWrite:false,side:THREE.DoubleSide});cam=new THREE.PerspectiveCamera(75,1,.1,200);cam.rotation.order='YXZ';
+ for(const stage of [8,4,2,1])makeLodTexture(stage);
+ for(const stage of [8,4,2,1]){LOD_MAT[stage]=new THREE.MeshLambertMaterial({map:LOD_TEX[stage],alphaTest:.5});LOD_WMAT[stage]=new THREE.MeshBasicMaterial({map:LOD_TEX[stage],transparent:true,opacity:.65,depthWrite:false,side:THREE.DoubleSide})}
+ mat=new THREE.MeshLambertMaterial({map:tex,vertexColors:true,alphaTest:.5});cam=new THREE.PerspectiveCamera(75,1,.1,200);cam.rotation.order='YXZ';
  hl=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1.004,1.004,1.004)),new THREE.LineBasicMaterial({color:0}));scene.add(hl);
  wmat=new THREE.MeshLambertMaterial({map:tex,vertexColors:true,transparent:true,opacity:.65,depthWrite:false,side:THREE.DoubleSide});
  const hemi=new THREE.HemisphereLight(0xd9f2ff,0x5d6b4a,.42);scene.add(hemi);
@@ -465,7 +487,7 @@ function updateLocalLights(){if(!scene||!pl)return;const arr=[];for(const key of
 function sky(){const a=(tm-.25)*6.2832,sh=Math.sin(a),k=Math.max(0,Math.min(1,(sh+.15)/.4)),dk=Math.max(0,1-Math.abs(sh)/.25)*.55;
  const c=[mx(8,142,k),mx(12,201,k),mx(32,239,k)].map((v,i)=>mx(v,[240,120,70][i],dk));
  scene.background.setRGB(c[0]/255,c[1]/255,c[2]/255);scene.fog.color.copy(scene.background);
- const L=mx(.68,.92,k);mat.color.setScalar(L);wmat.color.setScalar(L);flatMat.color.setScalar(Math.min(L,.92));flatWmat.color.setScalar(Math.min(L,.92));sunLight.intensity=mx(.12,.38,k);
+ const L=mx(.68,.92,k);mat.color.setScalar(L);wmat.color.setScalar(L);for(const stage of [8,4,2,1]){LOD_MAT[stage].color.setScalar(L);LOD_WMAT[stage].color.setScalar(Math.min(L,.92))}sunLight.intensity=mx(.12,.38,k);
  const cp=cam.position,d=[Math.cos(a),sh,.25],l=Math.hypot(d[0],d[1],d[2])/70;
  sun.position.set(cp.x+d[0]/l,cp.y+d[1]/l,cp.z+d[2]/l);moon.position.set(cp.x-d[0]/l,cp.y-d[1]/l,cp.z-d[2]/l);sun.lookAt(cp);moon.lookAt(cp);
  sunLight.position.set(cp.x+d[0]*.75,cp.y+d[1]*.75+30,cp.z+d[2]*.75);sunTarget.position.set(cp.x,cp.y,cp.z);
@@ -515,16 +537,19 @@ function upd(){sel=slots[si];sbtn.forEach((s,j)=>{s.style.backgroundImage=icon(s
 for(let j=0;j<9;j++){const s=document.createElement('button');s.className='sl';s.onclick=()=>{si=j;upd()};hb.append(s);sbtn.push(s)}
 MCLoad.add('Hotbar','ok','Hotbar validada antes da atualização dos ícones.');
 const iib=document.createElement('canvas');iib.width=iib.height=64;const iix=iib.getContext('2d');iix.imageSmoothingEnabled=false;function inventoryIcon(){iix.clearRect(0,0,64,64);iix.save();iix.scale(4,4);iix.fillStyle='#15191d';iix.fillRect(2,3,12,11);iix.fillStyle='#8b949e';iix.fillRect(3,4,10,2);iix.fillStyle='#4f5862';iix.fillRect(3,7,10,6);iix.fillStyle='#b8c0c8';iix.fillRect(5,8,2,2);iix.fillRect(9,8,2,2);iix.fillStyle='#252a30';iix.fillRect(7,5,2,2);iix.restore();return`url(${iib.toDataURL()})`}const ib=document.createElement('button');ib.className='sl';ib.style.backgroundImage=inventoryIcon();ib.title='Inventário';ib.onclick=()=>{ps=1;show('iv')};hb.append(ib);
-for(const i of INV){const d=document.createElement('div');d.className='cell';const s=document.createElement('button');s.className='sl';s.style.cssText='width:56px;height:56px';s.style.backgroundImage=icon(i);
- s.onclick=()=>{slots[si]=i;upd();ps=0;show('none')};d.append(s,Object.assign(document.createElement('span'),{textContent:B[i][0]}));$('#ig').append(d)}
-$('#ivc').onclick=()=>{ps=0;show('none')};upd();
+const INV_CAT={construcao:new Set([7,8,9,10,11,24,25,26,27,28,29,30,31,32,33,35]),natureza:new Set([1,2,4,5,6,12,13,14,34,37]),materiais:new Set([3,15,16,24,25,26,27,28,29,30,31,32,33,34,35,36]),itens:new Set([100,101])};
+let invCat='all';
+function invCategory(id){for(const [cat,set] of Object.entries(INV_CAT))if(set.has(id))return cat;return 'materiais'}
+function renderInventory(){const g=$('#ig');g.innerHTML='';for(const i of INV){if(invCat!=='all'&&invCategory(i)!==invCat)continue;const d=document.createElement('div');d.className='cell';const s=document.createElement('button');s.className='sl';s.style.cssText='width:56px;height:56px';s.style.backgroundImage=icon(i);s.onclick=()=>{slots[si]=i;upd();ps=0;show('none')};d.append(s,Object.assign(document.createElement('span'),{textContent:B[i][0]}));g.append(d)}}
+$$('#invTabs .sg').forEach(b=>b.onclick=()=>{invCat=b.dataset.cat;$$('#invTabs .sg').forEach(x=>x.classList.toggle('on',x===b));renderInventory()});
+$('#invClose').onclick=()=>{ps=0;show('none')};$('#cfgClose').onclick=()=>{show('m')};upd();
 [['Manhã',.27],['Meio-dia',.5],['Tarde',.72],['Noite',0]].forEach(([n,v])=>{const b=document.createElement('button');b.className='sg';b.textContent=n;b.onclick=()=>{tm=v;sky();$$('#tp .sg').forEach(x=>x.classList.toggle('on',x==b))};$('#tp').append(b)});
 
 /* ---------- Menus ---------- */
-const OPT=[['rd','Distância de renderização'],['fd','Distância da neblina'],['fc','Início das cores sólidas'],['q','Resolução',[[.6,'Baixa'],[1,'Média'],[1.5,'Alta']]],['fov','Campo de visão',[[60,'60°'],[75,'75°'],[90,'90°']]],
-['sn','Sensibilidade da câmera',[[.6,'Baixa'],[1,'Média'],[1.6,'Alta']]],['iy','Inverter câmera vertical',[[0,'Não'],[1,'Sim']]],['ct','Quebrar / colocar',[[0,'Toque'],[1,'Botões']]],['js','Joystick',[[0,'Fixo'],[1,'Flutuante']]],
-['bs','Tamanho dos botões',[[.85,'Pequeno'],[1,'Médio'],[1.2,'Grande']]],['bo','Opacidade dos controles',[[.5,'50%'],[.75,'75%'],[1,'100%']]],['dl','Duração do dia',[[0,'Parado'],[120,'Curto'],[240,'Normal'],[480,'Longo']]]];
-function drawCfg(){const c=$('#sl');c.innerHTML='';OPT.forEach(([k,n,v])=>{const d=document.createElement('div');d.className='row';d.innerHTML='<div>'+n+'</div>';if(k==='rd'||k==='fd'||k==='fc'){const r=document.createElement('div');r.className='rangeBox';const inp=document.createElement('input');inp.type='range';inp.min=2;inp.max=k==='fc'?32:64;inp.step=1;inp.value=cfg[k];const val=document.createElement('span');val.className='rangeVal';val.textContent=cfg[k]+' chunks';const apply=()=>{cfg[k]=+inp.value;val.textContent=cfg[k]+' chunks';applyUI();try{localStorage.setItem('mc_cfg',JSON.stringify(cfg))}catch(e){}if(k==='rd'||k==='fd'){if(R)resize();if(k==='rd'){lastC='';stream();if(stars)stars.scale.setScalar(Math.max(1,(cfg.rd*16+20)/68));for(let i=0;i<Math.min(8,cq.length);i++)proc()}}else if(k==='fc'){chunks.forEach(c=>{if(c.done)mesh(c)})}};inp.oninput=()=>{val.textContent=inp.value+' chunks'};inp.onchange=apply;r.append(inp,val);d.append(r);c.append(d);return}const r=document.createElement('div');r.className='r3';v.forEach(([val,l])=>{const b=document.createElement('button');b.textContent=l;b.className='sg'+(cfg[k]==val?' on':'');b.onclick=()=>{cfg[k]=val;applyUI();try{localStorage.setItem('mc_cfg',JSON.stringify(cfg))}catch(e){}drawCfg()};r.append(b)});d.append(r);c.append(d)})}
+const OPT={visual:[['q','Qualidade gráfica',[[.6,'Baixa'],[1,'Média'],[1.5,'Alta']]],['fov','Campo de visão',[[60,'60°'],[75,'75°'],[90,'90°']]],['cr','Mira na tela',[[1,'Ligada'],[0,'Desligada']]],['nb','Nome do bloco',[[1,'Ligado'],[0,'Desligado']]]],mundo:[['rd','Distância de renderização'],['fd','Distância da neblina'],['dl','Duração do dia',[[0,'Parado'],[120,'Curto'],[240,'Normal'],[480,'Longo']]]],controles:[['sn','Sensibilidade da câmera',[[.6,'Baixa'],[1,'Média'],[1.6,'Alta']]],['iy','Inverter câmera vertical',[[0,'Não'],[1,'Sim']]],['ct','Quebrar / colocar',[[0,'Toque'],[1,'Botões']]],['js','Joystick',[[0,'Fixo'],[1,'Flutuante']]],['bs','Tamanho dos botões',[[.85,'Pequeno'],[1,'Médio'],[1.2,'Grande']]],['bo','Opacidade dos controles',[[.5,'50%'],[.75,'75%'],[1,'100%']]],['dm','Modo escuro de botões',[[0,'Desativado'],[1,'Ativado']]],['sq','Botões quadrados',[[0,'Desativado'],[1,'Ativado']]],['old','Controles antigos',[[0,'Desativado'],[1,'Ativado']]]],jogo:[]};
+let cfgTab='visual';
+function drawCfg(){const c=$('#sl');c.innerHTML='';const list=OPT[cfgTab]||[];if(!list.length){c.innerHTML='<div class="settingCard"><div class="settingTitle">Jogo</div><div>As configurações de jogabilidade desta versão permanecem nos controles durante a partida.</div></div>';return}list.forEach(([k,n,v])=>{const d=document.createElement('div');d.className='settingCard';if(k==='rd'||k==='fd'){d.innerHTML='<div class="settingTitle">'+n+'</div>';const r=document.createElement('div');r.className='rangeBox';const inp=document.createElement('input');inp.type='range';inp.min=2;inp.max=64;inp.step=1;inp.value=cfg[k];const val=document.createElement('span');val.className='rangeVal';val.textContent=cfg[k]+' chunks';const apply=()=>{cfg[k]=+inp.value;val.textContent=cfg[k]+' chunks';applyUI();try{localStorage.setItem('mc_cfg',JSON.stringify(cfg))}catch(e){}if(R)resize();if(k==='rd'){lastC='';stream();if(stars)stars.scale.setScalar(Math.max(1,(cfg.rd*16+20)/68));for(let i=0;i<Math.min(8,cq.length);i++)proc()}};inp.oninput=()=>val.textContent=inp.value+' chunks';inp.onchange=apply;r.append(inp,val);d.append(r);c.append(d);return}d.innerHTML='<div class="settingTitle">'+n+'</div>';const r=document.createElement('div');r.className='r3';v.forEach(([val,l])=>{const b=document.createElement('button');b.textContent=l;b.className='sg'+(cfg[k]==val?' on':'');b.onclick=()=>{cfg[k]=val;applyUI();try{localStorage.setItem('mc_cfg',JSON.stringify(cfg))}catch(e){}drawCfg()};r.append(b)});d.append(r);c.append(d)})}
+$$('#cfgTabs .sg').forEach(b=>b.onclick=()=>{cfgTab=b.dataset.tab;$$('#cfgTabs .sg').forEach(x=>x.classList.toggle('on',x===b));drawCfg()});
 function drawW(){const l=$('#wl');l.innerHTML=worlds.length?'':'<div style="text-align:center;text-shadow:2px 2px 0 #0006">Nenhum mundo ainda</div>';
  worlds.forEach((w,i)=>{const d=document.createElement('div');d.className='wi';d.innerHTML=`<div class="wn"><b>${w.name}</b><small>Seed ${w.seed}</small></div><button class="b2 g">▶</button><button class="b2">🗑</button>`;
   const[bp,bx]=d.querySelectorAll('button');bp.onclick=()=>start(w);
@@ -533,7 +558,7 @@ function nextWorldNumber(){return worlds.reduce((m,w)=>Math.max(m,w.n||0),0)+1}
 function openNewWorld(){const n=nextWorldNumber();$('#wni').value='Mundo '+n;$('#wsi').value=(Math.random()*1000000000|0);show('nwc');setTimeout(()=>$('#wni').focus(),0)}
 function createWorld(){const n=nextWorldNumber();let name=$('#wni').value.trim()||('Mundo '+n),seed=Number($('#wsi').value);if(!Number.isFinite(seed))seed=Math.random()*1000000000|0;seed=Math.trunc(seed);const w={n,name,seed};worlds.push(w);saveW();start(w)}
 function setHow(tab){const mobile=tab==='mobile';$('#htm').classList.toggle('on',mobile);$('#hpc').classList.toggle('on',!mobile);$('#htxt').innerHTML=mobile?'<div class="helpbox"><b>Celular</b><br><br>• Use o joystick para andar.<br>• Arraste o lado direito para olhar.<br>• Toque para quebrar um bloco.<br>• Segure para colocar o bloco selecionado.<br>• ▲ pula. Toque duas vezes nele para ligar/desligar o voo.<br>• Use ☰ para pausar e salvar.</div>':'<div class="helpbox"><b>Computador</b><br><br>• WASD: andar.<br>• Mouse: olhar ao redor.<br>• Espaço: pular.<br>• Shift esquerdo: descer durante o voo.<br>• Clique: quebrar o bloco.<br>• Segure o clique: colocar o bloco selecionado.<br>• Use o menu ☰ para pausar e salvar.</div>';}
-$('#play').onclick=()=>{drawW();show('w')};$('#how').onclick=()=>{setHow('mobile');show('h')};$('#cfg').onclick=()=>{drawCfg();show('s')};$('#nw').onclick=openNewWorld;$('#nw2').onclick=openNewWorld;$('#createw').onclick=createWorld;$('#htm').onclick=()=>setHow('mobile');$('#hpc').onclick=()=>setHow('pc');setHow('mobile');
+renderInventory();drawCfg();$('#play').onclick=()=>{drawW();show('w')};$('#how').onclick=()=>{setHow('mobile');show('h')};$('#cfg').onclick=()=>{drawCfg();show('s')};$('#nw').onclick=openNewWorld;$('#nw2').onclick=openNewWorld;$('#createw').onclick=createWorld;$('#htm').onclick=()=>setHow('mobile');$('#hpc').onclick=()=>setHow('pc');setHow('mobile');
 // Cena do próprio jogo como fundo dos menus. A tela inicial fica sem escurecimento; os demais menus usam .dim.
 try{
   MCLoad.add('Inicialização do mundo','ok','Estruturas verificadas; iniciando a cena do menu.');
@@ -541,5 +566,5 @@ try{
   menuPreview=true;show('m');
   MCLoad.done();
 }catch(e){MCLoad.fatal('Falha ao iniciar o MiniCraft',e&&e.stack?e.stack:String(e))}
-if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));}
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}
 </script></body></html>
