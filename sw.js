@@ -2,7 +2,7 @@
  * Para publicar uma atualização do jogo, mude o número em CACHE_VERSION.
  * O cache antigo do MiniCraft é apagado automaticamente na ativação. */
 const CACHE_VERSION = 'v9.89-1';
-const CACHE_NAME = 'minicraft-' + CACHE_VERSION;
+const CACHE_NAME = 'minicraft-under-construction-' + CACHE_VERSION;
 
 // Arquivos do próprio app (index.html é obrigatório; o resto é opcional)
 const APP_SHELL = ['./manifest.json'];
