@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><title>MiniCraft 9.90 Preview 6</title>
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><title>MiniCraft 9.90 Preview 7</title>
 <link rel="icon" type="image/jpeg" href="favicon.jpeg">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#1b1d22">
@@ -148,7 +148,7 @@ html.mc-pc body{cursor:default}
   setTimeout(function(){
     if(!window.__mcMainStarted){MCLoad.fatal('Inicialização','O código principal não terminou de iniciar.');}
   },12000);
-  MCLoad.add('Página HTML','ok','MiniCraft 9.90 Preview 6.');
+  MCLoad.add('Página HTML','ok','MiniCraft 9.90 Preview 7.');
   try{
     const c=document.createElement('canvas');
     const gl=c.getContext('webgl',{antialias:false})||c.getContext('experimental-webgl');
@@ -244,7 +244,7 @@ PT.forEach((f,t)=>{for(let y=0;y<8;y++)for(let x=0;x<8;x++){const r=f(x,y);if(!r
 const B=[0,['Grama',0,1,2],['Terra',2,2,2],['Pedra',3,3,3],['Areia',4,4,4],['Tronco',6,5,6],['Folhas',7,7,7],['Tábuas',8,8,8],['Pedregulho',9,9,9],['Tijolos',10,10,10],['Vidro',11,11,11],['Neve',12,12,12],['Cascalho',13,13,13],['Arenito',14,14,14],['Carvão',15,15,15],['Lã',16,16,16],['Água',17,17,17]];for(let i=17;i<24;i++)B[i]=B[16];
 [['Obsidiana',18],['Tábuas escuras',19],['Ouro',20],['Ferro',21],['Diamante',22],['Argila',23],['Lã azul',24],['Lã amarela',25],['Pedra lisa',26],['Luminária',27]].forEach(([n,t],i)=>B[24+i]=[n,t,t,t]);
 B[34]=['Areia do deserto',28,28,28];B[35]=['Arenito do deserto',29,29,29];B[36]=['Ardósia',30,30,30];B[37]=['Cacto',32,31,32];
-B[38]=['Folha nevada',33,33,33];B[39]=['Madeira escura',34,34,34];B[40]=['Grama nevada',39,38,2];B[41]=['Gelo',36,36,36];
+B[38]=['Folha nevada',33,33,33];B[39]=['Madeira escura',34,34,34];B[40]=['Grama nevada',38,37,2];B[41]=['Gelo',36,36,36];
 B[100]=['Balde cheio',17,17,17];B[101]=['Balde vazio',17,17,17];
 const INV=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,100,101],WT=b=>b>=16&&b<24;
 const T=new Uint8Array(42);T[6]=T[10]=T[38]=T[41]=1;for(let i=16;i<24;i++)T[i]=1;
@@ -381,15 +381,28 @@ function rm(a,b){const c=chunks.get(ck(a,b));if(c&&c.done)mk(c)}
 const FC=[[[1,0,0],[[1,0,0],[1,1,0],[1,1,1],[1,0,1]],.90,2],[[-1,0,0],[[0,0,1],[0,1,1],[0,1,0],[0,0,0]],.90,2],
 [[0,1,0],[[0,1,0],[0,1,1],[1,1,1],[1,1,0]],.98,1],[[0,-1,0],[[0,0,1],[0,0,0],[1,0,0],[1,0,1]],.82,3],
 [[0,0,1],[[1,0,1],[1,1,1],[0,1,1],[0,0,1]],.94,2],[[0,0,-1],[[0,0,0],[0,1,0],[1,1,0],[1,0,0]],.88,2]];
-const UV=[[0,0],[0,1],[1,1],[1,0]];let R,scene,cam,mat,wmat,leafMat,hl,sun,moon,stars,clouds=[],sunLight,sunTarget,tm=.4,uw=false,localLights=[];
+const UV=[[0,0],[0,1],[1,1],[1,0]];let R,scene,cam,mat,wmat,leafMat,trunkMat,hl,sun,moon,stars,clouds=[],sunLight,sunTarget,tm=.4,uw=false,localLights=[];
+let trunkShaderReady=false;
+function setupTrunkMaterial(){
+ if(!trunkMat||trunkShaderReady)return;
+ trunkMat.onBeforeCompile=shader=>{
+  shader.vertexShader=shader.vertexShader.replace('uniform mat4 modelViewMatrix;', 'uniform mat4 modelViewMatrix;\n attribute vec3 trunkCenter;');
+  shader.vertexShader=shader.vertexShader.replace('#include <beginnormal_vertex>', `vec3 trunkDir = normalize(cameraPosition - trunkCenter);\n  vec3 trunkRef = abs(trunkDir.y) < 0.999 ? vec3(0.0,1.0,0.0) : vec3(1.0,0.0,0.0);\n  vec3 trunkRight = normalize(cross(trunkRef,trunkDir));\n  vec3 trunkForward = cross(trunkDir,trunkRight);\n  vec3 objectNormal = normalize(trunkRight * normal.x + trunkDir * normal.y + trunkForward * normal.z);`);
+  shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>', `vec3 trunkDir2 = normalize(cameraPosition - trunkCenter);\n  vec3 trunkRef2 = abs(trunkDir2.y) < 0.999 ? vec3(0.0,1.0,0.0) : vec3(1.0,0.0,0.0);\n  vec3 trunkRight2 = normalize(cross(trunkRef2,trunkDir2));\n  vec3 trunkForward2 = cross(trunkDir2,trunkRight2);\n  vec3 trunkRel = position - trunkCenter;\n  vec3 transformed = trunkCenter + trunkRight2 * trunkRel.x + trunkDir2 * trunkRel.y + trunkForward2 * trunkRel.z;`);
+  trunkMat.userData.shader=shader;
+ };
+ trunkMat.needsUpdate=true;
+ trunkShaderReady=true;
+}
+
 function isFarChunk(c){if(!pl)return false;const dx=c.cx+0.5-pl.x/16,dz=c.cz+0.5-pl.z/16;return Math.hypot(dx,dz)>=12}
 const LAMP_ID=33;
 const lightSources=new Map(), sourceKey=(x,y,z)=>x+','+y+','+z;
 function markLightArea(x,y,z){const rc=Math.ceil(15/16);const pc=x>>4,pz=z>>4;for(let dz=-rc;dz<=rc;dz++)for(let dx=-rc;dx<=rc;dx++){const c=chunks.get(ck(pc+dx,pz+dz));if(c&&c.done)mk(c)}}
 function scanLights(c){for(let y=0;y<c.top;y++)for(let z=0;z<16;z++)for(let x=0;x<16;x++)if(c.d[x+z*16+y*256]===LAMP_ID)lightSources.set(sourceKey(c.cx*16+x,y,c.cz*16+z),15)}
 function rebuildAllLampSources(){lightSources.clear();if(!W)return;for(const [k,m] of W.ed){const cx=Math.floor(k/4096)-2048,cz=(k%4096)-2048;for(const [i,b] of m){if(b!==LAMP_ID)continue;const y=i>>8,lx=i&15,lz=(i>>4)&15;lightSources.set(sourceKey(cx*16+lx,y,cz*16+lz),15)}}}
-function drop(c){for(const k of['mesh','wm','lm'])if(c[k]){c[k].geometry.dispose();scene.remove(c[k]);c[k]=null}}
-function build(A,m,c,k,o){if(!A.n)return;const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(A.P,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(A.U,2));g.setAttribute('color',new THREE.Float32BufferAttribute(A.C,3));
+function drop(c){for(const k of['mesh','wm','lm','tm'])if(c[k]){c[k].geometry.dispose();scene.remove(c[k]);c[k]=null}}
+function build(A,m,c,k,o){if(!A.n)return;const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(A.P,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(A.U,2));g.setAttribute('color',new THREE.Float32BufferAttribute(A.C,3));if(A.TC)g.setAttribute('trunkCenter',new THREE.Float32BufferAttribute(A.TC,3));
  g.setIndex(A.I);g.computeVertexNormals();g.computeBoundingSphere();const ms=new THREE.Mesh(g,m);ms.renderOrder=o;ms.castShadow=k==='mesh';ms.receiveShadow=true;scene.add(ms);c[k]=ms}
 function rebuildLight(c){
  const L=new Uint8Array(CS*CS*H),Q=[];let qh=0;
@@ -459,20 +472,20 @@ function meshFar(c){
  }
  drop(c);build(O,LOD_MAT[stage],c,'mesh',0);build(Wt,LOD_WMAT[stage],c,'wm',1);c.flat=true;c.lodStage=stage;
 }
-function mesh(c){if(isFarChunk(c)){meshFar(c);return}const O={P:[],U:[],C:[],I:[],n:0},Wt={P:[],U:[],C:[],I:[],n:0},Lf={P:[],U:[],C:[],I:[],n:0},X0=c.cx*16,Z0=c.cz*16,d=c.d,wd=new Map(),far=false,L=rebuildLight(c);c.flat=false;
+function mesh(c){if(isFarChunk(c)){meshFar(c);return}const O={P:[],U:[],C:[],I:[],n:0},Wt={P:[],U:[],C:[],I:[],n:0},Lf={P:[],U:[],C:[],I:[],n:0},Tr={P:[],U:[],C:[],I:[],TC:[],n:0},X0=c.cx*16,Z0=c.cz*16,d=c.d,wd=new Map(),far=false,L=rebuildLight(c);c.flat=false;
  const depthAt=(x,y,z)=>{const key=(x&15)+((z&15)<<4)+(y<<8);if(wd.has(key))return wd.get(key);let dep=0,yy=y+1;while(yy<H&&WT(gb(x,yy,z))){dep++;yy++}wd.set(key,dep);return dep};
- const lightFactor=(x,y,z)=>{let b=L[(x&15)+((z&15)<<4)+y*256];for(const[dx,dy,dz]of FC.map(v=>v[0])){const nx=x+dx,nz=z+dz,ny=y+dy;if(nx>=0&&nx<16&&nz>=0&&nz<16&&ny>=0&&ny<H)b=Math.max(b,L[nx+nz*16+ny*256])}const wx=X0+x+.5,wz=Z0+z+.5,wy=y+.5;let lamp=0,ambientRelief=0;for(const key of lightSources.keys()){const a=key.split(',').map(Number),dx=wx-(a[0]+.5),dy=wy-(a[1]+.5),dz=wz-(a[2]+.5),d=Math.hypot(dx,dy,dz);if(d<3)lamp=Math.max(lamp,1-Math.pow(d/3,1.35));if(d<15)ambientRelief=Math.max(ambientRelief,1-Math.pow(d/15,1.25))}return Math.min(1.05,.34+.66*(b/15)+.70*lamp+.42*ambientRelief)};
+ const lightFactor=(x,y,z)=>{let b=L[(x&15)+((z&15)<<4)+y*256];for(const[dx,dy,dz]of FC.map(v=>v[0])){const nx=x+dx,nz=z+dz,ny=y+dy;if(nx>=0&&nx<16&&nz>=0&&nz<16&&ny>=0&&ny<H)b=Math.max(b,L[nx+nz*16+ny*256])}const wx=X0+x+.5,wz=Z0+z+.5,wy=y+.5;let lamp=0,invertedShadow=0;for(const key of lightSources.keys()){const a=key.split(',').map(Number),dx=wx-(a[0]+.5),dy=wy-(a[1]+.5),dz=wz-(a[2]+.5),dd=Math.hypot(dx,dy,dz);if(dd<3)lamp=Math.max(lamp,1-Math.pow(dd/3,1.35));if(dd<15)invertedShadow=Math.max(invertedShadow,1-Math.pow(dd/15,1.25))}return Math.min(1.16,.30+.66*(b/15)+.62*lamp+.58*invertedShadow)};
  for(let y=0;y<c.top;y++)for(let z=0;z<16;z++)for(let x=0;x<16;x++){const b=d[x+z*16+y*256];if(!b)continue;
-  const w=WT(b),leaf=b===6||b===38,A=w?Wt:leaf?Lf:O,wl=w&&!WT(gb(X0+x,y+1,Z0+z))?.9:1;
+  const w=WT(b),leaf=b===6||b===38,trunk=b===5||b===39,A=trunk?Tr:w?Wt:leaf?Lf:O,wl=w&&!WT(gb(X0+x,y+1,Z0+z))?.9:1;
   for(const[f,cs,sh,ti]of FC){const nb=gb(X0+x+f[0],y+f[1],Z0+z+f[2]);
    if(w?!(nb==0||(nb>0&&T[nb]&&!WT(nb))):(nb>0&&(!T[nb]||nb==b)))continue;
-   const t=b===40?(f[1]===1?39:(f[1]===-1?2:38)):B[b][ti],u0=t/TN,u1=(t+1)/TN;let faceSh=sh*lightFactor(x,y,z);
+   const t=b===40?(f[1]===1?38:(f[1]===-1?2:37)):B[b][ti],u0=t/TN,u1=(t+1)/TN;let faceSh=sh*lightFactor(x,y,z);
    if(!w){const waterDepth=depthAt(X0+x,y,Z0+z);if(waterDepth>0){const wet=Math.pow(.88,Math.min(waterDepth,10));faceSh*=Math.max(.28,wet)}}
    // Luminaria stay visibly bright while also illuminating nearby blocks.
    if(b===LAMP_ID)faceSh=Math.max(faceSh,1.15);
-   for(let k=0;k<4;k++){const v=cs[k];A.P.push(X0+x+v[0],y+(v[1]?wl:0),Z0+z+v[2]);A.U.push(UV[k][0]?u1:u0,UV[k][1]);A.C.push(faceSh,faceSh,faceSh)}
+   for(let k=0;k<4;k++){const v=cs[k];A.P.push(X0+x+v[0],y+(v[1]?wl:0),Z0+z+v[2]);A.U.push(UV[k][0]?u1:u0,UV[k][1]);A.C.push(faceSh,faceSh,faceSh);if(trunk)A.TC.push(X0+x+.5,y+.5,Z0+z+.5)}
    A.I.push(A.n,A.n+1,A.n+2,A.n,A.n+2,A.n+3);A.n+=4}}
- drop(c);build(O,mat,c,'mesh',0);build(Wt,wmat,c,'wm',1);build(Lf,leafMat,c,'lm',2)}
+ drop(c);build(O,mat,c,'mesh',0);build(Wt,wmat,c,'wm',1);build(Lf,leafMat,c,'lm',2);build(Tr,trunkMat,c,'tm',3)}
 
 /* ---------- Física: água e areia ---------- */
 function mk(c){if(dl)dirty.add(c);else mesh(c)}
@@ -532,7 +545,7 @@ function init3(){R=new THREE.WebGLRenderer({canvas:$('#c'),antialias:false,power
  mat=new THREE.MeshLambertMaterial({map:tex,vertexColors:true,alphaTest:.5});cam=new THREE.PerspectiveCamera(75,1,.1,200);cam.rotation.order='YXZ';
  hl=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1.004,1.004,1.004)),new THREE.LineBasicMaterial({color:0}));scene.add(hl);
  wmat=new THREE.MeshLambertMaterial({map:tex,vertexColors:true,transparent:true,opacity:.65,depthWrite:false,side:THREE.DoubleSide});
- leafMat=new THREE.MeshLambertMaterial({map:tex,vertexColors:true,alphaTest:.5,depthWrite:true,side:THREE.DoubleSide});
+ leafMat=new THREE.MeshLambertMaterial({map:tex,vertexColors:true,alphaTest:.5,depthWrite:true,side:THREE.DoubleSide});trunkMat=new THREE.MeshLambertMaterial({map:tex,vertexColors:true});setupTrunkMaterial();
  const hemi=new THREE.HemisphereLight(0xd9f2ff,0x5d6b4a,.42);scene.add(hemi);
  sunLight=new THREE.DirectionalLight(0xffffff,.16);sunLight.castShadow=false;scene.add(sunLight);
  sunTarget=new THREE.Object3D();scene.add(sunTarget);sunLight.target=sunTarget;
@@ -554,7 +567,7 @@ function updateLocalLights(){if(!scene||!pl)return;const arr=[];for(const key of
 function sky(){const a=(tm-.25)*6.2832,sh=Math.sin(a),k=Math.max(0,Math.min(1,(sh+.15)/.4)),dk=Math.max(0,1-Math.abs(sh)/.25)*.55;
  const c=[mx(8,142,k),mx(12,201,k),mx(32,239,k)].map((v,i)=>mx(v,[240,120,70][i],dk));
  scene.background.setRGB(c[0]/255,c[1]/255,c[2]/255);scene.fog.color.copy(scene.background);
- const L=mx(.68,.92,k);mat.color.setScalar(L);wmat.color.setScalar(L);if(leafMat)leafMat.color.setScalar(L);for(const stage of [8,4,2,1]){LOD_MAT[stage].color.setScalar(L);LOD_WMAT[stage].color.setScalar(Math.min(L,.92))}sunLight.intensity=mx(.12,.38,k);
+ const L=mx(.68,.92,k);mat.color.setScalar(L);wmat.color.setScalar(L);if(leafMat)leafMat.color.setScalar(L);if(trunkMat)trunkMat.color.setScalar(L);for(const stage of [8,4,2,1]){LOD_MAT[stage].color.setScalar(L);LOD_WMAT[stage].color.setScalar(Math.min(L,.92))}sunLight.intensity=mx(.12,.38,k);
  const cp=cam.position,d=[Math.cos(a),sh,.25],l=Math.hypot(d[0],d[1],d[2])/70;
  sun.position.set(cp.x+d[0]/l,cp.y+d[1]/l,cp.z+d[2]/l);moon.position.set(cp.x-d[0]/l,cp.y-d[1]/l,cp.z-d[2]/l);sun.lookAt(cp);moon.lookAt(cp);
  sunLight.position.set(cp.x+d[0]*.75,cp.y+d[1]*.75+30,cp.z+d[2]*.75);sunTarget.position.set(cp.x,cp.y,cp.z);
