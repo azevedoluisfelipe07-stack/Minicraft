@@ -460,7 +460,7 @@ function put(){
 
 /* ---------- Render / loop ---------- */
 function init3(){R=new THREE.WebGLRenderer({canvas:$('#c'),antialias:false,powerPreference:'high-performance'});R.shadowMap.enabled=false;scene=new THREE.Scene();
- const tex=new THREE.CanvasTexture(cv);tex.magFilter=THREE.NearestFilter;tex.minFilter=THREE.LinearMipmapLinearFilter;tex.generateMipmaps=true;tex.anisotropy=Math.min(4,R.capabilities.getMaxAnisotropy());tex.needsUpdate=true;
+ const tex=new THREE.CanvasTexture(cv);tex.magFilter=THREE.NearestFilter;tex.minFilter=THREE.NearestFilter;tex.generateMipmaps=false;tex.anisotropy=1;tex.needsUpdate=true;
  for(const stage of [8,4,2,1])makeLodTexture(stage);
  for(const stage of [8,4,2,1]){LOD_MAT[stage]=new THREE.MeshLambertMaterial({map:LOD_TEX[stage],alphaTest:.5});LOD_WMAT[stage]=new THREE.MeshBasicMaterial({map:LOD_TEX[stage],transparent:true,opacity:.65,depthWrite:false,side:THREE.DoubleSide})}
  mat=new THREE.MeshLambertMaterial({map:tex,vertexColors:true,alphaTest:.5});cam=new THREE.PerspectiveCamera(75,1,.1,200);cam.rotation.order='YXZ';
