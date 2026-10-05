@@ -1,9 +1,4 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-    <title>MiniCraft 9.90 Preview 7</title>
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><title>MiniCraft 9.90 Preview 7</title>
 <link rel="icon" type="image/jpeg" href="favicon.jpeg">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#1b1d22">
@@ -186,6 +181,29 @@ if(!Array.isArray(cfg.hb)){cfg.hb=hbSafe.slice();cfgRecovered=true}else{
 }
 if(cfgRecovered){try{localStorage.setItem('mc_cfg',JSON.stringify(cfg))}catch(e){}MCLoad.add('Configuração salva','warn','Um valor inválido foi encontrado e substituído por um valor seguro.');}else MCLoad.add('Configuração salva','ok','Configurações válidas.');
 let worlds=LS('mc_worlds',[]);
+// Troncos colocados: a rotação é capturada no momento da colocação e permanece fixa.
+const trunkRotations=new Map();
+const trunkKey=(x,y,z)=>x+','+y+','+z;
+function captureTrunkRotation(x,y,z){
+  if(!cam)return [0,0,0,1];
+  const dir=new THREE.Vector3(cam.position.x-(x+.5),cam.position.y-(y+.5),cam.position.z-(z+.5));
+  if(dir.lengthSq()<1e-8)dir.set(0,1,0);
+  else dir.normalize();
+  // Tronco 3D: quantiza a direção da face superior para um dos seis eixos
+  // do cubo. Assim a rotação é sempre ortogonal (múltiplos de 90 graus)
+  // e uma face inteira permanece alinhada com o chão/estrutura.
+  const ax=Math.abs(dir.x),ay=Math.abs(dir.y),az=Math.abs(dir.z);
+  let target=new THREE.Vector3();
+  if(ay>=ax&&ay>=az) target.set(0,dir.y>=0?1:-1,0);
+  else if(ax>=az) target.set(dir.x>=0?1:-1,0,0);
+  else target.set(0,0,dir.z>=0?1:-1);
+  const q=new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0),target);
+  return [q.x,q.y,q.z,q.w];
+}
+function trunkQuaternion(x,y,z){
+  const q=trunkRotations.get(trunkKey(x,y,z));
+  return q?new THREE.Quaternion(q[0],q[1],q[2],q[3]):new THREE.Quaternion();
+}
 if(!Array.isArray(worlds)){worlds=[];try{localStorage.setItem('mc_worlds','[]')}catch(e){}MCLoad.add('Mundos salvos','warn','Dados inválidos foram ignorados; nenhum mundo foi apagado do jogo por causa desta verificação.')}else{
   let worldWarnings=0;
   worlds=worlds.map((w,i)=>{
@@ -377,7 +395,7 @@ function gen(cx,cz){const k=ck(cx,cz);let c=chunks.get(k);if(c)return c;
  c={d,top,mesh:null,cx,cz,done:0,light:null};chunks.set(k,c);scanLights(c);return c}
 function gb(x,y,z){if(y<0)return 3;if(y>=H)return 0;const c=chunks.get(ck(x>>4,z>>4));return c?c.d[(x&15)+(z&15)*16+y*256]:-1}
 function sb(x,y,z,b){const cx=x>>4,cz=z>>4,k=ck(cx,cz),c=chunks.get(k);if(!c||y<0||y>=H)return;const lx=x&15,lz=z&15,i=lx+lz*16+y*256;
- const oldb=c.d[i];c.d[i]=b;if(y+1>c.top)c.top=y+1;let e=W.ed.get(k);if(!e)W.ed.set(k,e=new Map);e.set(i,b);
+ const oldb=c.d[i];c.d[i]=b;const tk=trunkKey(x,y,z);if((b===5||b===39)&&oldb!==b)trunkRotations.set(tk,captureTrunkRotation(x,y,z));else if(!(b===5||b===39)&&(oldb===5||oldb===39))trunkRotations.delete(tk);if(y+1>c.top)c.top=y+1;let e=W.ed.get(k);if(!e)W.ed.set(k,e=new Map);e.set(i,b);
  const sk=sourceKey(x,y,z);if(oldb===LAMP_ID&&b!==LAMP_ID)lightSources.delete(sk);if(b===LAMP_ID)lightSources.set(sk,15);c.light=null;mk(c);wake(x,y,z);if(oldb===LAMP_ID||b===LAMP_ID){markLightArea(x,y,z);updateLocalLights();}
  if(lx==0)rm(cx-1,cz);if(lx==15)rm(cx+1,cz);if(lz==0)rm(cx,cz-1);if(lz==15)rm(cx,cz+1)}
 function rm(a,b){const c=chunks.get(ck(a,b));if(c&&c.done)mk(c)}
@@ -387,17 +405,18 @@ const FC=[[[1,0,0],[[1,0,0],[1,1,0],[1,1,1],[1,0,1]],.90,2],[[-1,0,0],[[0,0,1],[
 [[0,1,0],[[0,1,0],[0,1,1],[1,1,1],[1,1,0]],.98,1],[[0,-1,0],[[0,0,1],[0,0,0],[1,0,0],[1,0,1]],.82,3],
 [[0,0,1],[[1,0,1],[1,1,1],[0,1,1],[0,0,1]],.94,2],[[0,0,-1],[[0,0,0],[0,1,0],[1,1,0],[1,0,0]],.88,2]];
 const UV=[[0,0],[0,1],[1,1],[1,0]];let R,scene,cam,mat,wmat,leafMat,trunkMat,hl,sun,moon,stars,clouds=[],sunLight,sunTarget,tm=.4,uw=false,localLights=[];
-let trunkShaderReady=false;
-function setupTrunkMaterial(){
- if(!trunkMat||trunkShaderReady)return;
- trunkMat.onBeforeCompile=shader=>{
-  shader.vertexShader=shader.vertexShader.replace('uniform mat4 modelViewMatrix;', 'uniform mat4 modelViewMatrix;\n attribute vec3 trunkCenter;');
-  shader.vertexShader=shader.vertexShader.replace('#include <beginnormal_vertex>', `vec3 trunkDir = normalize(cameraPosition - trunkCenter);\n  vec3 trunkRef = abs(trunkDir.y) < 0.999 ? vec3(0.0,1.0,0.0) : vec3(1.0,0.0,0.0);\n  vec3 trunkRight = normalize(cross(trunkDir,trunkRef));\n  vec3 trunkForward = normalize(cross(trunkRight,trunkDir));\n  vec3 objectNormal = normalize(trunkRight * normal.x + trunkDir * normal.y + trunkForward * normal.z);`);
-  shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>', `vec3 trunkDir2 = normalize(cameraPosition - trunkCenter);\n  vec3 trunkRef2 = abs(trunkDir2.y) < 0.999 ? vec3(0.0,1.0,0.0) : vec3(1.0,0.0,0.0);\n  vec3 trunkRight2 = normalize(cross(trunkDir2,trunkRef2));\n  vec3 trunkForward2 = normalize(cross(trunkRight2,trunkDir2));\n  vec3 trunkRel = position - trunkCenter;\n  vec3 transformed = trunkCenter + trunkRight2 * trunkRel.x + trunkDir2 * trunkRel.y + trunkForward2 * trunkRel.z;`);
-  trunkMat.userData.shader=shader;
- };
- trunkMat.needsUpdate=true;
- trunkShaderReady=true;
+function addRotatedTrunkCube(A,x,y,z,b,faceSh){
+  const q=trunkQuaternion(x,y,z);
+  const center=new THREE.Vector3(x+.5,y+.5,z+.5);
+  const faceTiles=[B[b][2],B[b][2],B[b][1],B[b][3],B[b][2],B[b][2]];
+  for(let fi=0;fi<6;fi++){
+    const cs=FC[fi][1],t=faceTiles[fi],u0=t/TN,u1=(t+1)/TN;
+    for(let k=0;k<4;k++){
+      const v=new THREE.Vector3(cs[k][0]-.5,cs[k][1]-.5,cs[k][2]-.5).applyQuaternion(q).add(center);
+      A.P.push(v.x,v.y,v.z);A.U.push(UV[k][0]?u1:u0,UV[k][1]);A.C.push(faceSh,faceSh,faceSh);
+    }
+    A.I.push(A.n,A.n+1,A.n+2,A.n,A.n+2,A.n+3);A.n+=4;
+  }
 }
 
 function isFarChunk(c){if(!pl)return false;const dx=c.cx+0.5-pl.x/16,dz=c.cz+0.5-pl.z/16;return Math.hypot(dx,dz)>=12}
@@ -407,7 +426,7 @@ function markLightArea(x,y,z){const rc=Math.ceil(15/16);const pc=x>>4,pz=z>>4;fo
 function scanLights(c){for(let y=0;y<c.top;y++)for(let z=0;z<16;z++)for(let x=0;x<16;x++)if(c.d[x+z*16+y*256]===LAMP_ID)lightSources.set(sourceKey(c.cx*16+x,y,c.cz*16+z),15)}
 function rebuildAllLampSources(){lightSources.clear();if(!W)return;for(const [k,m] of W.ed){const cx=Math.floor(k/4096)-2048,cz=(k%4096)-2048;for(const [i,b] of m){if(b!==LAMP_ID)continue;const y=i>>8,lx=i&15,lz=(i>>4)&15;lightSources.set(sourceKey(cx*16+lx,y,cz*16+lz),15)}}}
 function drop(c){for(const k of['mesh','wm','lm','tm'])if(c[k]){c[k].geometry.dispose();scene.remove(c[k]);c[k]=null}}
-function build(A,m,c,k,o){if(!A.n)return;const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(A.P,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(A.U,2));g.setAttribute('color',new THREE.Float32BufferAttribute(A.C,3));if(A.TC)g.setAttribute('trunkCenter',new THREE.Float32BufferAttribute(A.TC,3));
+function build(A,m,c,k,o){if(!A.n)return;const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(A.P,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(A.U,2));g.setAttribute('color',new THREE.Float32BufferAttribute(A.C,3));
  g.setIndex(A.I);g.computeVertexNormals();g.computeBoundingSphere();const ms=new THREE.Mesh(g,m);ms.renderOrder=o;ms.castShadow=k==='mesh';ms.receiveShadow=true;scene.add(ms);c[k]=ms}
 function rebuildLight(c){
  const L=new Uint8Array(CS*CS*H),Q=[];let qh=0;
@@ -482,6 +501,7 @@ function mesh(c){if(isFarChunk(c)){meshFar(c);return}const O={P:[],U:[],C:[],I:[
  const lightFactor=(x,y,z)=>{let b=L[(x&15)+((z&15)<<4)+y*256];for(const[dx,dy,dz]of FC.map(v=>v[0])){const nx=x+dx,nz=z+dz,ny=y+dy;if(nx>=0&&nx<16&&nz>=0&&nz<16&&ny>=0&&ny<H)b=Math.max(b,L[nx+nz*16+ny*256])}const wx=X0+x+.5,wz=Z0+z+.5,wy=y+.5;let lamp=0,invertedShadow=0;for(const key of lightSources.keys()){const a=key.split(',').map(Number),dx=wx-(a[0]+.5),dy=wy-(a[1]+.5),dz=wz-(a[2]+.5),dd=Math.hypot(dx,dy,dz);if(dd<3)lamp=Math.max(lamp,1-Math.pow(dd/3,1.35));if(dd<15)invertedShadow=Math.max(invertedShadow,1-Math.pow(dd/15,1.25))}return Math.min(1.16,.30+.66*(b/15)+.62*lamp+.58*invertedShadow)};
  for(let y=0;y<c.top;y++)for(let z=0;z<16;z++)for(let x=0;x<16;x++){const b=d[x+z*16+y*256];if(!b)continue;
   const w=WT(b),leaf=b===6||b===38,trunk=b===5||b===39,A=trunk?Tr:w?Wt:leaf?Lf:O,wl=w&&!WT(gb(X0+x,y+1,Z0+z))?.9:1;
+  if(trunk){addRotatedTrunkCube(Tr,X0+x,y,Z0+z,b,lightFactor(x,y,z));continue;}
   for(const[f,cs,sh,ti]of FC){const nb=gb(X0+x+f[0],y+f[1],Z0+z+f[2]);
    if(w?!(nb==0||(nb>0&&T[nb]&&!WT(nb))):(nb>0&&(!T[nb]||nb==b)))continue;
    const t=b===40?(f[1]===1?38:(f[1]===-1?2:37)):B[b][ti],u0=t/TN,u1=(t+1)/TN;let faceSh=sh*lightFactor(x,y,z);
@@ -550,7 +570,7 @@ function init3(){R=new THREE.WebGLRenderer({canvas:$('#c'),antialias:false,power
  mat=new THREE.MeshLambertMaterial({map:tex,vertexColors:true,alphaTest:.5});cam=new THREE.PerspectiveCamera(75,1,.1,200);cam.rotation.order='YXZ';
  hl=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1.004,1.004,1.004)),new THREE.LineBasicMaterial({color:0}));scene.add(hl);
  wmat=new THREE.MeshLambertMaterial({map:tex,vertexColors:true,transparent:true,opacity:.65,depthWrite:false,side:THREE.DoubleSide});
- leafMat=new THREE.MeshLambertMaterial({map:tex,vertexColors:true,alphaTest:.5,depthWrite:true,side:THREE.DoubleSide});trunkMat=new THREE.MeshLambertMaterial({map:tex,vertexColors:true,side:THREE.DoubleSide});setupTrunkMaterial();
+ leafMat=new THREE.MeshLambertMaterial({map:tex,vertexColors:true,alphaTest:.5,depthWrite:true,side:THREE.DoubleSide});trunkMat=new THREE.MeshLambertMaterial({map:tex,vertexColors:true,side:THREE.DoubleSide});
  const hemi=new THREE.HemisphereLight(0xd9f2ff,0x5d6b4a,.42);scene.add(hemi);
  sunLight=new THREE.DirectionalLight(0xffffff,.16);sunLight.castShadow=false;scene.add(sunLight);
  sunTarget=new THREE.Object3D();scene.add(sunTarget);sunLight.target=sunTarget;
@@ -583,10 +603,11 @@ function loop(t){if(!on)return;requestAnimationFrame(loop);if(ps){last=t;return}
  if(menuPreview){const tx=pl.x,tz=pl.z,ty=28,r=30;cam.position.set(tx+Math.cos(menuAngle)*r,34,tz+Math.sin(menuAngle)*r);cam.lookAt(tx,ty,tz)}else{cam.position.set(pl.x,pl.y+1.62,pl.z);cam.rotation.set(pl.pitch,pl.yaw,0)}updateLocalLights();sky();const u2=WT(gb(Math.floor(pl.x),Math.floor(pl.y+1.62),Math.floor(pl.z)));if(u2!==uw){uw=u2;$('#uw').style.display=u2?'block':'none'}
  const r=ray();hl.visible=!!r;if(r)hl.position.set(r.x+.5,r.y+.5,r.z+.5);R.render(scene,cam);
  if(t-sv>15000){sv=t;saveW()}}
-function saveW(){if(W&&pl){const e=[];for(const[k,m]of W.ed){const cx=Math.floor(k/4096)-2048,cz=k%4096-2048;for(const[i,b]of m)e.push(cx,cz,i,b)}W.e=e;W.p=[pl.x,pl.y,pl.z,pl.yaw,pl.pitch];W.t=tm}
+function saveW(){if(W&&pl){const e=[];for(const[k,m]of W.ed){const cx=Math.floor(k/4096)-2048,cz=k%4096-2048;for(const[i,b]of m)e.push(cx,cz,i,b)}W.e=e;const rr=[];for(const[key,q]of trunkRotations){const a=key.split(',').map(Number);rr.push(a[0],a[1],a[2],q[0],q[1],q[2],q[3])}W.r=rr;W.p=[pl.x,pl.y,pl.z,pl.yaw,pl.pitch];W.t=tm}
  try{localStorage.setItem('mc_worlds',JSON.stringify(worlds,(k,v)=>k=='ed'?undefined:v))}catch(e){}}
 function start(w){menuPreview=false;$$('.scr').forEach(e=>{e.classList.remove('on');e.style.display='none'});if($('#hud'))$('#hud').style.display='block';if(!R)init3();lightSources.clear();W=w;W.ed=new Map();const e=w.e||[];
  for(let i=0;i<e.length;i+=4){const k=ck(e[i],e[i+1]);let m=W.ed.get(k);if(!m)W.ed.set(k,m=new Map);m.set(e[i+2],e[i+3])}
+ trunkRotations.clear();const rr=w.r||[];for(let i=0;i+6<rr.length;i+=7){const x=Number(rr[i]),y=Number(rr[i+1]),z=Number(rr[i+2]),q=rr.slice(i+3,i+7).map(Number);if(q.length===4&&q.every(Number.isFinite))trunkRotations.set(trunkKey(x,y,z),q)}
  rebuildAllLampSources();
  chunks.forEach(drop);chunks.clear();lastC='';cq=[];wq=[];dirty.clear();const p=w.p;
  tm=w.t==null?.4:w.t;pl={x:p?p[0]:8.5,y:p?p[1]:40,z:p?p[2]:8.5,vy:0,og:0,fly:0,yaw:p?p[3]:0,pitch:p?p[4]:0};
@@ -694,6 +715,4 @@ try{
   MCLoad.done();
 }catch(e){MCLoad.fatal('Falha ao iniciar o MiniCraft',e&&e.stack?e.stack:String(e))}
 if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));}
- </script>
-   </body>
-     </html>
+</script></body></html>
