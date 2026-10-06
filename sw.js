@@ -1,7 +1,7 @@
 /* MiniCraft - Service Worker
  * Para publicar uma atualização do jogo, mude o número em CACHE_VERSION.
  * O cache antigo do MiniCraft é apagado automaticamente na ativação. */
-const CACHE_VERSION = 'v9.90.23';
+const CACHE_VERSION = 'v9.90.24';
 const CACHE_NAME = 'minicraft-' + CACHE_VERSION;
 
 // Arquivos do próprio app (index.html é obrigatório; o resto é opcional)
